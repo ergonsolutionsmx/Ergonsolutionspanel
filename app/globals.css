@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/*
+ * Tokens de marca Ergon (Plan de empresa · nuevo branding).
+ * Todo el color de la app sale de aquí: para cambiar la marca, se cambia este bloque.
+ */
+:root {
+  --ergon-navy: #0b1f44;
+  --ergon-navy-2: #11274e;
+  --ergon-blue: #2563eb;
+  --ergon-sky: #38bdf8;
+  --ergon-bg: #f3f4f6;
+
+  /* Roles (estilo shadcn/ui) mapeados a la marca */
+  --background: var(--ergon-bg);
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --primary: var(--ergon-blue);
+  --primary-foreground: #ffffff;
+  --secondary: #e5e7eb;
+  --secondary-foreground: var(--ergon-navy);
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --accent: #e0ecff;
+  --accent-foreground: var(--ergon-navy);
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #cbd5e1;
+  --ring: var(--ergon-blue);
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --color-ergon-navy: var(--ergon-navy);
+  --color-ergon-navy-2: var(--ergon-navy-2);
+  --color-ergon-blue: var(--ergon-blue);
+  --color-ergon-sky: var(--ergon-sky);
+  --color-ergon-bg: var(--ergon-bg);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Tipografía: Lato (POR CONFIRMAR vs Archivo + IBM Plex Sans). Se cambia en app/layout.tsx */
+  --font-sans: var(--font-marca), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+  }
+}
