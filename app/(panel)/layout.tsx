@@ -25,7 +25,7 @@ export default function PanelLayout({ children }: LayoutProps<"/">) {
 
         <div className="flex min-w-0 flex-1 flex-col">
           {/* Encabezado solo en celular */}
-          <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-card px-4 pt-[env(safe-area-inset-top)] md:hidden">
+          <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-card/95 px-4 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden">
             <Link href="/inicio" aria-label="Inicio">
               <Image src="/brand/isotipo.png" alt="Ergon Solutions" width={32} height={32} priority />
             </Link>

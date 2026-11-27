@@ -30,7 +30,7 @@ export function TarjetaTarea({
   return (
     <div
       className={cn(
-        "rounded-md border bg-card p-3 shadow-sm",
+        "rounded-xl border bg-card p-3 shadow-sm hover:border-ergon-blue/30",
         arrastrando && "rotate-1 shadow-lg ring-2 ring-ergon-blue",
         vencida && "border-red-300",
       )}

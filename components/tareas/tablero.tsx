@@ -24,6 +24,13 @@ import { TarjetaTarea } from "./tarjeta-tarea";
 
 type Columnas = Record<EstadoTarea, Tarea[]>;
 
+const PUNTO_ESTADO: Record<EstadoTarea, string> = {
+  por_hacer: "bg-slate-400",
+  en_curso: "bg-ergon-blue",
+  en_revision: "bg-amber-500",
+  hecha: "bg-emerald-500",
+};
+
 function agrupar(tareas: Tarea[]): Columnas {
   const cols: Columnas = { por_hacer: [], en_curso: [], en_revision: [], hecha: [] };
   for (const t of [...tareas].sort((a, b) => a.orden - b.orden)) cols[t.estado].push(t);
@@ -175,16 +182,19 @@ function Columna({ estado, tareas, children }: { estado: EstadoTarea; tareas: Ta
   return (
     <section
       aria-label={NOMBRE_ESTADO[estado]}
-      className="flex w-[82vw] max-w-xs shrink-0 snap-start flex-col rounded-lg bg-secondary/60 md:w-auto md:max-w-none"
+      className="flex w-[82vw] max-w-xs shrink-0 snap-start flex-col rounded-2xl bg-[#E9EEF5] md:w-auto md:max-w-none"
     >
       <h2 className="flex items-center justify-between px-3 pb-2 pt-3 text-sm font-black text-ergon-navy">
-        {NOMBRE_ESTADO[estado]}
+        <span className="flex items-center gap-2">
+          <span className={cn("size-2.5 rounded-full", PUNTO_ESTADO[estado])} aria-hidden />
+          {NOMBRE_ESTADO[estado]}
+        </span>
         <span className="rounded-full bg-card px-2 py-0.5 text-xs font-bold text-muted-foreground">{tareas.length}</span>
       </h2>
       <SortableContext id={estado} items={tareas.map((t) => t.id)} strategy={verticalListSortingStrategy}>
         <div
           ref={setNodeRef}
-          className={cn("flex min-h-32 flex-1 flex-col gap-2 rounded-b-lg p-2", isOver && "bg-accent")}
+          className={cn("flex min-h-32 flex-1 flex-col gap-2 rounded-b-2xl p-2", isOver && "bg-accent")}
         >
           {children}
           {tareas.length === 0 ? (

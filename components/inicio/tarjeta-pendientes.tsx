@@ -17,24 +17,26 @@ export function TarjetaPendientes({
   const total = grupos.reduce((s, g) => s + g.items.length, 0);
 
   return (
-    <section className="flex flex-col rounded-lg border bg-card shadow-sm" aria-labelledby={`tarjeta-${href}`}>
+    <section className="flex flex-col rounded-2xl border bg-card shadow-sm" aria-labelledby={`tarjeta-${href}`}>
       <Link
         href={href}
-        className="flex items-center gap-3 border-b px-4 py-3 hover:bg-muted"
+        className="group flex items-center gap-3 border-b px-4 py-3.5 hover:bg-muted/60"
       >
-        <Icono className="size-5 text-ergon-blue" aria-hidden />
+        <span className="flex size-8 items-center justify-center rounded-lg bg-accent text-ergon-blue">
+          <Icono className="size-[18px]" aria-hidden />
+        </span>
         <h2 id={`tarjeta-${href}`} className="flex-1 font-black text-ergon-navy">
           {titulo}
         </h2>
         {total > 0 ? (
-          <span className="rounded-full bg-ergon-blue px-2 py-0.5 text-xs font-black text-white">{total}</span>
+          <span className="rounded-full bg-ergon-navy px-2 py-0.5 text-xs font-black tabular-nums text-white">{total}</span>
         ) : null}
-        <ChevronRight className="size-4 text-muted-foreground" aria-hidden />
+        <ChevronRight className="size-4 text-muted-foreground group-hover:translate-x-0.5 group-hover:text-ergon-blue" aria-hidden />
       </Link>
 
       <div className="flex-1 px-4 py-3">
         {total === 0 ? (
-          <p className="py-4 text-center text-sm text-muted-foreground">
+          <p className="py-5 text-center text-sm text-muted-foreground">
             Nada pendiente
           </p>
         ) : (

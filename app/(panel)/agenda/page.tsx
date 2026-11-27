@@ -172,10 +172,10 @@ export default async function AgendaPage({ searchParams }: PageProps<"/agenda">)
 
       <div className="mb-3 flex gap-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded-sm border-l-4 border-ergon-blue bg-blue-50" aria-hidden /> Evento
+          <span className="h-3 w-3 rounded-[3px] border-l-4 border-ergon-blue bg-blue-50" aria-hidden /> Evento
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded-sm border border-dashed border-muted-foreground" aria-hidden /> Tarea
+          <span className="h-3 w-3 rounded-[3px] border border-dashed border-muted-foreground" aria-hidden /> Tarea
         </span>
       </div>
 

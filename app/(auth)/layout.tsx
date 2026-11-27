@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
         priority
         className="h-auto w-56"
       />
-      <div className="w-full max-w-sm rounded-lg border bg-card p-6 shadow-sm">{children}</div>
+      <div className="luz-marca w-full max-w-sm rounded-2xl border bg-card p-6 shadow-md sm:p-7">{children}</div>
     </main>
   );
 }

@@ -26,7 +26,7 @@ export function MenuLateral({ pie }: { pie?: React.ReactNode }) {
         </Link>
         <Campanita lado="right" className="text-white/80 hover:bg-white/10 hover:text-white" />
       </div>
-      <nav className="flex-1 space-y-1 px-3 py-2" aria-label="Principal">
+      <nav className="flex-1 space-y-0.5 px-3 py-3" aria-label="Principal">
         {SECCIONES.map(({ href, nombre, icono: Icono }) => {
           const activa = estaActiva(ruta, href);
           return (
@@ -35,11 +35,13 @@ export function MenuLateral({ pie }: { pie?: React.ReactNode }) {
               href={href}
               aria-current={activa ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-bold text-white/75 hover:bg-white/10 hover:text-white",
-                activa && "bg-ergon-blue text-white hover:bg-ergon-blue",
+                "relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-white/65 hover:bg-white/[0.06] hover:text-white",
+                activa && "bg-white/10 text-white hover:bg-white/10",
               )}
             >
-              <Icono className="size-5" aria-hidden />
+              {/* Indicador cian: acento de marca solo para la sección activa. */}
+              {activa ? <span className="absolute -left-3 top-2 bottom-2 w-1 rounded-r-full bg-ergon-sky" aria-hidden /> : null}
+              <Icono className={cn("size-5", activa ? "text-ergon-sky" : "text-white/55")} aria-hidden />
               {nombre}
             </Link>
           );

@@ -19,10 +19,10 @@ export function BarraInferior() {
   return (
     <>
       {abierto ? (
-        <div className="fixed inset-0 z-40 bg-black/30 md:hidden" onClick={() => setAbierto(false)}>
+        <div className="fixed inset-0 z-40 bg-ergon-navy/30 backdrop-blur-[2px] md:hidden" onClick={() => setAbierto(false)}>
           <nav
             aria-label="Más secciones"
-            className="absolute inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] mx-3 rounded-lg border bg-card p-2 shadow-lg"
+            className="absolute inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] mx-3 rounded-2xl border bg-card p-2 shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {EN_MAS.map(({ href, nombre, icono: Icono }) => (
@@ -45,7 +45,7 @@ export function BarraInferior() {
 
       <nav
         aria-label="Principal"
-        className="fixed inset-x-0 bottom-0 z-50 border-t bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-50 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
       >
         <ul className="grid grid-cols-5">
           {EN_BARRA.map(({ href, nombre, icono: Icono }) => {
@@ -57,10 +57,12 @@ export function BarraInferior() {
                   aria-current={activa ? "page" : undefined}
                   className={cn(
                     "flex h-16 flex-col items-center justify-center gap-1 text-xs font-bold text-muted-foreground",
-                    activa && "text-ergon-blue",
+                    activa && "text-ergon-navy",
                   )}
                 >
-                  <Icono className="size-6" aria-hidden />
+                  <span className={cn("flex h-7 w-12 items-center justify-center rounded-full", activa && "bg-accent text-ergon-blue")}>
+                    <Icono className="size-5" aria-hidden />
+                  </span>
                   {nombre}
                 </Link>
               </li>
@@ -73,10 +75,12 @@ export function BarraInferior() {
               onClick={() => setAbierto((v) => !v)}
               className={cn(
                 "flex h-16 w-full flex-col items-center justify-center gap-1 text-xs font-bold text-muted-foreground",
-                (abierto || masActivo) && "text-ergon-blue",
+                (abierto || masActivo) && "text-ergon-navy",
               )}
             >
-              {abierto ? <X className="size-6" aria-hidden /> : <Ellipsis className="size-6" aria-hidden />}
+              <span className={cn("flex h-7 w-12 items-center justify-center rounded-full", (abierto || masActivo) && "bg-accent text-ergon-blue")}>
+                {abierto ? <X className="size-5" aria-hidden /> : <Ellipsis className="size-5" aria-hidden />}
+              </span>
               Más
             </button>
           </li>
