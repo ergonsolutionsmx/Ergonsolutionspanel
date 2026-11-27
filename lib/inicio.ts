@@ -1,6 +1,7 @@
 import "server-only";
 import { crearClienteServidor } from "@/lib/supabase/server";
-import { fechaCorta, hoyISO } from "@/lib/fechas";
+import { fechaCorta, horaBonita, hoyISO, sumarDias } from "@/lib/fechas";
+import { obtenerAgenda } from "@/lib/agenda";
 
 /** Un renglón dentro de una tarjeta del Inicio. Al tocarlo lleva al registro. */
 export type Pendiente = {
@@ -53,9 +54,29 @@ export async function tareasPendientes(): Promise<GrupoPendientes[]> {
   ];
 }
 
-/** Eventos de hoy y mañana. Fase 3. */
-export async function eventosProximos(): Promise<GrupoPendientes[]> {
-  return [];
+/** Eventos de hoy y mañana (de los dos). */
+export async function eventosProximos(yoId: string): Promise<GrupoPendientes[]> {
+  const hoy = hoyISO();
+  const manana = sumarDias(hoy, 1);
+  const porDia = await obtenerAgenda({ desde: hoy, hasta: manana, de: "todos", yoId });
+  const volver = encodeURIComponent("/inicio");
+
+  const grupo = (nombre: string, dia: string): GrupoPendientes => ({
+    nombre,
+    items: (porDia[dia] ?? []).flatMap((i) =>
+      i.tipo === "evento"
+        ? [
+            {
+              id: `${i.id}-${dia}`,
+              titulo: i.titulo,
+              detalle: i.todoElDia || i.continua || !i.hora ? "Todo el día" : horaBonita(i.hora),
+              href: `/agenda/eventos/${i.id}?volver=${volver}`,
+            },
+          ]
+        : [],
+    ),
+  });
+  return [grupo("Hoy", hoy), grupo("Mañana", manana)];
 }
 
 /** Mensajes nuevos en la bandeja. Fase 6. */

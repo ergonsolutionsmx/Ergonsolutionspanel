@@ -16,7 +16,7 @@ export default async function InicioPage() {
 
   const [tareas, eventos, mensajes, propuestas] = await Promise.all([
     tareasPendientes(),
-    eventosProximos(),
+    eventosProximos(usuario.id),
     mensajesNuevos(),
     propuestasPendientes(),
   ]);
@@ -35,7 +35,7 @@ export default async function InicioPage() {
           </Link>
         </Button>
         <Button asChild variant="outline" className="h-auto flex-col gap-1 py-3 sm:h-10 sm:flex-row sm:py-2">
-          <Link href="/agenda?nuevo=evento">
+          <Link href="/agenda/eventos/nuevo?volver=%2Finicio">
             <CalendarPlus /> Evento
           </Link>
         </Button>
@@ -48,7 +48,7 @@ export default async function InicioPage() {
 
       <div className="grid gap-4 md:grid-cols-2">
         <TarjetaPendientes titulo="Tareas" icono={ListTodo} href="/proyectos" grupos={tareas} />
-        <TarjetaPendientes titulo="Agenda" icono={CalendarDays} href="/agenda" grupos={eventos} fase={3} />
+        <TarjetaPendientes titulo="Agenda" icono={CalendarDays} href="/agenda" grupos={eventos} />
         <TarjetaPendientes titulo="Bandeja" icono={Inbox} href="/bandeja" grupos={mensajes} fase={6} />
         <TarjetaPendientes titulo="Propuestas" icono={FileText} href="/propuestas" grupos={propuestas} fase={5} />
       </div>
