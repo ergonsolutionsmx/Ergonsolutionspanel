@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { ArrowRightLeft, CalendarDays, FolderKanban, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fechaRelativa } from "@/lib/fechas";
@@ -42,7 +42,7 @@ export function TaskCard({
   const hecha = tarea.estado === "hecha";
 
   return (
-    <motion.div
+    <m.div
       initial={arrastrando ? false : { opacity: 0, y: 6, filter: "blur(4px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
@@ -105,7 +105,7 @@ export function TaskCard({
           </DropdownMenuContent>
         </DropdownMenu>
       ) : null}
-    </motion.div>
+    </m.div>
   );
 }
 

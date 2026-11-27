@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { Plus } from "lucide-react";
 import {
   DndContext,
@@ -239,7 +240,7 @@ function Columna({ estado, tareas, hrefNueva, children }: { estado: EstadoTarea;
         </span>
         <span className="flex items-center gap-1">
           <AnimatePresence mode="popLayout" initial={false}>
-            <motion.span
+            <m.span
               key={tareas.length}
               initial={{ y: -8, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -247,7 +248,7 @@ function Columna({ estado, tareas, hrefNueva, children }: { estado: EstadoTarea;
               className="min-w-6 rounded-full bg-card px-2 py-0.5 text-center text-xs font-bold tabular-nums text-muted-foreground shadow-sm"
             >
               {tareas.length}
-            </motion.span>
+            </m.span>
           </AnimatePresence>
           <Link href={hrefNueva} aria-label={`Nueva tarea en ${NOMBRE_ESTADO[estado]}`} className="grid size-7 place-items-center rounded-full text-muted-foreground hover:bg-card hover:text-ergon-blue">
             <Plus className="size-4" aria-hidden />

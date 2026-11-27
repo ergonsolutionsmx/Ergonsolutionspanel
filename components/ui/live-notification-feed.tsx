@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, useReducedMotion } from "motion/react";
+import * as m from "motion/react-m";
 import { Bell, CalendarDays, Check, CheckCheck, FileText, Inbox, ListTodo, Trash2, X, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { gentleSpring } from "@/lib/motion";
@@ -45,7 +46,7 @@ function DetalleMensaje({ texto, fresca }: { texto: string; fresca: boolean }) {
       {escribiendo ? (
         <span className="flex h-[18px] items-center gap-1" aria-label="escribiendo">
           {[0, 1, 2].map((i) => (
-            <motion.span
+            <m.span
               key={i}
               className="size-1.5 rounded-full bg-muted-foreground"
               animate={{ y: [0, -3, 0], opacity: [0.35, 1, 0.35] }}
@@ -56,7 +57,7 @@ function DetalleMensaje({ texto, fresca }: { texto: string; fresca: boolean }) {
       ) : (
         <span className="line-clamp-3">
           {texto.split(/\s+/).map((p, i) => (
-            <motion.span
+            <m.span
               key={i}
               className="inline-block"
               initial={fresca && !reducir ? { opacity: 0, y: 4, filter: "blur(2px)" } : false}
@@ -64,7 +65,7 @@ function DetalleMensaje({ texto, fresca }: { texto: string; fresca: boolean }) {
               transition={{ duration: 0.26, delay: i * 0.04 }}
             >
               {p}&nbsp;
-            </motion.span>
+            </m.span>
           ))}
         </span>
       )}
@@ -80,7 +81,7 @@ function DetalleCalendario({ fecha, fresca }: { fecha: string; fresca: boolean }
   const hora = new Intl.DateTimeFormat("es-MX", { hour: "numeric", minute: "2-digit", timeZone: "America/Mexico_City" }).format(d);
   return (
     <div className="mt-2 flex items-center gap-3" style={{ perspective: 400 }}>
-      <motion.div
+      <m.div
         initial={fresca ? { rotateX: -90, opacity: 0 } : false}
         animate={{ rotateX: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.25 }}
@@ -88,7 +89,7 @@ function DetalleCalendario({ fecha, fresca }: { fecha: string; fresca: boolean }
       >
         <div className="bg-error py-0.5 text-[9px] font-black uppercase text-white">{mes}</div>
         <div className="py-0.5 text-base font-black text-ergon-navy">{dia}</div>
-      </motion.div>
+      </m.div>
       <span className="text-xs font-bold text-muted-foreground">{hora}</span>
     </div>
   );
@@ -110,7 +111,7 @@ function Tarjeta({
   const Icono = ICONO[a.tipo];
   const [hecho, setHecho] = useState<string | null>(null);
   return (
-    <motion.li
+    <m.li
       layout
       initial={fresca ? { opacity: 0, y: -16, scale: 0.96 } : { opacity: 0 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -120,14 +121,14 @@ function Tarjeta({
     >
       <article aria-label={`${a.app}: ${a.titulo}`} className={cn("group relative rounded-2xl border bg-card p-3 shadow-sm", !a.leida && "border-ergon-blue/25 bg-accent/40")}>
         <div className="flex gap-3">
-          <motion.span
+          <m.span
             className={cn("grid size-9 shrink-0 place-items-center rounded-xl", ACENTO[a.tipo])}
             initial={fresca ? { scale: 0.6, rotate: -12 } : false}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", stiffness: 420, damping: 14 }}
           >
             <Icono className="size-[18px]" aria-hidden />
-          </motion.span>
+          </m.span>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5 pr-7 text-xs text-muted-foreground">
               <span className="truncate font-bold">{a.app}</span>
@@ -198,7 +199,7 @@ function Tarjeta({
           <X className="size-3.5" aria-hidden />
         </button>
       </article>
-    </motion.li>
+    </m.li>
   );
 }
 
@@ -231,7 +232,7 @@ export function LiveNotificationFeed({
         <h2 className="font-black text-ergon-navy">Notificaciones</h2>
         <AnimatePresence>
           {sinLeer > 0 ? (
-            <motion.span
+            <m.span
               key={sinLeer}
               initial={{ scale: 0.6 }}
               animate={{ scale: 1 }}
@@ -240,7 +241,7 @@ export function LiveNotificationFeed({
               className="rounded-full bg-ergon-blue px-1.5 py-0.5 text-[11px] font-black tabular-nums text-white"
             >
               {sinLeer}
-            </motion.span>
+            </m.span>
           ) : null}
         </AnimatePresence>
         <div className="ml-auto flex gap-1">

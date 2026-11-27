@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Progress as ProgressPrimitive } from "radix-ui";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { cn } from "@/lib/utils";
 
 /** Barra de avance que se llena al aparecer. */
@@ -16,7 +16,7 @@ function Progress({ className, value, ...props }: React.ComponentProps<typeof Pr
       {...props}
     >
       <ProgressPrimitive.Indicator asChild>
-        <motion.div
+        <m.div
           data-slot="progress-indicator"
           className="h-full w-full rounded-full bg-gradient-to-r from-ergon-blue to-ergon-sky"
           initial={{ x: "-100%" }}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { gentleSpring } from "@/lib/motion";
@@ -32,10 +32,10 @@ export function SettingsTabs({ pestanas }: { pestanas: PestanaAjustes[] }) {
                 )}
               >
                 {sel ? (
-                  <motion.span layoutId="ajustes-activa" transition={gentleSpring} className="absolute inset-0 rounded-full bg-white shadow-sm md:rounded-xl" aria-hidden />
+                  <m.span layoutId="ajustes-activa" transition={gentleSpring} className="absolute inset-0 rounded-full bg-white shadow-sm md:rounded-xl" aria-hidden />
                 ) : null}
                 {sel ? (
-                  <motion.span layoutId="ajustes-barra" transition={gentleSpring} className="absolute -left-2 top-2 bottom-2 hidden w-1 rounded-full bg-ergon-blue md:block" aria-hidden />
+                  <m.span layoutId="ajustes-barra" transition={gentleSpring} className="absolute -left-2 top-2 bottom-2 hidden w-1 rounded-full bg-ergon-blue md:block" aria-hidden />
                 ) : null}
                 <p.icono className={cn("relative size-4", sel && "text-ergon-blue")} aria-hidden />
                 <span className="relative">{p.nombre}</span>

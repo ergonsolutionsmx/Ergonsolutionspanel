@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { CalendarDays, FolderKanban, MessageSquare, Pencil, Send, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fechaRelativa } from "@/lib/fechas";
@@ -155,7 +156,7 @@ export function DetalleTarea({
               </div>
               {datos.checklist.length ? (
                 <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-secondary">
-                  <motion.div
+                  <m.div
                     className="h-full rounded-full bg-exito"
                     animate={{ width: `${(hechos / datos.checklist.length) * 100}%` }}
                     transition={{ type: "spring", stiffness: 200, damping: 26 }}
@@ -165,7 +166,7 @@ export function DetalleTarea({
               <ul className="space-y-1">
                 <AnimatePresence initial={false}>
                   {datos.checklist.map((c) => (
-                    <motion.li
+                    <m.li
                       key={c.id}
                       layout
                       initial={{ opacity: 0, height: 0 }}
@@ -196,7 +197,7 @@ export function DetalleTarea({
                       >
                         <X className="size-3.5" aria-hidden />
                       </button>
-                    </motion.li>
+                    </m.li>
                   ))}
                 </AnimatePresence>
               </ul>
@@ -225,7 +226,7 @@ export function DetalleTarea({
                     const autor = catalogos.perfiles.find((p) => p.usuario_id === c.usuario_id);
                     const mio = c.usuario_id === catalogos.yoId;
                     return (
-                      <motion.li key={c.id} layout initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="group flex gap-2.5">
+                      <m.li key={c.id} layout initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="group flex gap-2.5">
                         <Avatar perfil={autor} className="size-7" />
                         <div className="min-w-0 flex-1">
                           <p className="text-xs">
@@ -247,7 +248,7 @@ export function DetalleTarea({
                             <Trash2 className="size-3.5" aria-hidden />
                           </button>
                         ) : null}
-                      </motion.li>
+                      </m.li>
                     );
                   })}
                 </AnimatePresence>

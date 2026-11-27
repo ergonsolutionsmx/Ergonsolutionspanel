@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { Ellipsis } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { gentleSpring } from "@/lib/motion";
@@ -15,7 +15,7 @@ const EN_MAS = SECCIONES.filter((s) => !s.enBarra);
 
 function Pastilla() {
   return (
-    <motion.span
+    <m.span
       layoutId="barra-activa"
       transition={gentleSpring}
       className="absolute inset-0 rounded-[1.1rem] bg-primary shadow-[var(--shadow-accion)]"

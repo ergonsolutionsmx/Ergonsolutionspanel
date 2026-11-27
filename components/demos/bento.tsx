@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { Dumbbell, Factory, GraduationCap, HardHat, Scissors, Stethoscope, Store, Truck, UtensilsCrossed, ExternalLink, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fadeUp, stagger } from "@/lib/motion";
@@ -21,12 +21,12 @@ export const GIROS: { clave: string; nombre: string; texto: string; icono: Lucid
 /** Lanzador en cuadrícula tipo bento: una tarjeta por giro. */
 export function BentoDemos({ url }: { url: string | null }) {
   return (
-    <motion.ul className="grid auto-rows-[minmax(9.5rem,auto)] gap-3 sm:grid-cols-2 lg:grid-cols-4" variants={stagger(0.04)} initial="oculto" animate="visible">
+    <m.ul className="grid auto-rows-[minmax(9.5rem,auto)] gap-3 sm:grid-cols-2 lg:grid-cols-4" variants={stagger(0.04)} initial="oculto" animate="visible">
       {GIROS.map((g, i) => {
         const grande = i === 0;
         const href = url ? `${url}${url.includes("?") ? "&" : "?"}giro=${g.clave}` : null;
         return (
-          <motion.li key={g.clave} variants={fadeUp} className={cn(grande && "lg:col-span-2 lg:row-span-2")}>
+          <m.li key={g.clave} variants={fadeUp} className={cn(grande && "lg:col-span-2 lg:row-span-2")}>
             <div
               className={cn(
                 "tarjeta-viva group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-white/70 bg-card p-5 shadow-sm",
@@ -54,9 +54,9 @@ export function BentoDemos({ url }: { url: string | null }) {
                 )}
               </div>
             </div>
-          </motion.li>
+          </m.li>
         );
       })}
-    </motion.ul>
+    </m.ul>
   );
 }

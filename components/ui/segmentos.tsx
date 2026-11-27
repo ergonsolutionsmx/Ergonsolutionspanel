@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useId } from "react";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { cn } from "@/lib/utils";
 import { gentleSpring } from "@/lib/motion";
 
@@ -40,7 +40,7 @@ export function Segmentos({
         const contenido = (
           <>
             {sel ? (
-              <motion.span
+              <m.span
                 layoutId={`segmento-${id}`}
                 transition={gentleSpring}
                 className="absolute inset-0 rounded-full bg-white shadow-sm"

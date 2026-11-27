@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     siteName: "Ergon Solutions",
     locale: "es_MX",
     type: "website",
-    images: [{ url: "/brand/logo-fondo-oscuro.png", width: 1200, height: 381, alt: "Ergon Solutions" }],
+    images: [{ url: "/brand/og.png", width: 1200, height: 630, alt: "Ergon Solutions" }],
   },
   appleWebApp: { capable: true, title: "Ergon", statusBarStyle: "default" },
   robots: { index: false, follow: false },

@@ -1,21 +1,21 @@
 "use client";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { fadeUp, stagger } from "@/lib/motion";
 
 /** Contenedor cuyos hijos <Aparece> entran escalonados (fade + subir). */
 export function Escalonado({ children, className, cada = 0.05 }: { children: React.ReactNode; className?: string; cada?: number }) {
   return (
-    <motion.div className={className} variants={stagger(cada)} initial="oculto" animate="visible">
+    <m.div className={className} variants={stagger(cada)} initial="oculto" animate="visible">
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
 export function Aparece({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <motion.div className={className} variants={fadeUp}>
+    <m.div className={className} variants={fadeUp}>
       {children}
-    </motion.div>
+    </m.div>
   );
 }

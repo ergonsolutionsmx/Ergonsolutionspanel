@@ -4,7 +4,13 @@ import { useState } from "react";
 import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Ventana } from "@/components/ui/ventana";
-import { MeetingScheduler } from "@/components/ui/meeting-scheduler";
+import dynamic from "next/dynamic";
+
+// El formulario (con el calendario) se carga al abrirlo.
+const MeetingScheduler = dynamic(() => import("@/components/ui/meeting-scheduler").then((m) => m.MeetingScheduler), {
+  ssr: false,
+  loading: () => <div className="esqueleto h-96 rounded-2xl" />,
+});
 import type { PerfilCorto } from "@/lib/tareas-tipos";
 
 /** Botón "Agendar reunión": abre el formulario en una ventana (o una hoja en celular). */

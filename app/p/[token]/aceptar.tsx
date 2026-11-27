@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { CheckCircle2, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,14 +23,14 @@ export function BotonAceptar({ token, folio }: { token: string; folio: string })
 
   if (resultado === "ok") {
     return (
-      <motion.p
+      <m.p
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         role="status"
         className="flex items-center gap-2 rounded-full bg-exito/10 px-4 py-2.5 text-sm font-bold text-exito"
       >
         <CheckCircle2 className="size-5" aria-hidden /> ¡Gracias! Recibimos tu aceptación.
-      </motion.p>
+      </m.p>
     );
   }
   return (

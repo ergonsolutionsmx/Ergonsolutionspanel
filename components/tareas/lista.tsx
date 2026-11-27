@@ -1,7 +1,8 @@
 "use client";
 
 import { useOptimistic, useState, useTransition } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { CalendarDays, Check, ListTodo } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fechaRelativa } from "@/lib/fechas";
@@ -59,7 +60,7 @@ export function ListaTareas({
                 const vencida = estaVencida(t, catalogos.hoy);
                 const proyecto = catalogos.proyectos.find((p) => p.id === t.proyecto_id);
                 return (
-                  <motion.li
+                  <m.li
                     key={t.id}
                     layout
                     initial={{ opacity: 0, y: 6 }}
@@ -68,7 +69,7 @@ export function ListaTareas({
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     className="flex items-center gap-3 rounded-2xl border border-white/70 bg-card px-3 py-2.5 shadow-sm"
                   >
-                    <motion.button
+                    <m.button
                       type="button"
                       whileTap={{ scale: 0.85 }}
                       onClick={() => alternar(t)}
@@ -81,12 +82,12 @@ export function ListaTareas({
                     >
                       <AnimatePresence>
                         {hecha ? (
-                          <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: "spring", stiffness: 600, damping: 20 }}>
+                          <m.span initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: "spring", stiffness: 600, damping: 20 }}>
                             <Check className="size-4" aria-hidden />
-                          </motion.span>
+                          </m.span>
                         ) : null}
                       </AnimatePresence>
-                    </motion.button>
+                    </m.button>
                     <button type="button" onClick={() => setDetalle(t.id)} className="min-w-0 flex-1 text-left">
                       <span className={cn("tachado inline-block max-w-full truncate align-top text-sm font-bold text-ergon-navy", hecha && "tachado-activo text-muted-foreground")}>{t.titulo}</span>
                       <span className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
@@ -101,7 +102,7 @@ export function ListaTareas({
                     </button>
                     <EtiquetaPrioridad prioridad={t.prioridad} />
                     <Avatar perfil={catalogos.perfiles.find((p) => p.usuario_id === t.responsable_id)} />
-                  </motion.li>
+                  </m.li>
                 );
               })}
             </AnimatePresence>

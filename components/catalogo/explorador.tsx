@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Segmentos } from "@/components/ui/segmentos";
 import { EmptyState } from "@/components/ui/empty-state";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { fadeUp, stagger } from "@/lib/motion";
 import { SearchX } from "lucide-react";
 import {
@@ -202,12 +202,12 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
 
 function Rejilla({ servicios }: { servicios: Servicio[] }) {
   return (
-    <motion.ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" variants={stagger(0.03)} initial="oculto" animate="visible">
+    <m.ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" variants={stagger(0.03)} initial="oculto" animate="visible">
       {servicios.map((s) => (
-        <motion.li key={s.id} variants={fadeUp}>
+        <m.li key={s.id} variants={fadeUp}>
           <TarjetaServicio servicio={s} />
-        </motion.li>
+        </m.li>
       ))}
-    </motion.ul>
+    </m.ul>
   );
 }

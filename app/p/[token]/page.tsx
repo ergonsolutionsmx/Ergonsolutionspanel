@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { Logo } from "@/components/brand/logo";
 import { Suspense } from "react";
 import { CheckCircle2, Clock, Download } from "lucide-react";
 import { LOCALE, ZONA_HORARIA } from "@/lib/utils";
@@ -23,7 +23,7 @@ function Marco({ children }: { children: React.ReactNode }) {
       <header className="relative overflow-hidden bg-ergon-navy">
         <div className="pointer-events-none absolute -right-24 -top-32 size-80 rounded-full bg-ergon-sky/25 blur-3xl" aria-hidden />
         <div className="relative mx-auto flex max-w-3xl items-center justify-between px-5 py-6">
-          <Image src="/brand/logo-fondo-oscuro.png" alt="Ergon Solutions" width={170} height={54} priority className="logo-entrada h-auto w-36 sm:w-44" />
+          <Logo tono="light" prioridad className="logo-entrada w-40 sm:w-48" />
         </div>
         <div className="h-1 bg-gradient-to-r from-ergon-blue to-ergon-sky" />
       </header>

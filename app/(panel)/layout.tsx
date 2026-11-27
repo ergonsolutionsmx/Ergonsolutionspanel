@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Logo } from "@/components/brand/logo";
 import Link from "next/link";
 import { Suspense } from "react";
 import { MenuLateral } from "@/components/panel/menu-lateral";
@@ -29,7 +29,7 @@ export default function PanelLayout({ children }: LayoutProps<"/">) {
           <div className="sticky top-0 z-30 px-3 pt-[calc(0.5rem+env(safe-area-inset-top))] md:hidden">
             <header className="vidrio-solido flex h-14 items-center justify-between rounded-2xl pl-2.5 pr-2">
               <Link href="/inicio" aria-label="Ergon Solutions · Inicio" className="flex items-center gap-2">
-                <Image src="/brand/isotipo.png" alt="" width={32} height={32} priority />
+                <Logo variante="app" prioridad className="size-8 rounded-lg" />
                 <span className="text-sm font-black tracking-tight text-ergon-navy">Ergon Solutions</span>
               </Link>
               <div className="flex items-center gap-1.5">

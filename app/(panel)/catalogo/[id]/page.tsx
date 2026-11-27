@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, FolderOpen, Pencil, FilePlus2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Pencil, FilePlus2 } from "lucide-react";
+import { LogoGoogleDrive } from "@/components/logos/marcas";
 import { pesos } from "@/lib/utils";
 import { obtenerUsuario } from "@/lib/auth";
 import { obtenerServicio } from "@/lib/catalogo";
@@ -82,7 +83,7 @@ export default async function ServicioPage({ params }: PageProps<"/catalogo/[id]
           {s.link_drive ? (
             <Button asChild variant="outline">
               <a href={s.link_drive} target="_blank" rel="noopener noreferrer">
-                <FolderOpen /> Carpeta en Drive <ExternalLink className="size-3" aria-hidden />
+                <LogoGoogleDrive aria-hidden titulo="" /> Carpeta en Drive <ExternalLink className="size-3" aria-hidden />
               </a>
             </Button>
           ) : null}

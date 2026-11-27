@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Logo } from "@/components/brand/logo";
 import { TarjetaAcceso } from "@/components/ui/sign-in-card-2";
 
 /** Pantallas de acceso: fondo navy con luces de marca y tarjeta de vidrio oscuro. */
@@ -20,7 +20,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
       </div>
       <TarjetaAcceso>
         <div className="mb-6 flex justify-center">
-          <Image src="/brand/logo-fondo-oscuro.png" alt="Ergon Solutions" width={180} height={57} priority className="logo-entrada h-auto w-40" />
+          <Logo tono="light" prioridad className="logo-entrada w-44" />
         </div>
         {children}
       </TarjetaAcceso>

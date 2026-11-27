@@ -1,7 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { CircleAlert, CircleCheck, Info, X } from "lucide-react";
 import { Alert, AlertContent, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -53,7 +54,7 @@ export function Toaster() {
         {lista.map((a) => {
           const Icono = ICONO[a.tipo];
           return (
-            <motion.div
+            <m.div
               key={a.id}
               layout
               initial={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -83,7 +84,7 @@ export function Toaster() {
                   {a.texto ? <AlertDescription>{a.texto}</AlertDescription> : null}
                 </AlertContent>
               </Alert>
-            </motion.div>
+            </m.div>
           );
         })}
       </AnimatePresence>

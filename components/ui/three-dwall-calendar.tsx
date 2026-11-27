@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
+import * as m from "motion/react-m";
 import { Box, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ItemAgenda } from "@/lib/agenda-tipos";
@@ -105,7 +106,7 @@ export function CalendarioPared(props: Props) {
           }}
           onPointerUp={() => (arrastre.current = null)}
         >
-          <motion.div
+          <m.div
             animate={vista3d ? { rotateX: inclinacion.x, rotateY: inclinacion.y } : { rotateX: 0, rotateY: 0 }}
             transition={{ type: "spring", stiffness: 160, damping: 22 }}
             style={{ transformStyle: "preserve-3d", transformOrigin: "50% 60%" }}
@@ -123,7 +124,7 @@ export function CalendarioPared(props: Props) {
                 const esHoy = d === hoy;
                 const items = porDia[d] ?? [];
                 return (
-                  <motion.div
+                  <m.div
                     key={d}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -158,11 +159,11 @@ export function CalendarioPared(props: Props) {
                     {items.length ? (
                       <p className="mt-auto pt-2 text-[11px] text-muted-foreground">{items.length === 1 ? "1 pendiente" : `${items.length} pendientes`}</p>
                     ) : null}
-                  </motion.div>
+                  </m.div>
                 );
               })}
             </div>
-          </motion.div>
+          </m.div>
         </div>
         <Leyenda />
       </div>

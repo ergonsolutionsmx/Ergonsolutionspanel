@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import * as mo from "motion/react-m";
 import { Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fadeUp, stagger } from "@/lib/motion";
@@ -35,12 +35,12 @@ export function ListaMensajes({
   if (mensajes.length === 0)
     return <EmptyState icono={Inbox} titulo="Sin mensajes" texto="Puedes crear uno de prueba en Ajustes → Integraciones." compacto={compacta} />;
   return (
-    <motion.ul className="space-y-2" variants={stagger(0.035)} initial="oculto" animate="visible">
+    <mo.ul className="space-y-2" variants={stagger(0.035)} initial="oculto" animate="visible">
       {mensajes.map((m) => {
         const nuevo = m.estado === "nuevo";
         const activo = m.id === seleccionado;
         return (
-          <motion.li key={m.id} variants={fadeUp} layout>
+          <mo.li key={m.id} variants={fadeUp} layout>
             <Link
               href={`/bandeja/${m.id}${qs ? `?${qs}` : ""}`}
               aria-current={activo ? "page" : undefined}
@@ -68,9 +68,9 @@ export function ListaMensajes({
               </div>
               {nuevo ? <span className="absolute right-3 top-3 size-2 rounded-full bg-ergon-blue" aria-hidden /> : null}
             </Link>
-          </motion.li>
+          </mo.li>
         );
       })}
-    </motion.ul>
+    </mo.ul>
   );
 }

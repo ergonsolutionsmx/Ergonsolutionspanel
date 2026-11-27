@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { Popover } from "radix-ui";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,14 @@ import { haceCuanto } from "@/lib/tiempo";
 import { useHidratado } from "@/lib/use-hidratado";
 import { useMedia } from "@/lib/use-media";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
-import { LiveNotificationFeed, type AvisoFeed, type TipoAviso } from "@/components/ui/live-notification-feed";
+import dynamic from "next/dynamic";
+import type { AvisoFeed, TipoAviso } from "@/components/ui/live-notification-feed";
+
+// El feed (con sus animaciones) se carga al abrir la campanita.
+const LiveNotificationFeed = dynamic(() => import("@/components/ui/live-notification-feed").then((m) => m.LiveNotificationFeed), {
+  ssr: false,
+  loading: () => <div className="esqueleto m-3 h-40 rounded-2xl" />,
+});
 import { toast } from "@/components/avisos/toast";
 import { cambiarEstadoTarea } from "@/app/(panel)/proyectos/acciones";
 import { useNotificaciones, type Notificacion } from "./contexto";
@@ -75,7 +82,7 @@ export function Campanita({ className }: { className?: string; lado?: "bottom" |
   );
 
   const boton = (
-    <motion.span
+    <m.span
       key={pulso}
       className="relative flex"
       animate={pulso > 0 ? { rotate: [0, -14, 12, -8, 6, 0] } : undefined}
@@ -83,7 +90,7 @@ export function Campanita({ className }: { className?: string; lado?: "bottom" |
     >
       <Bell className="size-5" aria-hidden />
       {noLeidas > 0 ? (
-        <motion.span
+        <m.span
           key={noLeidas}
           initial={{ scale: 0.5 }}
           animate={{ scale: 1 }}
@@ -91,9 +98,9 @@ export function Campanita({ className }: { className?: string; lado?: "bottom" |
           className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-error px-1 text-[11px] font-black leading-none text-white ring-2 ring-white"
         >
           {noLeidas > 99 ? "99+" : noLeidas}
-        </motion.span>
+        </m.span>
       ) : null}
-    </motion.span>
+    </m.span>
   );
 
   const claseBoton = cn("relative rounded-full p-2 outline-none focus-visible:ring-2 focus-visible:ring-ring", className);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useOptimistic, useTransition } from "react";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ETAPAS_METODO, NOMBRE_ETAPA, type EtapaMetodo } from "@/lib/tareas-tipos";
@@ -40,7 +40,7 @@ export function EtapasMetodo({ proyectoId, etapa }: { proyectoId: string; etapa:
                     !hecha && !activa && "border-border bg-card text-muted-foreground hover:border-ergon-blue/50",
                   )}
                 >
-                  {activa ? <motion.span layoutId={`etapa-${proyectoId}`} className="absolute -inset-1 rounded-full ring-4 ring-ergon-blue/20" aria-hidden /> : null}
+                  {activa ? <m.span layoutId={`etapa-${proyectoId}`} className="absolute -inset-1 rounded-full ring-4 ring-ergon-blue/20" aria-hidden /> : null}
                   {hecha ? <Check className="size-4" aria-hidden /> : i + 1}
                 </button>
                 <span className={cn("h-0.5 flex-1 rounded-full", i === ETAPAS_METODO.length - 1 ? "bg-transparent" : i < idx ? "bg-ergon-blue" : "bg-border")} aria-hidden />

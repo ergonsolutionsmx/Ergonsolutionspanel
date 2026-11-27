@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { History } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fadeUp, stagger } from "@/lib/motion";
@@ -30,8 +30,8 @@ export function LineaTiempo({ dias, compacta = false }: { dias: DiaActividad[]; 
       {dias.map((d) => (
         <section key={d.dia}>
           <h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">{d.dia}</h3>
-          <motion.ol className="relative" variants={stagger(0.04)} initial="oculto" animate="visible">
-            <motion.span
+          <m.ol className="relative" variants={stagger(0.04)} initial="oculto" animate="visible">
+            <m.span
               aria-hidden
               className="absolute bottom-4 left-4 top-4 w-px origin-top bg-border"
               initial={{ scaleY: 0 }}
@@ -69,7 +69,7 @@ export function LineaTiempo({ dias, compacta = false }: { dias: DiaActividad[]; 
                 </>
               );
               return (
-                <motion.li key={e.id} variants={fadeUp}>
+                <m.li key={e.id} variants={fadeUp}>
                   {e.href ? (
                     <Link href={e.href} className="-mx-2 flex items-start gap-3 rounded-xl px-2 py-2 hover:bg-muted">
                       {contenido}
@@ -77,10 +77,10 @@ export function LineaTiempo({ dias, compacta = false }: { dias: DiaActividad[]; 
                   ) : (
                     <div className="flex items-start gap-3 py-2">{contenido}</div>
                   )}
-                </motion.li>
+                </m.li>
               );
             })}
-          </motion.ol>
+          </m.ol>
         </section>
       ))}
     </div>

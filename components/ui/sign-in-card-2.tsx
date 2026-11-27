@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
+import { useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
+import * as m from "motion/react-m";
 import { cn } from "@/lib/utils";
 
 /**
@@ -28,14 +29,14 @@ export function TarjetaAcceso({ children, className }: { children: React.ReactNo
   };
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={cn("relative z-10 w-full max-w-sm", className)}
       style={{ perspective: 1500 }}
     >
-      <motion.div ref={ref} style={{ rotateX, rotateY }} onPointerMove={mover} onPointerLeave={salir} className="group relative">
+      <m.div ref={ref} style={{ rotateX, rotateY }} onPointerMove={mover} onPointerLeave={salir} className="group relative">
         {/* Luz que recorre el borde (detalle sutil) */}
         <div className="borde-luz pointer-events-none absolute -inset-px rounded-[1.75rem]" aria-hidden />
         <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.06] p-6 shadow-2xl shadow-black/40 sm:p-8">
@@ -50,7 +51,7 @@ export function TarjetaAcceso({ children, className }: { children: React.ReactNo
           />
           <div className="relative">{children}</div>
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }

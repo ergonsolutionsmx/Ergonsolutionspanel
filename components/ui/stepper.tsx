@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +11,7 @@ export function Stepper({ pasos, actual }: { pasos: { valor: string; nombre: str
   return (
     <nav aria-label="Pasos" className="rounded-[1.25rem] border border-white/70 bg-card p-3 shadow-sm">
       <div className="relative mx-4 mb-2 mt-1 h-1 rounded-full bg-secondary" aria-hidden>
-        <motion.div
+        <m.div
           className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-ergon-blue to-ergon-sky"
           initial={false}
           animate={{ width: `${(idx / Math.max(1, pasos.length - 1)) * 100}%` }}
