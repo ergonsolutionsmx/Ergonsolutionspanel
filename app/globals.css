@@ -75,3 +75,9 @@
     color: var(--foreground);
   }
 }
+
+/* El buscador trae su propio botón para borrar: ocultar el del navegador. */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
