@@ -49,7 +49,7 @@ export default async function InicioPage() {
       <div className="grid gap-4 md:grid-cols-2">
         <TarjetaPendientes titulo="Tareas" icono={ListTodo} href="/proyectos" grupos={tareas} />
         <TarjetaPendientes titulo="Agenda" icono={CalendarDays} href="/agenda" grupos={eventos} />
-        <TarjetaPendientes titulo="Bandeja" icono={Inbox} href="/bandeja" grupos={mensajes} fase={6} />
+        <TarjetaPendientes titulo="Bandeja" icono={Inbox} href="/bandeja" grupos={mensajes} />
         <TarjetaPendientes titulo="Propuestas" icono={FileText} href="/propuestas" grupos={propuestas} />
       </div>
     </>

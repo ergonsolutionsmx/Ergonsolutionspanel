@@ -2,6 +2,7 @@ import "server-only";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { fechaCorta, horaBonita, hoyISO, partesCDMX, sumarDias } from "@/lib/fechas";
 import { obtenerAgenda } from "@/lib/agenda";
+import { haceCuanto } from "@/lib/tiempo";
 
 /** Un renglón dentro de una tarjeta del Inicio. Al tocarlo lleva al registro. */
 export type Pendiente = {
@@ -79,9 +80,27 @@ export async function eventosProximos(yoId: string): Promise<GrupoPendientes[]> 
   return [grupo("Hoy", hoy), grupo("Mañana", manana)];
 }
 
-/** Mensajes nuevos en la bandeja. Fase 6. */
+/** Mensajes nuevos en la bandeja. */
 export async function mensajesNuevos(): Promise<GrupoPendientes[]> {
-  return [];
+  const supabase = await crearClienteServidor();
+  const { data } = await supabase
+    .from("mensajes")
+    .select("id, canal, remitente_nombre, remitente_contacto, asunto, recibido_en")
+    .eq("estado", "nuevo")
+    .order("recibido_en", { ascending: false })
+    .limit(8);
+  const canal: Record<string, string> = { formulario: "Formulario", correo: "Correo", whatsapp: "WhatsApp", interno: "Aviso" };
+  return [
+    {
+      nombre: "Nuevos",
+      items: (data ?? []).map((m) => ({
+        id: m.id,
+        titulo: m.asunto ?? m.remitente_nombre ?? m.remitente_contacto ?? "Mensaje",
+        detalle: `${canal[m.canal] ?? ""} · ${haceCuanto(m.recibido_en)}`,
+        href: `/bandeja/${m.id}`,
+      })),
+    },
+  ];
 }
 
 /** Propuestas que vencen en 7 días o menos, y vistas sin respuesta. */

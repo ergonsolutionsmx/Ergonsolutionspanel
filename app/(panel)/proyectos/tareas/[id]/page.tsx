@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Inbox } from "lucide-react";
 import { notFound } from "next/navigation";
 import { obtenerUsuario, rutaSegura } from "@/lib/auth";
 import { obtenerCatalogos, obtenerTarea } from "@/lib/tareas";
@@ -34,6 +36,11 @@ export default async function TareaPage({ params, searchParams }: PageProps<"/pr
           textoBoton="Guardar"
         />
       </div>
+      {tarea.mensaje_id ? (
+        <Link href={`/bandeja/${tarea.mensaje_id}`} className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline">
+          <Inbox className="size-4" aria-hidden /> Ver mensaje original
+        </Link>
+      ) : null}
       <p className="mt-3 text-xs text-muted-foreground">
         Creada {haceCuanto(tarea.creado_en)}
         {creador ? ` por ${creador.nombre}` : ""}

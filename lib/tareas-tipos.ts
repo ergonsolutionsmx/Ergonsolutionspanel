@@ -35,6 +35,8 @@ export type Tarea = {
   completada_en: string | null;
   creado_en: string;
   creado_por: string | null;
+  /** Mensaje de la bandeja del que salió la tarea. */
+  mensaje_id: string | null;
 };
 
 export type Proyecto = {
@@ -58,7 +60,7 @@ export type Catalogos = {
 };
 
 export const COLUMNAS_TAREA =
-  "id, titulo, descripcion, proyecto_id, responsable_id, fecha_limite, prioridad, estado, orden, completada_en, creado_en, creado_por";
+  "id, titulo, descripcion, proyecto_id, responsable_id, fecha_limite, prioridad, estado, orden, completada_en, creado_en, creado_por, mensaje_id";
 export const COLUMNAS_PROYECTO = "id, nombre, descripcion, estado, responsable_id, fecha_objetivo, creado_en";
 
 /** Orden de la vista lista: fecha límite (sin fecha al final), luego prioridad. */

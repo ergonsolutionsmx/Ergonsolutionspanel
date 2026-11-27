@@ -6,10 +6,14 @@ import { Popover } from "radix-ui";
 import { Bell, CheckCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haceCuanto } from "@/lib/tiempo";
+import { useHidratado } from "@/lib/use-hidratado";
 import { useNotificaciones } from "./contexto";
 
 export function Campanita({ className, lado = "bottom" }: { className?: string; lado?: "bottom" | "right" }) {
-  const { notificaciones, noLeidas, cargando, marcarLeida, marcarTodas } = useNotificaciones();
+  const { notificaciones, noLeidas: noLeidasReales, cargando, marcarLeida, marcarTodas } = useNotificaciones();
+  // El servidor siempre dibuja la campana en cero: el número aparece ya hidratado.
+  const hidratado = useHidratado();
+  const noLeidas = hidratado ? noLeidasReales : 0;
   const [abierto, setAbierto] = useState(false);
   const router = useRouter();
 

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Pendiente, Titulo } from "@/components/panel/titulo";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { ProbarNotificaciones } from "./probar-notificaciones";
+import { CanalesBandeja } from "@/components/bandeja/canales";
 
 export const metadata: Metadata = { title: "Ajustes" };
 
@@ -41,6 +42,14 @@ export default async function AjustesPage() {
           </CardHeader>
           <CardContent>
             <ProbarNotificaciones usuarios={usuarios ?? []} yoId={usuario.id} />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Canales de la bandeja</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CanalesBandeja />
           </CardContent>
         </Card>
         <Pendiente fase={7} />
