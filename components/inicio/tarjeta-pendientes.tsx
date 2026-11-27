@@ -8,14 +8,11 @@ export function TarjetaPendientes({
   icono: Icono,
   href,
   grupos,
-  fase,
 }: {
   titulo: string;
   icono: LucideIcon;
   href: string;
   grupos: GrupoPendientes[];
-  /** Si el módulo aún no existe, en qué fase se activa. */
-  fase?: number;
 }) {
   const total = grupos.reduce((s, g) => s + g.items.length, 0);
 
@@ -38,7 +35,7 @@ export function TarjetaPendientes({
       <div className="flex-1 px-4 py-3">
         {total === 0 ? (
           <p className="py-4 text-center text-sm text-muted-foreground">
-            {fase ? `Se activa en la Fase ${fase}` : "Nada pendiente"}
+            Nada pendiente
           </p>
         ) : (
           <div className="space-y-3">
