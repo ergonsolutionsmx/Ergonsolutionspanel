@@ -45,7 +45,7 @@ export function BentoDemos({ url }: { url: string | null }) {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-b from-[#3B76F0] to-ergon-blue px-4 text-sm font-bold text-white shadow-[var(--shadow-accion)] after:absolute after:inset-0 active:scale-[0.97]"
+                    className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-b from-[#2f54d4] to-ergon-blue px-4 text-sm font-bold text-white shadow-[var(--shadow-accion)] after:absolute after:inset-0 active:scale-[0.97]"
                   >
                     Abrir demo <ExternalLink className="size-4" aria-hidden />
                   </a>

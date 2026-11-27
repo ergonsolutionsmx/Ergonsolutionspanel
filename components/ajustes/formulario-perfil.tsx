@@ -9,7 +9,7 @@ import { Campo, ErrorForm } from "@/components/ui/campo";
 import { actualizarPerfil } from "@/app/(panel)/ajustes/acciones";
 
 /** Colores sugeridos (de la marca y complementarios). */
-const COLORES = ["#2563EB", "#0EA5E9", "#0B1F44", "#7C3AED", "#059669", "#D97706", "#DC2626", "#DB2777"];
+const COLORES = ["#1d3fb8", "#0EA5E9", "#06142e", "#7C3AED", "#059669", "#D97706", "#DC2626", "#DB2777"];
 
 export function FormularioPerfil({ nombre, color, correo }: { nombre: string; color: string; correo: string }) {
   const [estado, enviar, enviando] = useActionState(actualizarPerfil, undefined);

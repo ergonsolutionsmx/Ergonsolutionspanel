@@ -9,10 +9,10 @@
  * Todo el color de la app sale de aquí: para cambiar la marca, se cambia este bloque.
  */
 :root {
-  --ergon-navy: #0b1f44;
-  --ergon-navy-2: #11274e;
-  --ergon-blue: #2563eb;
-  --ergon-sky: #38bdf8;
+  --ergon-navy: #06142e;
+  --ergon-navy-2: #0b1c3d;
+  --ergon-blue: #1d3fb8;
+  --ergon-sky: #2e90df;
   --ergon-bg: #f3f4f6;
 
   /* Roles (shadcn/ui) mapeados a la marca */
@@ -38,7 +38,7 @@
   --radius: 0.875rem;
 
   /* Menú lateral */
-  --sidebar: rgb(11 31 68 / 0.9);
+  --sidebar: rgb(6 20 46 / 0.9);
   --sidebar-foreground: #e6ecf7;
   --sidebar-active: var(--ergon-navy-2);
   --sidebar-accent: var(--ergon-sky);
@@ -62,8 +62,8 @@
 .dark {
   color-scheme: dark;
   --ergon-navy: #e6ecf7; /* en oscuro, "navy" como color de texto pasa a claro */
-  --ergon-bg: #060d1f;
-  --background: #060d1f;
+  --ergon-bg: #030915;
+  --background: #030915;
   --foreground: #e6ecf7;
   --card: rgb(24 44 86 / 0.5);
   --card-foreground: #e6ecf7;
@@ -73,7 +73,7 @@
   --secondary-foreground: #e6ecf7;
   --muted: rgb(255 255 255 / 0.05);
   --muted-foreground: #9fb0c9;
-  --accent: rgb(56 189 248 / 0.14);
+  --accent: rgb(46 144 223 / 0.14);
   --accent-foreground: #e6ecf7;
   --border: rgb(255 255 255 / 0.1);
   --input: rgb(255 255 255 / 0.16);
@@ -133,11 +133,11 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* Sombras de vidrio: filo de luz arriba + sombra larga y suave con tinte navy. */
-  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 1px 0 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(255 255 255 / 0.2), 0 1px 2px rgb(11 31 68 / 0.04), 0 12px 28px -20px rgb(11 31 68 / 0.42);
-  --shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.8), 0 1px 2px -1px rgb(11 31 68 / 0.08), 0 16px 40px -22px rgb(11 31 68 / 0.35);
-  --shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 2px 4px -2px rgb(11 31 68 / 0.1), 0 24px 60px -24px rgb(11 31 68 / 0.4);
+  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 1px 0 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(255 255 255 / 0.2), 0 1px 2px rgb(6 20 46 / 0.04), 0 12px 28px -20px rgb(6 20 46 / 0.42);
+  --shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.8), 0 1px 2px -1px rgb(6 20 46 / 0.08), 0 16px 40px -22px rgb(6 20 46 / 0.35);
+  --shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 2px 4px -2px rgb(6 20 46 / 0.1), 0 24px 60px -24px rgb(6 20 46 / 0.4);
   /* Solo para la acción principal (botón azul). */
-  --shadow-accion: 0 0.7px 2.7px -1.2px rgb(37 99 235 / 0.3), 0 2.7px 10px -2.3px rgb(37 99 235 / 0.25), 0 10px 30px -6px rgb(37 99 235 / 0.18);
+  --shadow-accion: 0 0.7px 2.7px -1.2px rgb(29 63 184 / 0.3), 0 2.7px 10px -2.3px rgb(29 63 184 / 0.25), 0 10px 30px -6px rgb(29 63 184 / 0.18);
 
   /* Tipografía: Lato (POR CONFIRMAR vs Archivo + IBM Plex Sans). Se cambia en app/layout.tsx */
   --font-sans: var(--font-marca), ui-sans-serif, system-ui, sans-serif;
@@ -162,7 +162,7 @@
     letter-spacing: -0.015em;
   }
   ::selection {
-    background: rgb(56 189 248 / 0.3);
+    background: rgb(46 144 223 / 0.3);
   }
 }
 
@@ -189,14 +189,14 @@
   height: 260px;
   right: -80px;
   top: -140px;
-  background: radial-gradient(closest-side, rgb(56 189 248 / 0.55), transparent);
+  background: radial-gradient(closest-side, rgb(46 144 223 / 0.55), transparent);
 }
 .luz-marca::after {
   width: 300px;
   height: 220px;
   right: 140px;
   top: -150px;
-  background: radial-gradient(closest-side, rgb(37 99 235 / 0.35), transparent);
+  background: radial-gradient(closest-side, rgb(29 63 184 / 0.35), transparent);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -238,21 +238,21 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(46rem 34rem at 94% -10%, rgb(56 189 248 / 0.55), transparent 62%),
-    radial-gradient(40rem 32rem at 58% -16%, rgb(37 99 235 / 0.28), transparent 60%),
-    radial-gradient(42rem 36rem at -8% 22%, rgb(56 189 248 / 0.24), transparent 60%),
+    radial-gradient(46rem 34rem at 94% -10%, rgb(46 144 223 / 0.55), transparent 62%),
+    radial-gradient(40rem 32rem at 58% -16%, rgb(29 63 184 / 0.28), transparent 60%),
+    radial-gradient(42rem 36rem at -8% 22%, rgb(46 144 223 / 0.24), transparent 60%),
     radial-gradient(36rem 30rem at 18% 70%, rgb(129 140 248 / 0.14), transparent 62%),
-    radial-gradient(56rem 40rem at 34% 114%, rgb(37 99 235 / 0.22), transparent 62%),
-    radial-gradient(40rem 30rem at 102% 96%, rgb(56 189 248 / 0.2), transparent 60%),
+    radial-gradient(56rem 40rem at 34% 114%, rgb(29 63 184 / 0.22), transparent 62%),
+    radial-gradient(40rem 30rem at 102% 96%, rgb(46 144 223 / 0.2), transparent 60%),
     var(--ergon-bg);
 }
 .dark body::before {
   background:
-    radial-gradient(46rem 34rem at 94% -10%, rgb(56 189 248 / 0.22), transparent 62%),
-    radial-gradient(40rem 32rem at 58% -16%, rgb(37 99 235 / 0.28), transparent 60%),
-    radial-gradient(42rem 36rem at -8% 22%, rgb(37 99 235 / 0.18), transparent 60%),
+    radial-gradient(46rem 34rem at 94% -10%, rgb(46 144 223 / 0.22), transparent 62%),
+    radial-gradient(40rem 32rem at 58% -16%, rgb(29 63 184 / 0.28), transparent 60%),
+    radial-gradient(42rem 36rem at -8% 22%, rgb(29 63 184 / 0.18), transparent 60%),
     radial-gradient(36rem 30rem at 18% 70%, rgb(129 140 248 / 0.12), transparent 62%),
-    radial-gradient(56rem 40rem at 34% 114%, rgb(56 189 248 / 0.12), transparent 62%),
+    radial-gradient(56rem 40rem at 34% 114%, rgb(46 144 223 / 0.12), transparent 62%),
     var(--ergon-bg);
 }
 
@@ -271,8 +271,8 @@ body::before {
     inset 1px 0 0 rgb(255 255 255 / 0.55),
     inset 0 -1px 0 rgb(255 255 255 / 0.25),
     inset 0 0 0 1px rgb(255 255 255 / 0.35),
-    inset 0 -18px 40px -30px rgb(37 99 235 / 0.25),
-    0 24px 60px -30px rgb(11 31 68 / 0.4);
+    inset 0 -18px 40px -30px rgb(29 63 184 / 0.25),
+    0 24px 60px -30px rgb(6 20 46 / 0.4);
   @supports not (backdrop-filter: blur(1px)) {
     background: rgb(255 255 255 / 0.94);
   }
@@ -288,7 +288,7 @@ body::before {
     inset 0 1px 0 rgb(255 255 255 / 1),
     inset 1px 0 0 rgb(255 255 255 / 0.6),
     inset 0 0 0 1px rgb(255 255 255 / 0.45),
-    0 24px 80px -20px rgb(11 31 68 / 0.38);
+    0 24px 80px -20px rgb(6 20 46 / 0.38);
   @supports not (backdrop-filter: blur(1px)) {
     background: rgb(255 255 255 / 0.97);
   }
@@ -301,7 +301,7 @@ body::before {
     inset 0 1px 0 rgb(255 255 255 / 0.16),
     inset 1px 0 0 rgb(255 255 255 / 0.08),
     inset 0 0 0 1px rgb(255 255 255 / 0.06),
-    inset 0 -18px 40px -30px rgb(56 189 248 / 0.25),
+    inset 0 -18px 40px -30px rgb(46 144 223 / 0.25),
     0 24px 60px -30px rgb(0 0 0 / 0.7);
 }
 @media (min-width: 48rem) {
@@ -313,7 +313,7 @@ body::before {
       inset 0 1px 0 rgb(255 255 255 / 0.16),
       inset 1px 0 0 rgb(255 255 255 / 0.08),
       inset 0 0 0 1px rgb(255 255 255 / 0.06),
-      inset 0 -18px 40px -30px rgb(56 189 248 / 0.25),
+      inset 0 -18px 40px -30px rgb(46 144 223 / 0.25),
       0 24px 60px -30px rgb(0 0 0 / 0.7);
   }
 }
@@ -352,7 +352,7 @@ body::before {
 
 /* Carga: brillo suave que recorre el bloque. */
 .esqueleto {
-  background: linear-gradient(100deg, rgb(11 31 68 / 0.06) 30%, rgb(11 31 68 / 0.11) 50%, rgb(11 31 68 / 0.06) 70%);
+  background: linear-gradient(100deg, rgb(6 20 46 / 0.06) 30%, rgb(6 20 46 / 0.11) 50%, rgb(6 20 46 / 0.06) 70%);
   background-size: 200% 100%;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -384,7 +384,7 @@ body::before {
 }
 .borde-luz {
   padding: 1px;
-  background: conic-gradient(from var(--angulo-luz), transparent 0 70%, rgb(56 189 248 / 0.9) 82%, rgb(255 255 255 / 0.9) 86%, transparent 92%);
+  background: conic-gradient(from var(--angulo-luz), transparent 0 70%, rgb(46 144 223 / 0.9) 82%, rgb(255 255 255 / 0.9) 86%, transparent 92%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -438,10 +438,10 @@ body::before {
 }
 /* Fondos navy sólidos (chips activos, encabezados de tabla): azul profundo para que se distingan. */
 .dark [class~="bg-ergon-navy"] {
-  background-color: #1d3b73;
+  background-color: #1a3488;
 }
 .dark :is([class~="border-ergon-navy"], [class~="md:border-ergon-navy"]) {
-  border-color: #2b5096;
+  border-color: #2a4bb0;
 }
 .dark :is(.text-amber-700, .text-amber-800, .text-amber-900) { color: #fbbf24; }
 .dark :is(.text-emerald-600, .text-emerald-700, .text-emerald-800) { color: #34d399; }
@@ -455,7 +455,7 @@ body::before {
   background-size: 200% 100%;
 }
 .dark ::selection {
-  background: rgb(56 189 248 / 0.35);
+  background: rgb(46 144 223 / 0.35);
 }
 /* En oscuro, el filo de luz de las tarjetas es tenue (en claro es blanco brillante). */
 .dark [class~="shadow-sm"] {

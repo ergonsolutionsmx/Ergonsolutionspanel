@@ -24,7 +24,7 @@ export function MenuLateral({ pie }: { pie?: React.ReactNode }) {
     <div className="sticky top-0 z-40 hidden h-dvh shrink-0 md:block" style={{ width: CERRADO }}>
       <m.aside
         data-abierto={abierto}
-        className="group/menu absolute inset-y-0 left-0 flex flex-col overflow-hidden bg-sidebar text-sidebar-foreground shadow-[8px_0_40px_-12px_rgb(11_31_68/0.45),inset_-1px_0_0_rgb(255_255_255/0.08)] backdrop-blur-2xl backdrop-saturate-150"
+        className="group/menu absolute inset-y-0 left-0 flex flex-col overflow-hidden bg-sidebar text-sidebar-foreground shadow-[8px_0_40px_-12px_rgb(6_20_46/0.45),inset_-1px_0_0_rgb(255_255_255/0.08)] backdrop-blur-2xl backdrop-saturate-150"
         initial={false}
         animate={{ width: abierto ? ABIERTO : CERRADO }}
         transition={{ type: "spring", stiffness: 420, damping: 38 }}

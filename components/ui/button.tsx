@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-b from-[#3B76F0] to-ergon-blue text-primary-foreground shadow-[var(--shadow-accion)] hover:from-ergon-blue hover:to-[#1D4ED8]",
+          "bg-gradient-to-b from-[#2f54d4] to-ergon-blue text-primary-foreground shadow-[var(--shadow-accion)] hover:from-ergon-blue hover:to-[#18349c]",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline: "border border-input bg-card text-ergon-navy shadow-sm hover:border-ergon-blue/40 hover:bg-accent",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
