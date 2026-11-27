@@ -85,11 +85,25 @@ docs/             guía para conectar el formulario del sitio
 
 ## Marca y diseño
 
-Colores en `app/globals.css` (`--ergon-*` y roles), tipografía en `app/layout.tsx`
-(Lato, POR CONFIRMAR) y logos en `public/brand/`. La luz de marca (`.luz-marca`) es
-solo decorativa.
+- **Colores:** `app/globals.css` (`--ergon-*`, roles de shadcn, `--sidebar-*`, estados `--estado-*`, gráficas `--chart-*`).
+  Nada de colores sueltos: todo sale de variables.
+- **Tipografía:** Lato (400, 700, 900) en `app/layout.tsx`.
+- **Logo:** `components/brand/logo.tsx` con variantes `full`, `icon` y `app`, y tonos `light` (fondo navy) y
+  `dark` (fondo claro). SVG limpios en `public/brand/` (sacados de los PDF de Drive, con degradado real).
+  Íconos de la app (favicon, apple, 192/512, maskable) e imagen para compartir (`public/brand/og.png`).
+- **Estilo general:** vidrio sobre fondo de marca (`.vidrio`, `.vidrio-solido`), tarjetas casi blancas,
+  menú lateral navy que se abre al pasar el mouse, barra inferior flotante en celular.
+- **Kit:** `components/ui` (shadcn + propios: `segmentos`, `stepper`, `empty-state`, `ventana`,
+  `confirmar`, `flow-button`, `alert`). Avisos rápidos con `toast.success / error / info`
+  (`components/avisos/toast.tsx`).
+- **Animaciones:** `motion` (carga diferida con `LazyMotion`), valores compartidos en `lib/motion.ts`.
+  Con "reducir movimiento" del sistema todo aparece sin movimiento.
+- **Logos de marcas:** `components/logos/marcas.tsx` (Gmail, WhatsApp, Google Calendar, Drive, Forms,
+  Supabase, Vercel; de simple-icons, CC0).
 
 ## Por confirmar
+- Etapas del Método Ergon (hoy: Diagnóstico, Propuesta, Diseño, Desarrollo, Pruebas, Entrega, Seguimiento) en `lib/tareas-tipos.ts`.
+- Textos y link de cada giro del lanzador de Demos (`components/demos/bento.tsx`).
 
 - Tipografía final (Lato vs Archivo + IBM Plex Sans).
 - Dominio y subdominio del panel.
