@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarPlus, FilePlus2, ListPlus, Search, Users } from "lucide-react";
+import { BookOpen, CalendarPlus, FilePlus2, ListPlus, Search, Users } from "lucide-react";
+import { serviciosParaBuscar } from "./buscador-acciones";
 import {
   CommandDialog,
   CommandEmpty,
@@ -24,7 +25,13 @@ const ACCIONES = [
 /** Buscador global (Ctrl/Cmd + K): ir a una sección o crear algo. */
 export function Buscador() {
   const [abierto, setAbierto] = useState(false);
+  const [servicios, setServicios] = useState<{ id: string; numero: string; nombre: string }[] | null>(null);
   const router = useRouter();
+
+  // Los servicios se piden la primera vez que se abre el buscador.
+  useEffect(() => {
+    if (abierto && servicios === null) void serviciosParaBuscar().then(setServicios);
+  }, [abierto, servicios]);
 
   useEffect(() => {
     const tecla = (e: KeyboardEvent) => {
@@ -64,6 +71,16 @@ export function Buscador() {
               </CommandItem>
             ))}
           </CommandGroup>
+          {servicios?.length ? (
+            <CommandGroup heading="Servicios del catálogo">
+              {servicios.map((sv) => (
+                <CommandItem key={sv.id} value={`${sv.numero} ${sv.nombre}`} onSelect={() => ir(`/catalogo/${sv.id}`)}>
+                  <BookOpen aria-hidden /> {sv.nombre}
+                  <CommandShortcut>{sv.numero}</CommandShortcut>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          ) : null}
           <CommandGroup heading="Ir a">
             {SECCIONES.map(({ nombre, href, icono: Icono }) => (
               <CommandItem key={href} onSelect={() => ir(href)}>

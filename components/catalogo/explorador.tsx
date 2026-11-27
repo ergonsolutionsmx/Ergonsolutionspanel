@@ -1,10 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NativeSelect } from "@/components/ui/native-select";
+import { Segmentos } from "@/components/ui/segmentos";
+import { EmptyState } from "@/components/ui/empty-state";
+import { motion } from "motion/react";
+import { fadeUp, stagger } from "@/lib/motion";
+import { SearchX } from "lucide-react";
 import {
   CATEGORIAS,
   DIFICULTADES,
@@ -36,6 +41,19 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
     router.replace(p.size ? `${ruta}?${p}` : ruta, { scroll: false });
   }
 
+  // Atajo: "/" enfoca el buscador.
+  useEffect(() => {
+    const tecla = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (e.key === "/" && !/input|textarea|select/i.test(t.tagName)) {
+        e.preventDefault();
+        document.getElementById("buscar")?.focus();
+      }
+    };
+    window.addEventListener("keydown", tecla);
+    return () => window.removeEventListener("keydown", tecla);
+  }, []);
+
   const resultados = useMemo(() => {
     return servicios
       .filter((s) => (f.archivados === "1" ? true : s.activo))
@@ -65,9 +83,12 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
           value={f.q}
           onChange={(e) => cambiar({ q: e.target.value })}
           placeholder="¿Qué problema tiene el cliente? Ej.: citas, WhatsApp, me deben dinero"
-          className="h-12 w-full rounded-lg border border-input bg-card pl-10 pr-10 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-12 w-full rounded-2xl border border-white/70 bg-card pl-10 pr-16 text-base shadow-sm outline-none focus-visible:border-ergon-blue focus-visible:ring-4 focus-visible:ring-ergon-blue/15"
           autoComplete="off"
         />
+        {!f.q ? (
+          <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-md border bg-muted px-1.5 py-0.5 text-[11px] font-bold text-muted-foreground md:block">/</kbd>
+        ) : null}
         {f.q ? (
           <button
             type="button"
@@ -80,15 +101,24 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
         ) : null}
       </div>
 
-      <div className="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
-        <NativeSelect aria-label="Categoría" value={f.cat} onChange={(e) => cambiar({ cat: e.target.value })}>
-          <option value="">Todas las categorías</option>
-          {CATEGORIAS.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </NativeSelect>
+      <div className="-mx-4 mb-3 flex gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:px-0" aria-label="Categoría">
+        {["", ...CATEGORIAS].map((c) => (
+          <button
+            key={c || "todas"}
+            type="button"
+            aria-pressed={f.cat === c}
+            onClick={() => cambiar({ cat: c })}
+            className={cn(
+              "flex h-9 items-center whitespace-nowrap rounded-full border px-3.5 text-sm font-bold transition-colors",
+              f.cat === c ? "border-ergon-navy bg-ergon-navy text-white" : "border-white/70 bg-card text-ergon-navy hover:bg-accent",
+            )}
+          >
+            {c || "Todas"}
+          </button>
+        ))}
+      </div>
+
+      <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
         <NativeSelect aria-label="Estado" value={f.estado} onChange={(e) => cambiar({ estado: e.target.value })}>
           <option value="">Cualquier estado</option>
           {ESTADOS_SERVICIO.map((e) => (
@@ -114,26 +144,15 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div role="tablist" className="inline-flex rounded-full bg-ergon-navy/[0.06] p-1">
-          {[
-            { v: "", nombre: "Todos" },
-            { v: "categorias", nombre: "Por categoría" },
-          ].map(({ v, nombre }) => (
-            <button
-              key={v}
-              type="button"
-              role="tab"
-              aria-selected={f.vista === v}
-              onClick={() => cambiar({ vista: v })}
-              className={cn(
-                "rounded-full px-4 py-1.5 text-sm font-bold",
-                f.vista === v ? "bg-white text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
-              )}
-            >
-              {nombre}
-            </button>
-          ))}
-        </div>
+        <Segmentos
+          etiqueta="Vista"
+          activo={f.vista}
+          onCambio={(v) => cambiar({ vista: v })}
+          opciones={[
+            { valor: "", etiqueta: "Todos" },
+            { valor: "categorias", etiqueta: "Por categoría" },
+          ]}
+        />
         <p className="text-sm text-muted-foreground" aria-live="polite">
           {resultados.length} {resultados.length === 1 ? "servicio" : "servicios"}
         </p>
@@ -158,9 +177,7 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
       </div>
 
       {resultados.length === 0 ? (
-        <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">
-          Ningún servicio coincide. Prueba con otras palabras.
-        </p>
+        <EmptyState icono={SearchX} titulo="Ningún servicio coincide" texto="Prueba con otras palabras o quita filtros." />
       ) : porCategoria ? (
         <div className="space-y-8">
           {CATEGORIAS.map((c) => {
@@ -185,12 +202,12 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
 
 function Rejilla({ servicios }: { servicios: Servicio[] }) {
   return (
-    <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <motion.ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" variants={stagger(0.03)} initial="oculto" animate="visible">
       {servicios.map((s) => (
-        <li key={s.id}>
+        <motion.li key={s.id} variants={fadeUp}>
           <TarjetaServicio servicio={s} />
-        </li>
+        </motion.li>
       ))}
-    </ul>
+    </motion.ul>
   );
 }
