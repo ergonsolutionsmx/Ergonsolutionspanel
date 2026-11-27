@@ -12,13 +12,16 @@ export default function PanelLayout({ children }: LayoutProps<"/">) {
   return (
     <ProveedorNotificaciones>
       <div className="min-h-dvh md:flex">
-        <MenuLateral
-          pie={
-            <Suspense fallback={<div className="h-8" />}>
-              <UsuarioMenuLateral />
-            </Suspense>
-          }
-        />
+        {/* El menú lee la ruta actual (para resaltar la sección): va dentro de Suspense. */}
+        <Suspense fallback={<aside className="sticky top-0 hidden h-dvh w-60 shrink-0 bg-ergon-navy md:block" />}>
+          <MenuLateral
+            pie={
+              <Suspense fallback={<div className="h-8" />}>
+                <UsuarioMenuLateral />
+              </Suspense>
+            }
+          />
+        </Suspense>
 
         <div className="flex min-w-0 flex-1 flex-col">
           {/* Encabezado solo en celular */}
@@ -39,7 +42,9 @@ export default function PanelLayout({ children }: LayoutProps<"/">) {
           </main>
         </div>
 
-        <BarraInferior />
+        <Suspense fallback={<div className="fixed inset-x-0 bottom-0 h-16 border-t bg-card md:hidden" />}>
+          <BarraInferior />
+        </Suspense>
       </div>
     </ProveedorNotificaciones>
   );

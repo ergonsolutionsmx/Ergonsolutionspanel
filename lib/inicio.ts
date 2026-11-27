@@ -1,4 +1,6 @@
 import "server-only";
+import { crearClienteServidor } from "@/lib/supabase/server";
+import { fechaCorta, hoyISO } from "@/lib/fechas";
 
 /** Un renglón dentro de una tarjeta del Inicio. Al tocarlo lleva al registro. */
 export type Pendiente = {
@@ -19,9 +21,36 @@ export type GrupoPendientes = {
 // Cada función se llena en la fase de su módulo. Mientras, regresan vacío
 // y la tarjeta muestra en qué fase se activa.
 
-/** Tareas vencidas y de hoy (mías y de los dos). Fase 2. */
+/** Tareas vencidas y de hoy (de los dos), sin terminar. */
 export async function tareasPendientes(): Promise<GrupoPendientes[]> {
-  return [];
+  const supabase = await crearClienteServidor();
+  const hoy = hoyISO();
+  const [tareas, perfiles] = await Promise.all([
+    supabase
+      .from("tareas")
+      .select("id, titulo, fecha_limite, responsable_id, prioridad")
+      .neq("estado", "hecha")
+      .lte("fecha_limite", hoy)
+      .order("fecha_limite", { ascending: true })
+      .limit(50),
+    supabase.from("perfiles").select("usuario_id, nombre"),
+  ]);
+  const nombre = new Map((perfiles.data ?? []).map((p) => [p.usuario_id, p.nombre.split(" ")[0]]));
+  const volver = encodeURIComponent("/inicio");
+
+  const aItem = (t: { id: string; titulo: string; fecha_limite: string; responsable_id: string | null }, vencida: boolean): Pendiente => ({
+    id: t.id,
+    titulo: t.titulo,
+    detalle: [nombre.get(t.responsable_id ?? ""), vencida ? fechaCorta(t.fecha_limite, hoy) : null].filter(Boolean).join(" · "),
+    href: `/proyectos/tareas/${t.id}?volver=${volver}`,
+    urgente: vencida,
+  });
+
+  const lista = tareas.data ?? [];
+  return [
+    { nombre: "Vencidas", items: lista.filter((t) => t.fecha_limite < hoy).slice(0, 8).map((t) => aItem(t, true)) },
+    { nombre: "Hoy", items: lista.filter((t) => t.fecha_limite === hoy).slice(0, 8).map((t) => aItem(t, false)) },
+  ];
 }
 
 /** Eventos de hoy y mañana. Fase 3. */
