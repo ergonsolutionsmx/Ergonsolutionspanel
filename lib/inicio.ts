@@ -1,6 +1,6 @@
 import "server-only";
 import { crearClienteServidor } from "@/lib/supabase/server";
-import { fechaCorta, horaBonita, hoyISO, sumarDias } from "@/lib/fechas";
+import { fechaCorta, horaBonita, hoyISO, partesCDMX, sumarDias } from "@/lib/fechas";
 import { obtenerAgenda } from "@/lib/agenda";
 
 /** Un renglón dentro de una tarjeta del Inicio. Al tocarlo lleva al registro. */
@@ -84,7 +84,48 @@ export async function mensajesNuevos(): Promise<GrupoPendientes[]> {
   return [];
 }
 
-/** Propuestas que vencen en ≤ 7 días y vistas sin respuesta. Fase 5. */
+/** Propuestas que vencen en 7 días o menos, y vistas sin respuesta. */
 export async function propuestasPendientes(): Promise<GrupoPendientes[]> {
-  return [];
+  const supabase = await crearClienteServidor();
+  const ahora = new Date();
+  const enSiete = new Date(ahora.getTime() + 7 * 86_400_000).toISOString();
+  const hoy = hoyISO();
+  const [porVencer, vistas] = await Promise.all([
+    supabase
+      .from("propuestas")
+      .select("id, folio, prospecto_nombre, vence_en")
+      .in("estado", ["enviada", "vista"])
+      .eq("archivada", false)
+      .gte("vence_en", ahora.toISOString())
+      .lte("vence_en", enSiete)
+      .order("vence_en")
+      .limit(8),
+    supabase
+      .from("propuestas")
+      .select("id, folio, prospecto_nombre, vista_en")
+      .eq("estado", "vista")
+      .eq("archivada", false)
+      .order("vista_en", { ascending: false })
+      .limit(8),
+  ]);
+  return [
+    {
+      nombre: "Vencen pronto",
+      items: (porVencer.data ?? []).map((p) => ({
+        id: p.id,
+        titulo: `${p.folio} · ${p.prospecto_nombre}`,
+        detalle: fechaCorta(partesCDMX(p.vence_en).fecha, hoy),
+        href: `/propuestas/${p.id}`,
+        urgente: true,
+      })),
+    },
+    {
+      nombre: "Vistas sin respuesta",
+      items: (vistas.data ?? []).map((p) => ({
+        id: `v-${p.id}`,
+        titulo: `${p.folio} · ${p.prospecto_nombre}`,
+        href: `/propuestas/${p.id}`,
+      })),
+    },
+  ];
 }
