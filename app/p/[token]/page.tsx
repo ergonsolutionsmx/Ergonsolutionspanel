@@ -6,7 +6,11 @@ import { LOCALE, ZONA_HORARIA, pesos } from "@/lib/utils";
 import { esMiembroConSesion, obtenerPropuestaPublica } from "@/lib/propuestas";
 import { hayPreciosPorDefinir, type PropuestaParaCliente } from "@/lib/propuestas-tipos";
 
-export const metadata: Metadata = { title: "Propuesta" };
+export const metadata: Metadata = {
+  title: "Propuesta",
+  description: "Propuesta de Ergon Solutions.",
+  openGraph: { title: "Propuesta · Ergon Solutions", description: "Propuesta de Ergon Solutions." },
+};
 
 const fecha = (iso: string) =>
   new Intl.DateTimeFormat(LOCALE, { timeZone: ZONA_HORARIA, day: "numeric", month: "long", year: "numeric" }).format(new Date(iso));
@@ -137,7 +141,7 @@ async function Propuesta({ params }: { params: Promise<{ token: string }> }) {
 export default function PaginaPropuestaPublica({ params }: PageProps<"/p/[token]">) {
   return (
     <Marco>
-      <Suspense fallback={<div className="h-64 animate-pulse rounded-lg bg-secondary" />}>
+      <Suspense fallback={<div className="h-64 motion-safe:animate-pulse rounded-lg bg-secondary" />}>
         <Propuesta params={params} />
       </Suspense>
     </Marco>
