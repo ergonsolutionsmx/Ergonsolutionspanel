@@ -5,11 +5,16 @@ import { cerrarSesion } from "@/app/(auth)/acciones";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Pendiente, Titulo } from "@/components/panel/titulo";
+import { crearClienteServidor } from "@/lib/supabase/server";
+import { ProbarNotificaciones } from "./probar-notificaciones";
 
 export const metadata: Metadata = { title: "Ajustes" };
 
 export default async function AjustesPage() {
   const usuario = await obtenerUsuario();
+  const supabase = await crearClienteServidor();
+  const { data: usuarios } = await supabase.from("perfiles").select("usuario_id, nombre").order("nombre");
+
   return (
     <>
       <Titulo>Ajustes</Titulo>
@@ -28,6 +33,14 @@ export default async function AjustesPage() {
                 <LogOut /> Cerrar sesión
               </Button>
             </form>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Notificaciones</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ProbarNotificaciones usuarios={usuarios ?? []} yoId={usuario.id} />
           </CardContent>
         </Card>
         <Pendiente fase={7} />
