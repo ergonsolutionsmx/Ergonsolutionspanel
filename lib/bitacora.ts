@@ -60,6 +60,21 @@ export function leerFiltrosBitacora(sp: Record<string, string | string[] | undef
   };
 }
 
+/** Para la línea de tiempo: los primeros `cantidad` registros con filtros ("Cargar más"). */
+export async function obtenerBitacoraHasta(f: FiltrosBitacora, cantidad: number) {
+  const supabase = await crearClienteServidor();
+  let q = supabase
+    .from("bitacora")
+    .select("id, usuario_id, accion, tabla, registro_id, detalle, creado_en", { count: "exact" })
+    .order("creado_en", { ascending: false });
+  if (f.tabla) q = q.eq("tabla", f.tabla);
+  if (f.accion) q = q.eq("accion", f.accion);
+  if (f.usuario === "sistema") q = q.is("usuario_id", null);
+  else if (/^[0-9a-f-]{36}$/i.test(f.usuario)) q = q.eq("usuario_id", f.usuario);
+  const { data, count } = await q.range(0, cantidad - 1);
+  return { registros: (data ?? []) as Registro[], total: count ?? 0 };
+}
+
 export async function obtenerBitacora(f: FiltrosBitacora) {
   const supabase = await crearClienteServidor();
   let q = supabase

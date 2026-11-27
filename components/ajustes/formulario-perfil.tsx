@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "@/components/avisos/toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,10 @@ export function FormularioPerfil({ nombre, color, correo }: { nombre: string; co
   const [estado, enviar, enviando] = useActionState(actualizarPerfil, undefined);
   const [elegido, setElegido] = useState(color.toUpperCase());
   const [nombreVista, setNombreVista] = useState(nombre);
+  const huboCambios = nombreVista.trim() !== nombre || elegido !== color.toUpperCase();
+  useEffect(() => {
+    if (estado?.ok) toast.success("Guardado", estado.ok);
+  }, [estado]);
   const iniciales = nombreVista
     .split(" ")
     .map((p) => p[0])
@@ -32,10 +37,16 @@ export function FormularioPerfil({ nombre, color, correo }: { nombre: string; co
           {iniciales || "?"}
         </span>
         <div className="text-sm">
-          <p className="font-bold">{correo}</p>
-          <p className="text-muted-foreground">El correo de acceso no se cambia desde aquí.</p>
+          <p className="font-bold text-ergon-navy">{nombreVista || "Tu nombre"}</p>
+          <p className="text-muted-foreground">Así te ven en el panel.</p>
         </div>
       </div>
+      <Campo id="correo" etiqueta="Correo">
+        <Input id="correo" value={correo} readOnly disabled aria-describedby="correo-ayuda" />
+        <p id="correo-ayuda" className="text-xs text-muted-foreground">
+          El correo de acceso no se cambia desde aquí.
+        </p>
+      </Campo>
       <Campo id="nombre" etiqueta="Nombre">
         <Input id="nombre" name="nombre" required maxLength={80} defaultValue={nombre} onChange={(e) => setNombreVista(e.target.value)} />
       </Campo>
@@ -67,10 +78,9 @@ export function FormularioPerfil({ nombre, color, correo }: { nombre: string; co
       </fieldset>
       <ErrorForm mensaje={estado?.error} />
       <div className="flex items-center gap-3">
-        <Button type="submit" disabled={enviando}>
-          {enviando ? "Guardando…" : "Guardar perfil"}
+        <Button type="submit" loading={enviando} disabled={!huboCambios}>
+          {enviando ? "Guardando…" : "Guardar cambios"}
         </Button>
-        {estado?.ok ? <span role="status" className="text-sm text-emerald-700">{estado.ok}</span> : null}
       </div>
     </form>
   );

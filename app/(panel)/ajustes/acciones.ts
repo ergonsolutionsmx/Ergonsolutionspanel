@@ -107,3 +107,19 @@ export async function eliminarDemo(id: string) {
   await supabase.from("demos").delete().eq("id", id);
   refresh();
 }
+
+// ---------------------------------------------------------------------------
+// Preferencias de notificaciones
+// ---------------------------------------------------------------------------
+
+const CLAVES_PREFERENCIA = ["mensaje", "tarea", "evento", "propuesta"] as const;
+
+export async function guardarPreferencia(clave: string, activa: boolean): Promise<{ ok: boolean }> {
+  const yo = await obtenerUsuario();
+  if (!(CLAVES_PREFERENCIA as readonly string[]).includes(clave)) return { ok: false };
+  const supabase = await crearClienteServidor();
+  const { data } = await supabase.from("perfiles").select("preferencias").eq("usuario_id", yo.id).maybeSingle();
+  const preferencias = { ...((data?.preferencias as Record<string, boolean>) ?? {}), [clave]: activa };
+  const { error } = await supabase.from("perfiles").update({ preferencias }).eq("usuario_id", yo.id);
+  return { ok: !error };
+}

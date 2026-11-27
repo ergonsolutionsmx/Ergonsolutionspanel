@@ -1,5 +1,5 @@
 import "server-only";
-import { ACCIONES_BITACORA, RUTA_REGISTRO, TABLAS_BITACORA, nombreRegistro, type Registro } from "@/lib/bitacora";
+import { ACCIONES_BITACORA, RUTA_REGISTRO, TABLAS_BITACORA, cambios, nombreRegistro, type Registro } from "@/lib/bitacora";
 import { fechaCorta, horaBonita, hoyISO, partesCDMX, sumarDias } from "@/lib/fechas";
 
 export type EntradaActividad = {
@@ -9,6 +9,8 @@ export type EntradaActividad = {
   modulo: string;
   hora: string;
   href?: string;
+  /** "estado: por_hacer → hecha" (solo en ediciones). */
+  cambios?: string[];
 };
 
 export type DiaActividad = { dia: string; entradas: EntradaActividad[] };
@@ -36,6 +38,7 @@ export function agruparActividad(registros: Registro[], perfiles: { usuario_id: 
       modulo,
       hora: horaBonita(hora),
       href: ruta,
+      cambios: r.accion === "update" ? cambios(r).slice(0, 3).map((c) => `${c.campo}: ${c.antes} → ${c.despues}`) : undefined,
     });
     grupos.set(etiqueta, lista);
   }

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { IconoCanal } from "./icono-canal";
 import { BotonPrueba } from "./boton-prueba";
 
-/** Ajustes → Canales: estado de cada canal y mensaje de prueba. */
+/** Ajustes → Integraciones: estado de cada canal y mensaje de prueba. */
 export async function CanalesBandeja() {
   const supabase = await crearClienteServidor();
   const { data } = await supabase.from("canales_config").select("canal, activo, estado_conexion, ultima_sincronizacion");
@@ -24,8 +24,14 @@ export async function CanalesBandeja() {
             <IconoCanal canal={canal} />
             <div className="min-w-[14rem] flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-bold">{NOMBRE_CANAL[canal]}</span>
-                {activo ? <Badge variant="verde">Activo</Badge> : <Badge variant="gris">No conectado</Badge>}
+                <span className="font-bold text-ergon-navy">{NOMBRE_CANAL[canal]}</span>
+                {activo ? (
+                  <Badge variant="aceptada">Conectado</Badge>
+                ) : canal === "correo" || canal === "whatsapp" ? (
+                  <Badge variant="pendiente">Próximamente</Badge>
+                ) : (
+                  <Badge variant="baja">No conectado</Badge>
+                )}
               </div>
               <p className="mt-1 text-sm text-muted-foreground">{e.descripcion}</p>
               {e.faltan.length ? (

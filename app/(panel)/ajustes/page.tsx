@@ -1,39 +1,15 @@
 import type { Metadata } from "next";
-import { LogOut } from "lucide-react";
 import { obtenerUsuario } from "@/lib/auth";
-import { cerrarSesion } from "@/app/(auth)/acciones";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormularioPerfil } from "@/components/ajustes/formulario-perfil";
-import { FormularioContrasena } from "@/components/ajustes/formulario-contrasena";
+import { SeccionAjustes } from "@/components/ajustes/seccion";
 
-export const metadata: Metadata = { title: "Ajustes" };
+export const metadata: Metadata = { title: "Perfil" };
 
-export default async function AjustesCuentaPage() {
+export default async function AjustesPerfilPage() {
   const usuario = await obtenerUsuario();
   return (
-    <div className="grid max-w-2xl gap-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Perfil</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FormularioPerfil nombre={usuario.nombre} color={usuario.color} correo={usuario.correo} />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Contraseña</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FormularioContrasena />
-        </CardContent>
-      </Card>
-      <form action={cerrarSesion}>
-        <Button type="submit" variant="ghost">
-          <LogOut /> Cerrar sesión
-        </Button>
-      </form>
-    </div>
+    <SeccionAjustes titulo="Perfil" descripcion="Tu nombre y color se usan en las iniciales de todo el panel.">
+      <FormularioPerfil nombre={usuario.nombre} color={usuario.color} correo={usuario.correo} />
+    </SeccionAjustes>
   );
 }

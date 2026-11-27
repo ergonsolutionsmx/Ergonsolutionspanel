@@ -53,6 +53,15 @@ export function LineaTiempo({ dias, compacta = false }: { dias: DiaActividad[]; 
                       <span className="font-bold">{e.quien?.nombre.split(" ")[0] ?? "Sistema"}</span>{" "}
                       <span className="text-muted-foreground">{e.texto.charAt(0).toLowerCase() + e.texto.slice(1)}</span>
                     </span>
+                    {!compacta && e.cambios?.length ? (
+                      <span className="mt-1 block space-y-0.5 rounded-lg bg-muted px-2 py-1 text-xs text-muted-foreground">
+                        {e.cambios.map((c) => (
+                          <span key={c} className="block truncate">
+                            {c}
+                          </span>
+                        ))}
+                      </span>
+                    ) : null}
                     <span className="mt-0.5 block text-xs text-muted-foreground">
                       {e.modulo} · {e.hora}
                     </span>
