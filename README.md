@@ -87,7 +87,7 @@ docs/             guía para conectar el formulario del sitio
 
 - **Colores:** `app/globals.css` (`--ergon-*`, roles de shadcn, `--sidebar-*`, estados `--estado-*`, gráficas `--chart-*`).
   Nada de colores sueltos: todo sale de variables.
-- **Tipografía:** Lato (400, 700, 900) en `app/layout.tsx`.
+- **Tipografía:** Inter (estilo Apple, grosor variable) en `app/layout.tsx`; títulos en 700 y énfasis en 600. El PDF sigue en Lato.
 - **Logo:** `components/brand/logo.tsx` con variantes `full`, `icon` y `app`, y tonos `light` (fondo navy) y
   `dark` (fondo claro). SVG limpios en `public/brand/` (sacados de los PDF de Drive, con degradado real).
   Íconos de la app (favicon, apple, 192/512, maskable) e imagen para compartir (`public/brand/og.png`).
@@ -105,7 +105,6 @@ docs/             guía para conectar el formulario del sitio
 - Etapas del Método Ergon (hoy: Diagnóstico, Propuesta, Diseño, Desarrollo, Pruebas, Entrega, Seguimiento) en `lib/tareas-tipos.ts`.
 - Textos y link de cada giro del lanzador de Demos (`components/demos/bento.tsx`).
 
-- Tipografía final (Lato vs Archivo + IBM Plex Sans).
 - Dominio y subdominio del panel.
 - Precios y tiempos de las variantes del catálogo.
 - Si los precios de las propuestas incluyen IVA.

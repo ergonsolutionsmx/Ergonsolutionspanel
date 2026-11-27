@@ -1,15 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Lato } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ProveedorMovimiento } from "@/components/movimiento/proveedor";
 import { Toaster } from "@/components/avisos/toast";
 import { SCRIPT_TEMA } from "@/components/tema/tema";
 
-// Tipografía de marca. POR CONFIRMAR: Lato vs Archivo + IBM Plex Sans.
-const fuenteMarca = Lato({
+// Tipografía: Inter (la más parecida a San Francisco de Apple), variable: cualquier grosor.
+const fuenteMarca = Inter({
   variable: "--font-marca",
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
 });
 
 export const metadata: Metadata = {

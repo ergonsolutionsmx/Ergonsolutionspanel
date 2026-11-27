@@ -139,8 +139,11 @@
   /* Solo para la acción principal (botón azul). */
   --shadow-accion: 0 0.7px 2.7px -1.2px rgb(29 63 184 / 0.3), 0 2.7px 10px -2.3px rgb(29 63 184 / 0.25), 0 10px 30px -6px rgb(29 63 184 / 0.18);
 
-  /* Tipografía: Lato (POR CONFIRMAR vs Archivo + IBM Plex Sans). Se cambia en app/layout.tsx */
-  --font-sans: var(--font-marca), ui-sans-serif, system-ui, sans-serif;
+  /* Tipografía: Inter (estilo Apple). Se cambia en app/layout.tsx */
+  --font-sans: var(--font-marca), -apple-system, BlinkMacSystemFont, "SF Pro Text", ui-sans-serif, system-ui, sans-serif;
+  /* Grosores estilo Apple: títulos en negrita (no extra negrita), énfasis en semi-negrita. */
+  --font-weight-black: 700;
+  --font-weight-bold: 600;
 }
 
 @layer base {
@@ -148,6 +151,8 @@
     border-color: var(--color-border);
   }
   body {
+    font-feature-settings: "cv11", "ss01", "ss03"; /* formas de Inter más cercanas a SF */
+    letter-spacing: -0.006em;
     background: var(--background);
     position: relative;
     isolation: isolate;
@@ -159,7 +164,7 @@
   h2,
   h3 {
     text-wrap: balance;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.022em;
   }
   ::selection {
     background: rgb(46 144 223 / 0.3);
