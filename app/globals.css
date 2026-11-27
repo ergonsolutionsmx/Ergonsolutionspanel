@@ -9,25 +9,25 @@
   --ergon-navy-2: #11274e;
   --ergon-blue: #2563eb;
   --ergon-sky: #38bdf8;
-  --ergon-bg: #f3f4f6;
+  --ergon-bg: #eef2f8;
 
   /* Roles (estilo shadcn/ui) mapeados a la marca */
   --background: var(--ergon-bg);
   --foreground: #0f172a;
-  --card: #ffffff;
+  --card: rgb(255 255 255 / 0.68); /* vidrio: deja ver el fondo de marca */
   --card-foreground: var(--foreground);
   --primary: var(--ergon-blue);
   --primary-foreground: #ffffff;
-  --secondary: #e5e7eb;
+  --secondary: rgb(11 31 68 / 0.06);
   --secondary-foreground: var(--ergon-navy);
-  --muted: #f1f5f9;
+  --muted: rgb(11 31 68 / 0.035);
   --muted-foreground: #4a6178; /* pizarra azulada: texto secundario */
-  --accent: #e0ecff;
+  --accent: rgb(37 99 235 / 0.09);
   --accent-foreground: var(--ergon-navy);
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #e3e7ee; /* hilo navy muy tenue en vez de gris */
-  --input: #d3dae4;
+  --border: rgb(11 31 68 / 0.09); /* hilo navy muy tenue en vez de gris */
+  --input: rgb(11 31 68 / 0.15);
   --ring: var(--ergon-blue);
   --radius: 0.875rem;
 }
@@ -62,10 +62,10 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Sombras: elevación mínima de "papel" con tinte navy, nunca halos grises. */
-  --shadow-sm: 0 0.5px 0.3px -1.8px rgb(11 31 68 / 0.16), 0 4px 2.8px -3.5px rgb(11 31 68 / 0.08), 0 0 0 1px rgb(11 31 68 / 0.02);
-  --shadow-md: 0 1px 2px -1px rgb(11 31 68 / 0.1), 0 8px 20px -6px rgb(11 31 68 / 0.12);
-  --shadow-lg: 0 2px 4px -2px rgb(11 31 68 / 0.12), 0 18px 40px -12px rgb(11 31 68 / 0.22);
+  /* Sombras de vidrio: filo de luz arriba + sombra larga y suave con tinte navy. */
+  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.75), 0 1px 2px rgb(11 31 68 / 0.04), 0 10px 24px -20px rgb(11 31 68 / 0.4);
+  --shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.8), 0 1px 2px -1px rgb(11 31 68 / 0.08), 0 16px 40px -22px rgb(11 31 68 / 0.35);
+  --shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 2px 4px -2px rgb(11 31 68 / 0.1), 0 24px 60px -24px rgb(11 31 68 / 0.4);
   /* Solo para la acción principal (botón azul). */
   --shadow-accion: 0 0.7px 2.7px -1.2px rgb(37 99 235 / 0.3), 0 2.7px 10px -2.3px rgb(37 99 235 / 0.25), 0 10px 30px -6px rgb(37 99 235 / 0.18);
 
@@ -79,6 +79,8 @@
   }
   body {
     background: var(--background);
+    position: relative;
+    isolation: isolate;
     color: var(--foreground);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -152,5 +154,74 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .luz-marca::after {
     display: none;
+  }
+}
+
+/*
+ * Fondo de marca: manchas difusas cian, azul y navy, fijas detrás de todo.
+ * Sobre él, las superficies son de vidrio (blancas translúcidas).
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(48rem 34rem at 92% -8%, rgb(56 189 248 / 0.42), transparent 62%),
+    radial-gradient(40rem 32rem at 58% -14%, rgb(37 99 235 / 0.2), transparent 60%),
+    radial-gradient(44rem 36rem at -6% 18%, rgb(56 189 248 / 0.18), transparent 60%),
+    radial-gradient(56rem 40rem at 30% 112%, rgb(37 99 235 / 0.16), transparent 62%),
+    radial-gradient(40rem 30rem at 100% 100%, rgb(11 31 68 / 0.1), transparent 60%),
+    var(--ergon-bg);
+}
+
+/* Vidrio esmerilado: menú, encabezado, barra del celular y ventanas flotantes. */
+@utility vidrio {
+  background: rgb(255 255 255 / 0.55);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
+  backdrop-filter: blur(22px) saturate(1.25);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    inset 0 0 0 1px rgb(255 255 255 / 0.45),
+    0 20px 52px -26px rgb(11 31 68 / 0.32);
+  @supports not (backdrop-filter: blur(1px)) {
+    background: rgb(255 255 255 / 0.94);
+  }
+}
+/* Vidrio más sólido para ventanas que flotan sobre contenido. */
+@utility vidrio-solido {
+  background: rgb(255 255 255 / 0.86);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    inset 0 0 0 1px rgb(255 255 255 / 0.5),
+    0 24px 80px -20px rgb(11 31 68 / 0.35);
+  @supports not (backdrop-filter: blur(1px)) {
+    background: rgb(255 255 255 / 0.97);
+  }
+}
+
+/* Entrada suave del contenido al cambiar de sección (sube y se enfoca). */
+@media (prefers-reduced-motion: no-preference) {
+  .revelar > * {
+    animation: revelar 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .revelar > :nth-child(2) { animation-delay: 45ms; }
+  .revelar > :nth-child(3) { animation-delay: 90ms; }
+  .revelar > :nth-child(4) { animation-delay: 135ms; }
+  .revelar > :nth-child(n + 5) { animation-delay: 180ms; }
+}
+@keyframes revelar {
+  from {
+    opacity: 0.45;
+    transform: translateY(12px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }

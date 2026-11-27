@@ -17,7 +17,7 @@ export default async function NuevoEventoPage({ searchParams }: PageProps<"/agen
   return (
     <div className="max-w-2xl">
       <Titulo>Nuevo evento</Titulo>
-      <div className="rounded-lg border bg-card p-4 md:p-6">
+      <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioEvento
           accion={crearEvento}
           perfiles={perfiles}

@@ -24,7 +24,7 @@ export default async function EditarServicioPage({ params }: PageProps<"/catalog
       <h1 className="mb-6 text-2xl font-black text-ergon-navy">
         Editar {s.numero} · {s.nombre}
       </h1>
-      <div className="mb-8 rounded-lg border bg-card p-4 md:p-6">
+      <div className="mb-8 rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioServicio accion={actualizarServicio.bind(null, s.id)} servicio={s} cancelar={`/catalogo/${s.id}`} textoBoton="Guardar" />
       </div>
       <h2 id="variantes" className="mb-3 text-lg font-black text-ergon-navy">

@@ -30,7 +30,7 @@ export async function UsuarioMenuLateral() {
       <form action={cerrarSesion}>
         <button
           type="submit"
-          className="rounded-md p-2 text-white/75 hover:bg-white/10 hover:text-white"
+          className="rounded-full p-2 text-ergon-navy/60 hover:bg-white hover:text-ergon-navy"
           aria-label="Cerrar sesión"
           title="Cerrar sesión"
         >

@@ -29,7 +29,7 @@ export default async function EventoPage({ params, searchParams }: PageProps<"/a
       <Titulo accion={<BotonEliminar accion={eliminarEvento.bind(null, evento.id, volver)} pregunta="¿Eliminar este evento?" />}>
         Evento
       </Titulo>
-      <div className="rounded-lg border bg-card p-4 md:p-6">
+      <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioEvento
           accion={actualizarEvento.bind(null, evento.id)}
           perfiles={perfiles}

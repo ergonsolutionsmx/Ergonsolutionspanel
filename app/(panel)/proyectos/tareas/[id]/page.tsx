@@ -27,7 +27,7 @@ export default async function TareaPage({ params, searchParams }: PageProps<"/pr
       <Titulo accion={<BotonEliminar accion={eliminarTarea.bind(null, tarea.id, volver)} pregunta="¿Eliminar esta tarea? No se puede deshacer." />}>
         Tarea
       </Titulo>
-      <div className="rounded-lg border bg-card p-4 md:p-6">
+      <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioTarea
           accion={actualizarTarea.bind(null, tarea.id)}
           catalogos={catalogos}

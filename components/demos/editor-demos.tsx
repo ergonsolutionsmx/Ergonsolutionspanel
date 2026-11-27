@@ -15,7 +15,7 @@ function FormularioDemo({ demo, siguienteOrden }: { demo?: Demo; siguienteOrden:
   const [borrando, startTransition] = useTransition();
   const id = (k: string) => `${k}-${demo?.id ?? "nueva"}`;
   return (
-    <form action={enviar} className="grid gap-3 rounded-lg border bg-card p-4">
+    <form action={enviar} className="grid gap-3 rounded-lg border border-white/70 bg-card p-4">
       {!demo ? <p className="font-bold">Nueva demo</p> : null}
       <div className="grid gap-3 sm:grid-cols-[1fr_6rem]">
         <Campo id={id("nombre")} etiqueta="Nombre">

@@ -18,7 +18,7 @@ export default async function NuevaTareaPage({ searchParams }: PageProps<"/proye
   return (
     <div className="max-w-2xl">
       <Titulo>Nueva tarea</Titulo>
-      <div className="rounded-lg border bg-card p-4 md:p-6">
+      <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioTarea
           accion={crearTarea}
           catalogos={catalogos}

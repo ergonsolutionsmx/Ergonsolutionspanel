@@ -40,7 +40,7 @@ export function Campanita({ className, lado = "bottom" }: { className?: string; 
           align={lado === "right" ? "start" : "end"}
           sideOffset={8}
           collisionPadding={8}
-          className="z-50 flex max-h-[min(32rem,var(--radix-popover-content-available-height))] w-[min(24rem,calc(100vw-1rem))] flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-lg"
+          className="z-50 flex max-h-[min(32rem,var(--radix-popover-content-available-height))] w-[min(24rem,calc(100vw-1rem))] flex-col overflow-hidden vidrio-solido rounded-2xl text-card-foreground"
         >
           <div className="flex items-center justify-between border-b px-4 py-3">
             <h2 className="font-black text-ergon-navy">Notificaciones</h2>

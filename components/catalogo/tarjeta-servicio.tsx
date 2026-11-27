@@ -9,7 +9,7 @@ export function TarjetaServicio({ servicio: s }: { servicio: Servicio }) {
   return (
     <Link
       href={`/catalogo/${s.id}`}
-      className="flex h-full flex-col gap-2 rounded-lg border bg-card p-4 shadow-sm hover:border-ergon-blue"
+      className="flex h-full flex-col gap-2 rounded-lg border border-white/70 bg-card p-4 shadow-sm hover:border-ergon-blue"
     >
       <div className="flex items-start gap-2">
         <span className="mt-0.5 rounded bg-ergon-navy px-1.5 py-0.5 text-xs font-black text-white">{s.numero}</span>

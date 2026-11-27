@@ -67,9 +67,9 @@ export default async function PropuestasPage({ searchParams }: PageProps<"/propu
       </div>
 
       {propuestas.length === 0 ? (
-        <p className="rounded-lg border bg-card p-8 text-center text-sm text-muted-foreground">Sin propuestas</p>
+        <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">Sin propuestas</p>
       ) : (
-        <ul className="divide-y rounded-lg border bg-card">
+        <ul className="divide-y rounded-lg border border-white/70 bg-card">
           {propuestas.map((p) => {
             const vence = p.vence_en ? partesCDMX(p.vence_en).fecha : null;
             return (

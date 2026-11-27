@@ -38,11 +38,11 @@ export function ListaTareas({
   const ordenadas = [...lista].sort(ordenarParaLista);
 
   if (ordenadas.length === 0) {
-    return <p className="rounded-lg border bg-card p-8 text-center text-sm text-muted-foreground">Sin tareas</p>;
+    return <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">Sin tareas</p>;
   }
 
   return (
-    <ul className="divide-y rounded-lg border bg-card">
+    <ul className="divide-y rounded-lg border border-white/70 bg-card">
       {ordenadas.map((t) => {
         const hecha = t.estado === "hecha";
         const vencida = estaVencida(t, catalogos.hoy);

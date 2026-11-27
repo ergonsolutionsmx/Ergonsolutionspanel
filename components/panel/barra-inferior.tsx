@@ -19,10 +19,10 @@ export function BarraInferior() {
   return (
     <>
       {abierto ? (
-        <div className="fixed inset-0 z-40 bg-ergon-navy/30 backdrop-blur-[2px] md:hidden" onClick={() => setAbierto(false)}>
+        <div className="fixed inset-0 z-40 bg-ergon-navy/20 backdrop-blur-[3px] md:hidden" onClick={() => setAbierto(false)}>
           <nav
             aria-label="Más secciones"
-            className="absolute inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] mx-3 rounded-2xl border bg-card p-2 shadow-lg"
+            className="vidrio-solido absolute inset-x-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] rounded-[1.375rem] p-2"
             onClick={(e) => e.stopPropagation()}
           >
             {EN_MAS.map(({ href, nombre, icono: Icono }) => (
@@ -31,8 +31,8 @@ export function BarraInferior() {
                 href={href}
                 onClick={() => setAbierto(false)}
                 className={cn(
-                  "flex items-center gap-3 rounded-md px-3 py-3 text-base font-bold text-ergon-navy hover:bg-accent",
-                  estaActiva(ruta, href) && "bg-accent",
+                  "flex items-center gap-3 rounded-2xl px-3 py-3 text-base font-bold text-ergon-navy hover:bg-white/70",
+                  estaActiva(ruta, href) && "bg-white shadow-sm",
                 )}
               >
                 <Icono className="size-5" aria-hidden />
@@ -45,9 +45,9 @@ export function BarraInferior() {
 
       <nav
         aria-label="Principal"
-        className="fixed inset-x-0 bottom-0 z-50 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+        className="vidrio-solido fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 rounded-[1.375rem] p-1 md:hidden"
       >
-        <ul className="grid grid-cols-5">
+        <ul className="grid grid-cols-5 gap-1">
           {EN_BARRA.map(({ href, nombre, icono: Icono }) => {
             const activa = estaActiva(ruta, href);
             return (
@@ -56,11 +56,11 @@ export function BarraInferior() {
                   href={href}
                   aria-current={activa ? "page" : undefined}
                   className={cn(
-                    "flex h-16 flex-col items-center justify-center gap-1 text-xs font-bold text-muted-foreground",
-                    activa && "text-ergon-navy",
+                    "flex h-14 flex-col items-center justify-center gap-0.5 rounded-[1.1rem] text-[11px] font-bold text-ergon-navy/55",
+                    activa && "bg-white text-ergon-navy shadow-sm",
                   )}
                 >
-                  <span className={cn("flex h-7 w-12 items-center justify-center rounded-full", activa && "bg-accent text-ergon-blue")}>
+                  <span className={cn("flex h-6 items-center justify-center", activa && "text-ergon-blue")}>
                     <Icono className="size-5" aria-hidden />
                   </span>
                   {nombre}
@@ -74,11 +74,11 @@ export function BarraInferior() {
               aria-expanded={abierto}
               onClick={() => setAbierto((v) => !v)}
               className={cn(
-                "flex h-16 w-full flex-col items-center justify-center gap-1 text-xs font-bold text-muted-foreground",
-                (abierto || masActivo) && "text-ergon-navy",
+                "flex h-14 w-full flex-col items-center justify-center gap-0.5 rounded-[1.1rem] text-[11px] font-bold text-ergon-navy/55",
+                (abierto || masActivo) && "bg-white text-ergon-navy shadow-sm",
               )}
             >
-              <span className={cn("flex h-7 w-12 items-center justify-center rounded-full", (abierto || masActivo) && "bg-accent text-ergon-blue")}>
+              <span className={cn("flex h-6 items-center justify-center", (abierto || masActivo) && "text-ergon-blue")}>
                 {abierto ? <X className="size-5" aria-hidden /> : <Ellipsis className="size-5" aria-hidden />}
               </span>
               Más

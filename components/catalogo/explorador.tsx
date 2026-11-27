@@ -114,7 +114,7 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div role="tablist" className="inline-flex rounded-lg bg-secondary p-1">
+        <div role="tablist" className="inline-flex rounded-full bg-ergon-navy/[0.06] p-1">
           {[
             { v: "", nombre: "Todos" },
             { v: "categorias", nombre: "Por categoría" },
@@ -126,8 +126,8 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
               aria-selected={f.vista === v}
               onClick={() => cambiar({ vista: v })}
               className={cn(
-                "rounded-md px-4 py-1.5 text-sm font-bold",
-                f.vista === v ? "bg-card text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
+                "rounded-full px-4 py-1.5 text-sm font-bold",
+                f.vista === v ? "bg-white text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
               )}
             >
               {nombre}
@@ -158,7 +158,7 @@ export function ExploradorCatalogo({ servicios }: { servicios: Servicio[] }) {
       </div>
 
       {resultados.length === 0 ? (
-        <p className="rounded-lg border bg-card p-8 text-center text-sm text-muted-foreground">
+        <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">
           Ningún servicio coincide. Prueba con otras palabras.
         </p>
       ) : porCategoria ? (

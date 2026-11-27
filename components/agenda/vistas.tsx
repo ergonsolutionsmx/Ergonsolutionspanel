@@ -43,7 +43,7 @@ export function VistaSemana({ desde, ...p }: Comun & { desde: string }) {
         const items = p.porDia[dia] ?? [];
         const esHoy = dia === p.hoy;
         return (
-          <section key={dia} aria-label={mayuscula(diaLargo(dia))} className={cn("rounded-lg border bg-card p-2", esHoy && "border-ergon-blue ring-1 ring-ergon-blue")}>
+          <section key={dia} aria-label={mayuscula(diaLargo(dia))} className={cn("rounded-lg border border-white/70 bg-card p-2", esHoy && "border-ergon-blue ring-1 ring-ergon-blue")}>
             <Link href={p.hrefDia(dia)} className="mb-2 flex items-baseline gap-2 rounded px-1 hover:bg-muted md:flex-col md:items-start md:gap-0">
               <span className="text-xs font-bold uppercase text-muted-foreground">{diaCorto(dia).replace(".", "")}</span>
               <span className={cn("text-lg font-black", esHoy ? "text-ergon-blue" : "text-ergon-navy")}>{Number(dia.slice(8))}</span>
@@ -72,7 +72,7 @@ export function VistaMes({ desde, hasta, mes, ...p }: Comun & { desde: string; h
   const dias = rangoDias(desde, hasta);
   const encabezados = dias.slice(0, 7).map((d) => diaCorto(d).replace(".", ""));
   return (
-    <div className="overflow-hidden rounded-lg border bg-card">
+    <div className="overflow-hidden rounded-lg border border-white/70 bg-card">
       <div className="grid grid-cols-7 border-b bg-muted text-center text-xs font-bold uppercase text-muted-foreground">
         {encabezados.map((d) => (
           <div key={d} className="py-2">

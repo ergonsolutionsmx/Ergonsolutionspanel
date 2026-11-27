@@ -120,7 +120,7 @@ export default async function AgendaPage({ searchParams }: PageProps<"/agenda">)
       </div>
 
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <div role="tablist" className="inline-flex rounded-lg bg-secondary p-1">
+        <div role="tablist" className="inline-flex rounded-full bg-ergon-navy/[0.06] p-1">
           {pestanas.map((v) => (
             <Link
               key={v}
@@ -128,8 +128,8 @@ export default async function AgendaPage({ searchParams }: PageProps<"/agenda">)
               aria-selected={vista === v}
               href={href({ vista: v })}
               className={cn(
-                "rounded-md px-3 py-1.5 text-sm font-bold sm:px-4",
-                vista === v ? "bg-card text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
+                "rounded-full px-3 py-1.5 text-sm font-bold sm:px-4",
+                vista === v ? "bg-white text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
               )}
             >
               {NOMBRE_VISTA[v]}

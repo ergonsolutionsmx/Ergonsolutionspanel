@@ -11,7 +11,7 @@ export default async function NuevaPropuestaPage() {
   return (
     <div className="max-w-3xl">
       <Titulo>Nueva propuesta</Titulo>
-      <div className="rounded-lg border bg-card p-4 md:p-6">
+      <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioProspecto accion={crearPropuesta} textoBoton="Crear y agregar servicios" cancelar="/propuestas" />
       </div>
     </div>

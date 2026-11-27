@@ -145,7 +145,7 @@ export function EditorConceptos({
   const [agregando, startTransition] = useTransition();
   return (
     <div className="grid gap-4">
-      <div className="rounded-lg border bg-card p-4">
+      <div className="rounded-lg border border-white/70 bg-card p-4">
         <AgregarDelCatalogo propuestaId={propuestaId} servicios={servicios} />
         <button
           type="button"
@@ -157,7 +157,7 @@ export function EditorConceptos({
         </button>
       </div>
 
-      <div className="rounded-lg border bg-card">
+      <div className="rounded-lg border border-white/70 bg-card">
         {conceptos.length === 0 ? (
           <p className="p-6 text-center text-sm text-muted-foreground">Agrega servicios del catálogo.</p>
         ) : (
@@ -171,7 +171,7 @@ export function EditorConceptos({
       </div>
 
       <div className="grid grid-cols-2 gap-3" aria-live="polite">
-        <div className="rounded-lg border bg-card p-4">
+        <div className="rounded-lg border border-white/70 bg-card p-4">
           <p className="text-xs font-bold uppercase text-muted-foreground">Instalación (pago único)</p>
           <p className="mt-1 text-2xl font-black text-ergon-navy">{pesos(totalInstalacion)}</p>
         </div>

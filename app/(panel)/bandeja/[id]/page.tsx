@@ -35,7 +35,7 @@ export default async function MensajePage({ params }: PageProps<"/bandeja/[id]">
         <ArrowLeft className="size-4" aria-hidden /> Bandeja
       </Link>
       <div className="grid gap-6 lg:grid-cols-[1fr_18rem]">
-        <article className="min-w-0 rounded-lg border bg-card">
+        <article className="min-w-0 rounded-lg border border-white/70 bg-card">
           <header className="flex items-start gap-3 border-b p-4 md:p-5">
             <IconoCanal canal={m.canal} className="size-11" />
             <div className="min-w-0 flex-1">

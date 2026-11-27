@@ -17,7 +17,7 @@ export function TarjetaPendientes({
   const total = grupos.reduce((s, g) => s + g.items.length, 0);
 
   return (
-    <section className="flex flex-col rounded-2xl border bg-card shadow-sm" aria-labelledby={`tarjeta-${href}`}>
+    <section className="flex flex-col rounded-2xl border border-white/70 bg-card shadow-sm" aria-labelledby={`tarjeta-${href}`}>
       <Link
         href={href}
         className="group flex items-center gap-3 border-b px-4 py-3.5 hover:bg-muted/60"

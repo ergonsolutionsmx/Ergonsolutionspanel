@@ -25,13 +25,13 @@ export default async function DemosPage() {
         Demos
       </Titulo>
       {demos.length === 0 ? (
-        <p className="rounded-lg border bg-card p-8 text-center text-sm text-muted-foreground">
+        <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">
           Sin demos. Agrégalas en Ajustes → Demos.
         </p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {demos.map((d) => (
-            <li key={d.id} className="flex flex-col gap-3 rounded-lg border bg-card p-5 shadow-sm">
+            <li key={d.id} className="flex flex-col gap-3 rounded-lg border border-white/70 bg-card p-5 shadow-sm">
               <div className="flex items-center gap-3">
                 <span className="flex size-10 items-center justify-center rounded-lg bg-ergon-navy text-ergon-sky">
                   <MonitorPlay className="size-5" aria-hidden />

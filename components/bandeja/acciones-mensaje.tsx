@@ -39,7 +39,7 @@ export function AccionesMensaje({
 
   return (
     <div className="grid gap-4">
-      <section className="grid gap-2 rounded-lg border bg-card p-4" aria-label="Responder">
+      <section className="grid gap-2 rounded-lg border border-white/70 bg-card p-4" aria-label="Responder">
         {respuesta?.tipo === "externo" ? (
           <Button
             disabled={pendiente}
@@ -65,7 +65,7 @@ export function AccionesMensaje({
         </Button>
       </section>
 
-      <section className="grid gap-2 rounded-lg border bg-card p-4" aria-label="Asignar">
+      <section className="grid gap-2 rounded-lg border border-white/70 bg-card p-4" aria-label="Asignar">
         <label htmlFor="asignado" className="text-sm font-bold">
           Asignado a
         </label>
@@ -84,7 +84,7 @@ export function AccionesMensaje({
         </NativeSelect>
       </section>
 
-      <section className="grid gap-2 rounded-lg border bg-card p-4" aria-label="Estado">
+      <section className="grid gap-2 rounded-lg border border-white/70 bg-card p-4" aria-label="Estado">
         {estado !== "respondido" ? (
           <Button variant="outline" disabled={pendiente} onClick={() => hacer(() => cambiarEstadoMensaje(id, "respondido"))}>
             <CheckCheck /> Marcar respondido

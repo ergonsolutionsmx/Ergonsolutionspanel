@@ -50,7 +50,7 @@ export function PanelAcciones({
 
   return (
     <div className="grid gap-4">
-      <section className="rounded-lg border bg-card p-4" aria-label="Link para el prospecto">
+      <section className="rounded-lg border border-white/70 bg-card p-4" aria-label="Link para el prospecto">
         <h2 className="mb-2 font-black text-ergon-navy">Link para el prospecto</h2>
         {borrador ? (
           <>
@@ -89,7 +89,7 @@ export function PanelAcciones({
       </section>
 
       {!borrador && estado !== "aceptada" && estado !== "rechazada" ? (
-        <section className="rounded-lg border bg-card p-4" aria-label="Respuesta del prospecto">
+        <section className="rounded-lg border border-white/70 bg-card p-4" aria-label="Respuesta del prospecto">
           <h2 className="mb-2 font-black text-ergon-navy">Respuesta</h2>
           <div className="grid grid-cols-2 gap-2">
             <Button
@@ -112,7 +112,7 @@ export function PanelAcciones({
         </section>
       ) : null}
 
-      <section className="grid gap-2 rounded-lg border bg-card p-4" aria-label="Más acciones">
+      <section className="grid gap-2 rounded-lg border border-white/70 bg-card p-4" aria-label="Más acciones">
         <Button asChild variant="outline">
           <a href={`/propuestas/${id}/pdf`} download>
             <Download /> Descargar PDF

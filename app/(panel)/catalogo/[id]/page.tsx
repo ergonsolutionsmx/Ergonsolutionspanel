@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: "Servicio" };
 
 function Seccion({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-lg border bg-card p-4 md:p-5">
+    <section className="rounded-lg border border-white/70 bg-card p-4 md:p-5">
       <h2 className="mb-2 font-black text-ergon-navy">{titulo}</h2>
       {children}
     </section>
@@ -106,13 +106,13 @@ export default async function ServicioPage({ params }: PageProps<"/catalogo/[id]
         <section>
           <h2 className="mb-2 font-black text-ergon-navy">Variantes</h2>
           {s.variantes.length === 0 ? (
-            <div className="rounded-lg border bg-card p-4">
+            <div className="rounded-lg border border-white/70 bg-card p-4">
               <SinDefinir />
             </div>
           ) : (
             <div className="grid gap-3 md:grid-cols-3">
               {s.variantes.map((v) => (
-                <article key={v.id} className="flex flex-col gap-3 rounded-lg border bg-card p-4">
+                <article key={v.id} className="flex flex-col gap-3 rounded-lg border border-white/70 bg-card p-4">
                   <h3 className="font-black text-ergon-navy">{NOMBRE_VARIANTE[v.nombre]}</h3>
                   {v.que_incluye ? <p className="text-sm">{v.que_incluye}</p> : <SinDefinir />}
                   {v.entregables ? (

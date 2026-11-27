@@ -28,7 +28,7 @@ export default async function EditarProyectoPage({ params }: PageProps<"/proyect
       >
         Editar proyecto
       </Titulo>
-      <div className="rounded-lg border bg-card p-4 md:p-6">
+      <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioProyecto
           accion={actualizarProyecto.bind(null, proyecto.id)}
           catalogos={catalogos}

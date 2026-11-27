@@ -11,7 +11,7 @@ export default async function NuevoServicioPage() {
   return (
     <div className="max-w-3xl">
       <Titulo>Nuevo servicio</Titulo>
-      <div className="rounded-lg border bg-card p-4 md:p-6">
+      <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
         <FormularioServicio accion={crearServicio} cancelar="/catalogo" textoBoton="Crear y agregar variantes" />
       </div>
     </div>

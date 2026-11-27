@@ -32,7 +32,7 @@ function Marco({ children }: { children: React.ReactNode }) {
 
 function Aviso({ titulo, texto }: { titulo: string; texto: string }) {
   return (
-    <div className="rounded-lg border bg-card p-8 text-center shadow-sm">
+    <div className="rounded-lg border border-white/70 bg-card p-8 text-center shadow-sm">
       <Clock className="mx-auto mb-3 size-10 text-ergon-blue" aria-hidden />
       <h1 className="text-xl font-black text-ergon-navy">{titulo}</h1>
       <p className="mt-2 text-muted-foreground">{texto}</p>
@@ -84,7 +84,7 @@ function Contenido({ p, token }: { p: PropuestaParaCliente; token: string }) {
 
       <section>
         <h2 className="mb-2 text-sm font-black uppercase tracking-wide text-ergon-blue">Inversión</h2>
-        <ul className="divide-y overflow-hidden rounded-lg border bg-card">
+        <ul className="divide-y overflow-hidden rounded-lg border border-white/70 bg-card">
           {p.conceptos.map((c, i) => (
             <li key={i} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-start sm:gap-6">
               <div className="min-w-0 flex-1">
@@ -105,7 +105,7 @@ function Contenido({ p, token }: { p: PropuestaParaCliente; token: string }) {
           ))}
         </ul>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-lg border bg-card p-4">
+          <div className="rounded-lg border border-white/70 bg-card p-4">
             <p className="text-xs font-bold uppercase text-muted-foreground">Instalación (pago único)</p>
             <p className="mt-1 text-2xl font-black text-ergon-navy">{pesos(p.total_instalacion)}</p>
           </div>

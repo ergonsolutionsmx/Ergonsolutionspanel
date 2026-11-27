@@ -38,7 +38,7 @@ export default async function BitacoraPage({ searchParams }: PageProps<"/ajustes
   return (
     <div className="grid gap-4">
       {/* Filtros con un formulario GET: funcionan sin JavaScript. */}
-      <form method="get" className="grid gap-3 rounded-lg border bg-card p-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_9rem_9rem_auto] lg:items-end">
+      <form method="get" className="grid gap-3 rounded-lg border border-white/70 bg-card p-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_9rem_9rem_auto] lg:items-end">
         <label className="grid gap-1 text-xs font-bold text-muted-foreground">
           Tipo
           <NativeSelect name="tabla" defaultValue={f.tabla}>
@@ -94,9 +94,9 @@ export default async function BitacoraPage({ searchParams }: PageProps<"/ajustes
       </p>
 
       {registros.length === 0 ? (
-        <p className="rounded-lg border bg-card p-8 text-center text-sm text-muted-foreground">Sin registros.</p>
+        <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">Sin registros.</p>
       ) : (
-        <ul className="divide-y rounded-lg border bg-card">
+        <ul className="divide-y rounded-lg border border-white/70 bg-card">
           {registros.map((r) => {
             const perfil = perfiles.find((p) => p.usuario_id === r.usuario_id);
             const nombre = nombreRegistro(r);

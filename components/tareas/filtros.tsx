@@ -40,7 +40,7 @@ export function PestanasVista({ conProyectos = true }: { conProyectos?: boolean 
     ...(conProyectos ? [{ v: "proyectos", nombre: "Proyectos" }] : []),
   ];
   return (
-    <div role="tablist" className="inline-flex rounded-lg bg-secondary p-1">
+    <div role="tablist" className="inline-flex rounded-full bg-ergon-navy/[0.06] p-1">
       {pestanas.map(({ v, nombre }) => (
         <Link
           key={v}
@@ -49,8 +49,8 @@ export function PestanasVista({ conProyectos = true }: { conProyectos?: boolean 
           href={con(v)}
           scroll={false}
           className={cn(
-            "rounded-md px-4 py-1.5 text-sm font-bold",
-            vista === v ? "bg-card text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
+            "rounded-full px-4 py-1.5 text-sm font-bold",
+            vista === v ? "bg-white text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
           )}
         >
           {nombre}

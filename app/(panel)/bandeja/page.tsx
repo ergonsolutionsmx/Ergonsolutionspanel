@@ -59,11 +59,11 @@ export default async function BandejaPage({ searchParams }: PageProps<"/bandeja"
       </div>
 
       {mensajes.length === 0 ? (
-        <p className="rounded-lg border bg-card p-8 text-center text-sm text-muted-foreground">
+        <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">
           Sin mensajes. Puedes crear uno de prueba en Ajustes → Canales.
         </p>
       ) : (
-        <ul className="divide-y rounded-lg border bg-card">
+        <ul className="divide-y rounded-lg border border-white/70 bg-card">
           {mensajes.map((m) => {
             const nuevo = m.estado === "nuevo";
             return (

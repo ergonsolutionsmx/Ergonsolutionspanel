@@ -7,26 +7,26 @@ import { cn } from "@/lib/utils";
 import { SECCIONES, estaActiva } from "./secciones";
 import { Campanita } from "@/components/notificaciones/campanita";
 
-/** Menú lateral (computadora). */
+/** Menú lateral (computadora): panel de vidrio flotante. */
 export function MenuLateral({ pie }: { pie?: React.ReactNode }) {
   const ruta = usePathname();
 
   return (
-    <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col bg-ergon-navy text-white md:flex">
-      <div className="flex items-center justify-between gap-2 pb-4 pl-5 pr-3 pt-6">
+    <aside className="vidrio sticky top-4 hidden h-[calc(100dvh-2rem)] w-60 shrink-0 flex-col rounded-[1.5rem] text-ergon-navy md:flex">
+      <div className="flex items-center justify-between gap-2 pb-3 pl-5 pr-3 pt-5">
         <Link href="/inicio">
           <Image
-            src="/brand/logo-fondo-oscuro.png"
+            src="/brand/logo-horizontal-claro.png"
             alt="Ergon Solutions"
-            width={180}
-            height={57}
+            width={240}
+            height={56}
             priority
             className="h-auto w-36"
           />
         </Link>
-        <Campanita lado="right" className="text-white/80 hover:bg-white/10 hover:text-white" />
+        <Campanita lado="right" className="rounded-full text-ergon-navy/75 hover:bg-white/70 hover:text-ergon-navy" />
       </div>
-      <nav className="flex-1 space-y-0.5 px-3 py-3" aria-label="Principal">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-3" aria-label="Principal">
         {SECCIONES.map(({ href, nombre, icono: Icono }) => {
           const activa = estaActiva(ruta, href);
           return (
@@ -35,19 +35,17 @@ export function MenuLateral({ pie }: { pie?: React.ReactNode }) {
               href={href}
               aria-current={activa ? "page" : undefined}
               className={cn(
-                "relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-white/65 hover:bg-white/[0.06] hover:text-white",
-                activa && "bg-white/10 text-white hover:bg-white/10",
+                "flex items-center gap-3 rounded-full px-3.5 py-2.5 text-sm font-bold text-ergon-navy/65 hover:bg-white/50 hover:text-ergon-navy",
+                activa && "bg-white text-ergon-navy shadow-sm hover:bg-white",
               )}
             >
-              {/* Indicador cian: acento de marca solo para la sección activa. */}
-              {activa ? <span className="absolute -left-3 top-2 bottom-2 w-1 rounded-r-full bg-ergon-sky" aria-hidden /> : null}
-              <Icono className={cn("size-5", activa ? "text-ergon-sky" : "text-white/55")} aria-hidden />
+              <Icono className={cn("size-[1.15rem]", activa ? "text-ergon-blue" : "text-ergon-navy/50")} strokeWidth={1.9} aria-hidden />
               {nombre}
             </Link>
           );
         })}
       </nav>
-      {pie ? <div className="border-t border-white/10 p-3">{pie}</div> : null}
+      {pie ? <div className="m-3 mt-0 rounded-2xl bg-white/45 p-2.5">{pie}</div> : null}
     </aside>
   );
 }

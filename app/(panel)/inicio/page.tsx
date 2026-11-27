@@ -43,7 +43,7 @@ export default async function InicioPage() {
 
   return (
     <>
-      <section className="luz-marca mb-6 rounded-2xl border bg-card p-5 shadow-sm md:p-6" aria-label="Resumen del día">
+      <section className="luz-marca mb-6 rounded-2xl border border-white/70 bg-card p-5 shadow-sm md:p-6" aria-label="Resumen del día">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm font-bold text-muted-foreground">{fecha}</p>

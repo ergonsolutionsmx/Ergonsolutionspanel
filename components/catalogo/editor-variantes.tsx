@@ -17,7 +17,7 @@ function FormularioVariante({ servicioId, variante }: { servicioId: string; vari
   const id = (campo: string) => `${campo}-${sufijo}`;
 
   return (
-    <form action={enviar} className="grid gap-3 rounded-lg border bg-card p-4">
+    <form action={enviar} className="grid gap-3 rounded-lg border border-white/70 bg-card p-4">
       <div className="flex items-end gap-3">
         <div className="flex-1">
           <Campo id={id("nombre")} etiqueta={variante ? "Variante" : "Nueva variante"}>

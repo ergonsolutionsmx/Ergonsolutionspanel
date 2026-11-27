@@ -7,7 +7,7 @@ import { Avatar, BarraAvance, EtiquetaEstadoProyecto } from "@/components/tareas
 
 export function ListaProyectos({ proyectos, catalogos }: { proyectos: ProyectoConAvance[]; catalogos: Catalogos }) {
   if (proyectos.length === 0) {
-    return <p className="rounded-lg border bg-card p-8 text-center text-sm text-muted-foreground">Sin proyectos</p>;
+    return <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">Sin proyectos</p>;
   }
   return (
     <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -15,7 +15,7 @@ export function ListaProyectos({ proyectos, catalogos }: { proyectos: ProyectoCo
         const avance = porcentaje(p);
         return (
           <li key={p.id}>
-            <Link href={`/proyectos/${p.id}`} className="flex h-full flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm hover:border-ergon-blue">
+            <Link href={`/proyectos/${p.id}`} className="flex h-full flex-col gap-3 rounded-lg border border-white/70 bg-card p-4 shadow-sm hover:border-ergon-blue">
               <div className="flex items-start gap-2">
                 <h2 className="flex-1 font-black text-ergon-navy">{p.nombre}</h2>
                 <EtiquetaEstadoProyecto estado={p.estado} />

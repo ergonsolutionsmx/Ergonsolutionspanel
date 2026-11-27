@@ -15,7 +15,7 @@ export function PestanasAjustes() {
   const ruta = usePathname();
   return (
     <nav aria-label="Secciones de ajustes" className="-mx-4 mb-6 overflow-x-auto px-4 md:mx-0 md:px-0">
-      <div className="inline-flex rounded-lg bg-secondary p-1">
+      <div className="inline-flex rounded-full bg-ergon-navy/[0.06] p-1">
         {PESTANAS.map((p) => {
           const activa = ruta === p.href;
           return (
@@ -24,8 +24,8 @@ export function PestanasAjustes() {
               href={p.href}
               aria-current={activa ? "page" : undefined}
               className={cn(
-                "whitespace-nowrap rounded-md px-4 py-1.5 text-sm font-bold",
-                activa ? "bg-card text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
+                "whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-bold",
+                activa ? "bg-white text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
               )}
             >
               {p.nombre}

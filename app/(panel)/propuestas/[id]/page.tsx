@@ -58,7 +58,7 @@ export default async function PropuestaPage({ params }: PageProps<"/propuestas/[
             <h2 id="t-prospecto" className="mb-3 text-lg font-black text-ergon-navy">
               Prospecto
             </h2>
-            <div className="rounded-lg border bg-card p-4 md:p-6">
+            <div className="rounded-lg border border-white/70 bg-card p-4 md:p-6">
               <FormularioProspecto accion={actualizarPropuesta.bind(null, p.id)} propuesta={p} textoBoton="Guardar datos" />
             </div>
           </section>
