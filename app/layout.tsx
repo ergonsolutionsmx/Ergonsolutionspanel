@@ -3,6 +3,7 @@ import { Lato } from "next/font/google";
 import "./globals.css";
 import { ProveedorMovimiento } from "@/components/movimiento/proveedor";
 import { Toaster } from "@/components/avisos/toast";
+import { SCRIPT_TEMA } from "@/components/tema/tema";
 
 // Tipografía de marca. POR CONFIRMAR: Lato vs Archivo + IBM Plex Sans.
 const fuenteMarca = Lato({
@@ -36,7 +37,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-MX" className={`${fuenteMarca.variable} h-full antialiased`}>
+    <html lang="es-MX" className={`${fuenteMarca.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        {/* Tema claro/oscuro antes de pintar (sin parpadeo). */}
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+      </head>
       <body className="min-h-full font-sans">
         <ProveedorMovimiento>
           {children}

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Modo oscuro por clase (.dark en <html>), elegido en el panel. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Tokens de marca Ergon (Plan de empresa · nuevo branding).
  * Todo el color de la app sale de aquí: para cambiar la marca, se cambia este bloque.
@@ -15,7 +18,7 @@
   /* Roles (shadcn/ui) mapeados a la marca */
   --background: var(--ergon-bg);
   --foreground: #0f172a;
-  --card: rgb(255 255 255 / 0.86); /* casi blanco: deja ver un poco el fondo (estilo vidrio) */
+  --card: rgb(255 255 255 / 0.62); /* vidrio: deja ver el fondo de marca */
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
@@ -35,7 +38,7 @@
   --radius: 0.875rem;
 
   /* Menú lateral */
-  --sidebar: var(--ergon-navy);
+  --sidebar: rgb(11 31 68 / 0.9);
   --sidebar-foreground: #e6ecf7;
   --sidebar-active: var(--ergon-navy-2);
   --sidebar-accent: var(--ergon-sky);
@@ -53,6 +56,34 @@
   --chart-3: var(--ergon-navy);
   --chart-4: #94a3b8;
   --chart-5: #059669;
+}
+
+/* ---------- Modo oscuro ---------- */
+.dark {
+  color-scheme: dark;
+  --ergon-navy: #e6ecf7; /* en oscuro, "navy" como color de texto pasa a claro */
+  --ergon-bg: #060d1f;
+  --background: #060d1f;
+  --foreground: #e6ecf7;
+  --card: rgb(24 44 86 / 0.5);
+  --card-foreground: #e6ecf7;
+  --popover: #0f1d3b;
+  --popover-foreground: #e6ecf7;
+  --secondary: rgb(255 255 255 / 0.08);
+  --secondary-foreground: #e6ecf7;
+  --muted: rgb(255 255 255 / 0.05);
+  --muted-foreground: #9fb0c9;
+  --accent: rgb(56 189 248 / 0.14);
+  --accent-foreground: #e6ecf7;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.16);
+  --sidebar: rgb(5 12 28 / 0.82);
+  --sidebar-active: rgb(255 255 255 / 0.09);
+  --estado-exito: #34d399;
+  --estado-aviso: #fbbf24;
+  --estado-error: #f87171;
+  --estado-info: #60a5fa;
+  --chart-3: #9fb0c9;
 }
 
 @theme inline {
@@ -102,7 +133,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* Sombras de vidrio: filo de luz arriba + sombra larga y suave con tinte navy. */
-  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.75), 0 1px 2px rgb(11 31 68 / 0.04), 0 10px 24px -20px rgb(11 31 68 / 0.4);
+  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 1px 0 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(255 255 255 / 0.2), 0 1px 2px rgb(11 31 68 / 0.04), 0 12px 28px -20px rgb(11 31 68 / 0.42);
   --shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.8), 0 1px 2px -1px rgb(11 31 68 / 0.08), 0 16px 40px -22px rgb(11 31 68 / 0.35);
   --shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 2px 4px -2px rgb(11 31 68 / 0.1), 0 24px 60px -24px rgb(11 31 68 / 0.4);
   /* Solo para la acción principal (botón azul). */
@@ -207,39 +238,93 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(48rem 34rem at 92% -8%, rgb(56 189 248 / 0.42), transparent 62%),
-    radial-gradient(40rem 32rem at 58% -14%, rgb(37 99 235 / 0.2), transparent 60%),
-    radial-gradient(44rem 36rem at -6% 18%, rgb(56 189 248 / 0.18), transparent 60%),
-    radial-gradient(56rem 40rem at 30% 112%, rgb(37 99 235 / 0.16), transparent 62%),
-    radial-gradient(40rem 30rem at 100% 100%, rgb(11 31 68 / 0.1), transparent 60%),
+    radial-gradient(46rem 34rem at 94% -10%, rgb(56 189 248 / 0.55), transparent 62%),
+    radial-gradient(40rem 32rem at 58% -16%, rgb(37 99 235 / 0.28), transparent 60%),
+    radial-gradient(42rem 36rem at -8% 22%, rgb(56 189 248 / 0.24), transparent 60%),
+    radial-gradient(36rem 30rem at 18% 70%, rgb(129 140 248 / 0.14), transparent 62%),
+    radial-gradient(56rem 40rem at 34% 114%, rgb(37 99 235 / 0.22), transparent 62%),
+    radial-gradient(40rem 30rem at 102% 96%, rgb(56 189 248 / 0.2), transparent 60%),
+    var(--ergon-bg);
+}
+.dark body::before {
+  background:
+    radial-gradient(46rem 34rem at 94% -10%, rgb(56 189 248 / 0.22), transparent 62%),
+    radial-gradient(40rem 32rem at 58% -16%, rgb(37 99 235 / 0.28), transparent 60%),
+    radial-gradient(42rem 36rem at -8% 22%, rgb(37 99 235 / 0.18), transparent 60%),
+    radial-gradient(36rem 30rem at 18% 70%, rgb(129 140 248 / 0.12), transparent 62%),
+    radial-gradient(56rem 40rem at 34% 114%, rgb(56 189 248 / 0.12), transparent 62%),
     var(--ergon-bg);
 }
 
-/* Vidrio esmerilado: menú, encabezado, barra del celular y ventanas flotantes. */
+/*
+ * Vidrio líquido: muy translúcido, con saturación alta (los colores del fondo "brillan" a través),
+ * filo de luz arriba y a la izquierda, reflejo suave en la esquina y sombra larga.
+ */
 @utility vidrio {
-  background: rgb(255 255 255 / 0.55);
-  -webkit-backdrop-filter: blur(22px) saturate(1.25);
-  backdrop-filter: blur(22px) saturate(1.25);
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.5), transparent 55%),
+    linear-gradient(160deg, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.22));
+  -webkit-backdrop-filter: blur(26px) saturate(1.9) brightness(1.04);
+  backdrop-filter: blur(26px) saturate(1.9) brightness(1.04);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.85),
-    inset 0 0 0 1px rgb(255 255 255 / 0.45),
-    0 20px 52px -26px rgb(11 31 68 / 0.32);
+    inset 0 1px 0 rgb(255 255 255 / 0.95),
+    inset 1px 0 0 rgb(255 255 255 / 0.55),
+    inset 0 -1px 0 rgb(255 255 255 / 0.25),
+    inset 0 0 0 1px rgb(255 255 255 / 0.35),
+    inset 0 -18px 40px -30px rgb(37 99 235 / 0.25),
+    0 24px 60px -30px rgb(11 31 68 / 0.4);
   @supports not (backdrop-filter: blur(1px)) {
     background: rgb(255 255 255 / 0.94);
   }
 }
 /* Vidrio más sólido para ventanas que flotan sobre contenido. */
 @utility vidrio-solido {
-  background: rgb(255 255 255 / 0.93);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
-  backdrop-filter: blur(24px) saturate(1.2);
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.7), transparent 55%),
+    linear-gradient(160deg, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.78));
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+  backdrop-filter: blur(28px) saturate(1.8);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.9),
-    inset 0 0 0 1px rgb(255 255 255 / 0.5),
-    0 24px 80px -20px rgb(11 31 68 / 0.35);
+    inset 0 1px 0 rgb(255 255 255 / 1),
+    inset 1px 0 0 rgb(255 255 255 / 0.6),
+    inset 0 0 0 1px rgb(255 255 255 / 0.45),
+    0 24px 80px -20px rgb(11 31 68 / 0.38);
   @supports not (backdrop-filter: blur(1px)) {
     background: rgb(255 255 255 / 0.97);
   }
+}
+.dark .vidrio {
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.09), transparent 55%),
+    linear-gradient(160deg, rgb(30 52 96 / 0.55), rgb(12 24 50 / 0.45));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    inset 1px 0 0 rgb(255 255 255 / 0.08),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    inset 0 -18px 40px -30px rgb(56 189 248 / 0.25),
+    0 24px 60px -30px rgb(0 0 0 / 0.7);
+}
+@media (min-width: 48rem) {
+  .dark .md\:vidrio {
+    background:
+      radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.09), transparent 55%),
+      linear-gradient(160deg, rgb(30 52 96 / 0.55), rgb(12 24 50 / 0.45));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 1px 0 0 rgb(255 255 255 / 0.08),
+      inset 0 0 0 1px rgb(255 255 255 / 0.06),
+      inset 0 -18px 40px -30px rgb(56 189 248 / 0.25),
+      0 24px 60px -30px rgb(0 0 0 / 0.7);
+  }
+}
+.dark .vidrio-solido {
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.08), transparent 55%),
+    linear-gradient(160deg, rgb(22 40 78 / 0.92), rgb(12 24 50 / 0.9));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    inset 0 0 0 1px rgb(255 255 255 / 0.07),
+    0 24px 80px -20px rgb(0 0 0 / 0.7);
 }
 
 /* Entrada suave del contenido al cambiar de sección (sube y se enfoca). */
@@ -338,5 +423,52 @@ body::before {
 @media (prefers-reduced-motion: no-preference) {
   .tachado {
     transition: background-size 300ms cubic-bezier(0.16, 1, 0.3, 1), color 200ms;
+  }
+}
+
+/* ---------- Modo oscuro: ajustes de colores fijos ---------- */
+.dark :is([class~="bg-white"], [class*=" bg-white/"], [class^="bg-white/"]) {
+  background-color: rgb(255 255 255 / 0.1);
+}
+.dark [class*="hover:bg-white"]:hover {
+  background-color: rgb(255 255 255 / 0.12);
+}
+.dark :is([class*=" border-white/"], [class^="border-white/"]) {
+  border-color: rgb(255 255 255 / 0.08);
+}
+/* Fondos navy sólidos (chips activos, encabezados de tabla): azul profundo para que se distingan. */
+.dark [class~="bg-ergon-navy"] {
+  background-color: #1d3b73;
+}
+.dark :is([class~="border-ergon-navy"], [class~="md:border-ergon-navy"]) {
+  border-color: #2b5096;
+}
+.dark :is(.text-amber-700, .text-amber-800, .text-amber-900) { color: #fbbf24; }
+.dark :is(.text-emerald-600, .text-emerald-700, .text-emerald-800) { color: #34d399; }
+.dark :is(.text-red-700, .text-red-800) { color: #f87171; }
+.dark :is(.text-blue-800) { color: #93c5fd; }
+.dark :is(.text-sky-700, .text-sky-800) { color: #7dd3fc; }
+.dark :is(.text-slate-700) { color: #cbd5e1; }
+.dark :is(.bg-red-50, .bg-emerald-50, .bg-blue-100, .bg-blue-200) { background-color: rgb(255 255 255 / 0.06); }
+.dark .esqueleto {
+  background: linear-gradient(100deg, rgb(255 255 255 / 0.05) 30%, rgb(255 255 255 / 0.1) 50%, rgb(255 255 255 / 0.05) 70%);
+  background-size: 200% 100%;
+}
+.dark ::selection {
+  background: rgb(56 189 248 / 0.35);
+}
+/* En oscuro, el filo de luz de las tarjetas es tenue (en claro es blanco brillante). */
+.dark [class~="shadow-sm"] {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), inset 1px 0 0 rgb(255 255 255 / 0.04), 0 14px 30px -20px rgb(0 0 0 / 0.65);
+}
+.dark :is([class~="shadow-md"], [class*="hover:shadow-md"]:hover) {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 18px 40px -22px rgb(0 0 0 / 0.75);
+}
+.dark [class~="shadow-lg"] {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 24px 60px -24px rgb(0 0 0 / 0.8);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .dark .tarjeta-viva:hover {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 18px 40px -22px rgb(0 0 0 / 0.75);
   }
 }

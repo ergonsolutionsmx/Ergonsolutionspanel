@@ -8,6 +8,7 @@ import { UsuarioEncabezado, UsuarioMenuLateral } from "@/components/panel/usuari
 import { Cargando } from "@/components/panel/cargando";
 import { ProveedorNotificaciones } from "@/components/notificaciones/contexto";
 import { Campanita } from "@/components/notificaciones/campanita";
+import { BotonTema } from "@/components/tema/tema";
 
 export default function PanelLayout({ children }: LayoutProps<"/">) {
   return (
@@ -32,7 +33,8 @@ export default function PanelLayout({ children }: LayoutProps<"/">) {
                 <Logo variante="app" prioridad className="size-8 rounded-lg" />
                 <span className="text-sm font-black tracking-tight text-ergon-navy">Ergon Solutions</span>
               </Link>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
+                <BotonTema />
                 <Campanita className="rounded-full text-ergon-navy hover:bg-white/70" />
                 <Suspense fallback={<div className="size-8" />}>
                   <UsuarioEncabezado />
@@ -45,6 +47,7 @@ export default function PanelLayout({ children }: LayoutProps<"/">) {
           <header className="vidrio mx-auto mb-4 hidden h-16 w-full max-w-6xl items-center justify-between gap-4 rounded-[1.25rem] px-4 md:flex">
             <Buscador />
             <div className="flex items-center gap-2">
+              <BotonTema />
               <Campanita className="rounded-full text-ergon-navy hover:bg-white/70" />
               <Suspense fallback={<div className="size-8" />}>
                 <UsuarioEncabezado />
@@ -53,7 +56,7 @@ export default function PanelLayout({ children }: LayoutProps<"/">) {
           </header>
 
           {/* Contenedor principal de vidrio (computadora); en celular el contenido va directo sobre el fondo. */}
-          <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-32 pt-5 md:vidrio md:rounded-[1.75rem] md:px-8 md:pb-10 md:pt-8">
+          <main className="relative mx-auto w-full max-w-6xl flex-1 px-4 pb-32 pt-5 md:vidrio md:rounded-[1.75rem] md:px-8 md:pb-10 md:pt-8">
             <Suspense fallback={<Cargando />}>
               <div className="revelar">{children}</div>
             </Suspense>
