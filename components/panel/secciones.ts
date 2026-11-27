@@ -16,6 +16,8 @@ export type Seccion = {
   icono: LucideIcon;
   /** Aparece directo en la barra inferior del celular (el resto va en "Más"). */
   enBarra?: boolean;
+  /** Nombre corto para la barra inferior. */
+  corto?: string;
 };
 
 export const SECCIONES: Seccion[] = [
@@ -24,7 +26,7 @@ export const SECCIONES: Seccion[] = [
   { href: "/bandeja", nombre: "Bandeja", icono: Inbox, enBarra: true },
   { href: "/catalogo", nombre: "Catálogo", icono: BookOpen },
   { href: "/propuestas", nombre: "Propuestas", icono: FileText },
-  { href: "/proyectos", nombre: "Proyectos", icono: FolderKanban, enBarra: true },
+  { href: "/proyectos", nombre: "Proyectos y tareas", corto: "Tareas", icono: FolderKanban, enBarra: true },
   { href: "/demos", nombre: "Demos", icono: MonitorPlay },
   { href: "/ajustes", nombre: "Ajustes", icono: Settings },
 ];

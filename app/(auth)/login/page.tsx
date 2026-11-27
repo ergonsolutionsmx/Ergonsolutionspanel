@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { FormularioLogin } from "./formulario";
+import { EncabezadoAcceso } from "../campo";
 
 export const metadata: Metadata = { title: "Entrar" };
 
 export default function LoginPage() {
   return (
     <>
-      <h1 className="mb-6 text-xl font-black text-ergon-navy">Entrar</h1>
+      <EncabezadoAcceso titulo="Bienvenido de nuevo" texto="Entra a Ergon Solutions" />
       <Suspense>
         <FormularioLogin />
       </Suspense>

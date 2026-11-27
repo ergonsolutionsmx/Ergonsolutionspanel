@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
+import { ProveedorMovimiento } from "@/components/movimiento/proveedor";
+import { Toaster } from "@/components/avisos/toast";
 
 // Tipografía de marca. POR CONFIRMAR: Lato vs Archivo + IBM Plex Sans.
 const fuenteMarca = Lato({
@@ -26,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#E6EEF9",
+  themeColor: "#0B1F44",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -35,7 +37,12 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es-MX" className={`${fuenteMarca.variable} h-full antialiased`}>
-      <body className="min-h-full font-sans">{children}</body>
+      <body className="min-h-full font-sans">
+        <ProveedorMovimiento>
+          {children}
+          <Toaster />
+        </ProveedorMovimiento>
+      </body>
     </html>
   );
 }

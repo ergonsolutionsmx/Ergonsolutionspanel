@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 /*
  * Tokens de marca Ergon (Plan de empresa · nuevo branding).
@@ -9,27 +10,49 @@
   --ergon-navy-2: #11274e;
   --ergon-blue: #2563eb;
   --ergon-sky: #38bdf8;
-  --ergon-bg: #eef2f8;
+  --ergon-bg: #f3f4f6;
 
-  /* Roles (estilo shadcn/ui) mapeados a la marca */
+  /* Roles (shadcn/ui) mapeados a la marca */
   --background: var(--ergon-bg);
   --foreground: #0f172a;
-  --card: rgb(255 255 255 / 0.68); /* vidrio: deja ver el fondo de marca */
-  --card-foreground: var(--foreground);
+  --card: rgb(255 255 255 / 0.86); /* casi blanco: deja ver un poco el fondo (estilo vidrio) */
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
   --primary: var(--ergon-blue);
   --primary-foreground: #ffffff;
-  --secondary: rgb(11 31 68 / 0.06);
+  --secondary: #e8eef9;
   --secondary-foreground: var(--ergon-navy);
-  --muted: rgb(11 31 68 / 0.035);
-  --muted-foreground: #4a6178; /* pizarra azulada: texto secundario */
-  --accent: rgb(37 99 235 / 0.09);
+  --muted: #eef1f5;
+  --muted-foreground: #5b6478;
+  --accent: #e0ecff;
   --accent-foreground: var(--ergon-navy);
+  --border: #dde3ec;
+  --input: #dde3ec;
+  --ring: var(--ergon-blue);
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: rgb(11 31 68 / 0.09); /* hilo navy muy tenue en vez de gris */
-  --input: rgb(11 31 68 / 0.15);
-  --ring: var(--ergon-blue);
   --radius: 0.875rem;
+
+  /* Menú lateral */
+  --sidebar: var(--ergon-navy);
+  --sidebar-foreground: #e6ecf7;
+  --sidebar-active: var(--ergon-navy-2);
+  --sidebar-accent: var(--ergon-sky);
+
+  /* Estados y prioridades */
+  --estado-exito: #059669;
+  --estado-aviso: #d97706;
+  --estado-error: #dc2626;
+  --estado-info: var(--ergon-blue);
+  --estado-pendiente: var(--ergon-sky);
+
+  /* Gráficas */
+  --chart-1: var(--ergon-blue);
+  --chart-2: var(--ergon-sky);
+  --chart-3: var(--ergon-navy);
+  --chart-4: #94a3b8;
+  --chart-5: #059669;
 }
 
 @theme inline {
@@ -56,6 +79,22 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-exito: var(--estado-exito);
+  --color-aviso: var(--estado-aviso);
+  --color-error: var(--estado-error);
+  --color-info: var(--estado-info);
+  --color-pendiente: var(--estado-pendiente);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -191,7 +230,7 @@ body::before {
 }
 /* Vidrio más sólido para ventanas que flotan sobre contenido. */
 @utility vidrio-solido {
-  background: rgb(255 255 255 / 0.86);
+  background: rgb(255 255 255 / 0.93);
   -webkit-backdrop-filter: blur(24px) saturate(1.2);
   backdrop-filter: blur(24px) saturate(1.2);
   box-shadow:
@@ -224,4 +263,64 @@ body::before {
     transform: none;
     filter: none;
   }
+}
+
+/* Carga: brillo suave que recorre el bloque. */
+.esqueleto {
+  background: linear-gradient(100deg, rgb(11 31 68 / 0.06) 30%, rgb(11 31 68 / 0.11) 50%, rgb(11 31 68 / 0.06) 70%);
+  background-size: 200% 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .esqueleto {
+    animation: esqueleto 1.4s ease-in-out infinite;
+  }
+}
+@keyframes esqueleto {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+
+/* Tarjeta que se levanta un poco al pasar el mouse (solo con mouse). */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tarjeta-viva {
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms;
+  }
+  .tarjeta-viva:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Login: luz que recorre el borde de la tarjeta. */
+@property --angulo-luz {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.borde-luz {
+  padding: 1px;
+  background: conic-gradient(from var(--angulo-luz), transparent 0 70%, rgb(56 189 248 / 0.9) 82%, rgb(255 255 255 / 0.9) 86%, transparent 92%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .borde-luz {
+    animation: giro-luz 6s linear infinite;
+  }
+}
+@keyframes giro-luz {
+  to { --angulo-luz: 360deg; }
+}
+
+/* Logo: aparece en menos de 1 s (login y carga). */
+@media (prefers-reduced-motion: no-preference) {
+  .logo-entrada {
+    animation: logo-entrada 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+@keyframes logo-entrada {
+  from { opacity: 0; transform: scale(0.92); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
 }
