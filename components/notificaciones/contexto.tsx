@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { crearClienteNavegador } from "@/lib/supabase/client";
 
 export type Notificacion = {
@@ -19,6 +19,14 @@ type Valor = {
   cargando: boolean;
   marcarLeida: (id: string) => Promise<void>;
   marcarTodas: () => Promise<void>;
+  /** Descarta (borra) una notificación. */
+  descartar: (id: string) => Promise<void>;
+  /** Descarta todas. */
+  limpiar: () => Promise<void>;
+  /** Ids que acaban de llegar (para animarlas). */
+  nuevas: Set<string>;
+  /** Sube cada vez que llega algo nuevo (para mover la campanita). */
+  pulso: number;
 };
 
 const Contexto = createContext<Valor | null>(null);
@@ -34,13 +42,25 @@ export function ProveedorNotificaciones({ children }: { children: React.ReactNod
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
   const [noLeidas, setNoLeidas] = useState(0);
   const [cargando, setCargando] = useState(true);
+  const [nuevas, setNuevas] = useState<Set<string>>(new Set());
+  const [pulso, setPulso] = useState(0);
+  const conocidas = useRef<Set<string> | null>(null);
 
   const recargar = useCallback(async () => {
     const [lista, conteo] = await Promise.all([
       supabase.from("notificaciones").select(COLUMNAS).order("creado_en", { ascending: false }).limit(LIMITE),
       supabase.from("notificaciones").select("id", { count: "exact", head: true }).eq("leida", false),
     ]);
-    if (lista.data) setNotificaciones(lista.data);
+    if (lista.data) {
+      const previas = conocidas.current;
+      const llegaron = previas ? lista.data.filter((n) => !previas.has(n.id) && !n.leida).map((n) => n.id) : [];
+      conocidas.current = new Set(lista.data.map((n) => n.id));
+      if (llegaron.length) {
+        setNuevas(new Set(llegaron));
+        setPulso((p) => p + 1);
+      }
+      setNotificaciones(lista.data);
+    }
     if (typeof conteo.count === "number") setNoLeidas(conteo.count);
     setCargando(false);
   }, [supabase]);
@@ -97,9 +117,27 @@ export function ProveedorNotificaciones({ children }: { children: React.ReactNod
     await supabase.from("notificaciones").update({ leida: true }).eq("leida", false);
   }, [supabase]);
 
+  const descartar = useCallback(
+    async (id: string) => {
+      const actual = notificaciones.find((n) => n.id === id);
+      setNotificaciones((ns) => ns.filter((n) => n.id !== id));
+      if (actual && !actual.leida) setNoLeidas((c) => Math.max(0, c - 1));
+      await supabase.from("notificaciones").delete().eq("id", id);
+    },
+    [supabase, notificaciones],
+  );
+
+  const limpiar = useCallback(async () => {
+    const ids = notificaciones.map((n) => n.id);
+    setNotificaciones([]);
+    setNoLeidas(0);
+    if (ids.length) await supabase.from("notificaciones").delete().in("id", ids);
+    await supabase.from("notificaciones").update({ leida: true }).eq("leida", false);
+  }, [supabase, notificaciones]);
+
   const valor = useMemo(
-    () => ({ notificaciones, noLeidas, cargando, marcarLeida, marcarTodas }),
-    [notificaciones, noLeidas, cargando, marcarLeida, marcarTodas],
+    () => ({ notificaciones, noLeidas, cargando, marcarLeida, marcarTodas, descartar, limpiar, nuevas, pulso }),
+    [notificaciones, noLeidas, cargando, marcarLeida, marcarTodas, descartar, limpiar, nuevas, pulso],
   );
 
   return <Contexto value={valor}>{children}</Contexto>;

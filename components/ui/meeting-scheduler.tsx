@@ -31,7 +31,9 @@ export function MeetingScheduler({
   fecha,
   onListo,
   onCancelar,
+  tituloInicial = "",
 }: {
+  tituloInicial?: string;
   perfiles: PerfilCorto[];
   yoId: string;
   fecha: string;
@@ -80,7 +82,7 @@ export function MeetingScheduler({
 
       <div className="grid content-start gap-4">
         <Campo id="r-titulo" etiqueta="Título" error={e.titulo}>
-          <Input id="r-titulo" name="titulo" required maxLength={200} placeholder="Ej.: Llamada con el cliente" aria-invalid={!!e.titulo || undefined} />
+          <Input id="r-titulo" name="titulo" required maxLength={200} defaultValue={tituloInicial} placeholder="Ej.: Llamada con el cliente" aria-invalid={!!e.titulo || undefined} />
         </Campo>
 
         <div className="grid grid-cols-2 gap-3 rounded-2xl bg-muted/60 p-3">

@@ -2,100 +2,133 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 import { Popover } from "radix-ui";
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haceCuanto } from "@/lib/tiempo";
 import { useHidratado } from "@/lib/use-hidratado";
-import { useNotificaciones } from "./contexto";
+import { useMedia } from "@/lib/use-media";
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { LiveNotificationFeed, type AvisoFeed, type TipoAviso } from "@/components/ui/live-notification-feed";
+import { toast } from "@/components/avisos/toast";
+import { cambiarEstadoTarea } from "@/app/(panel)/proyectos/acciones";
+import { useNotificaciones, type Notificacion } from "./contexto";
 
-export function Campanita({ className, lado = "bottom" }: { className?: string; lado?: "bottom" | "right" }) {
-  const { notificaciones, noLeidas: noLeidasReales, cargando, marcarLeida, marcarTodas } = useNotificaciones();
+const TAREA = /^\/proyectos\/tareas\/([0-9a-f-]{36})/i;
+
+function aAviso(n: Notificacion): AvisoFeed {
+  const prefijo = n.tipo.split("_")[0];
+  const tipo: TipoAviso =
+    prefijo === "mensaje" ? "message" : prefijo === "tarea" ? "task" : prefijo === "propuesta" ? "proposal" : prefijo === "evento" || prefijo === "reunion" ? "calendar" : "info";
+  const app = { message: "Bandeja", task: "Tareas", proposal: "Propuestas", calendar: "Agenda", info: "Ergon" }[tipo];
+  const esTarea = tipo === "task" && TAREA.test(n.link ?? "");
+  return {
+    id: n.id,
+    tipo,
+    app,
+    titulo: n.titulo,
+    cuerpo: n.cuerpo,
+    hace: haceCuanto(n.creado_en),
+    leida: n.leida,
+    acciones: esTarea ? [{ etiqueta: "Marcar hecha", id: "hecha" }] : undefined,
+  };
+}
+
+export function Campanita({ className }: { className?: string; lado?: "bottom" | "right" }) {
+  const { notificaciones, noLeidas: noLeidasReales, cargando, marcarLeida, marcarTodas, descartar, limpiar, nuevas, pulso } = useNotificaciones();
   // El servidor siempre dibuja la campana en cero: el número aparece ya hidratado.
   const hidratado = useHidratado();
+  const escritorio = useMedia("(min-width: 768px)");
   const noLeidas = hidratado ? noLeidasReales : 0;
   const [abierto, setAbierto] = useState(false);
   const router = useRouter();
-
   const etiqueta = noLeidas > 0 ? `Notificaciones, ${noLeidas} sin leer` : "Notificaciones";
+  const porId = new Map(notificaciones.map((n) => [n.id, n]));
+
+  const feed = (
+    <LiveNotificationFeed
+      avisos={notificaciones.map(aAviso)}
+      nuevas={nuevas}
+      cargando={cargando}
+      className={escritorio ? "max-h-[min(34rem,calc(100dvh-7rem))]" : "h-full"}
+      onAbrir={(a) => {
+        void marcarLeida(a.id);
+        const link = porId.get(a.id)?.link;
+        if (link) {
+          setAbierto(false);
+          router.push(link);
+        }
+      }}
+      onAccion={async (a, accion) => {
+        const id = porId.get(a.id)?.link?.match(TAREA)?.[1];
+        if (accion === "hecha" && id) {
+          await cambiarEstadoTarea(id, "hecha");
+          void marcarLeida(a.id);
+          toast.success("Tarea marcada como hecha");
+        }
+      }}
+      onDescartar={(a) => void descartar(a.id)}
+      onLeerTodo={() => void marcarTodas()}
+      onLimpiar={() => void limpiar()}
+    />
+  );
+
+  const boton = (
+    <motion.span
+      key={pulso}
+      className="relative flex"
+      animate={pulso > 0 ? { rotate: [0, -14, 12, -8, 6, 0] } : undefined}
+      transition={{ duration: 0.6 }}
+    >
+      <Bell className="size-5" aria-hidden />
+      {noLeidas > 0 ? (
+        <motion.span
+          key={noLeidas}
+          initial={{ scale: 0.5 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 520, damping: 14 }}
+          className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-error px-1 text-[11px] font-black leading-none text-white ring-2 ring-white"
+        >
+          {noLeidas > 99 ? "99+" : noLeidas}
+        </motion.span>
+      ) : null}
+    </motion.span>
+  );
+
+  const claseBoton = cn("relative rounded-full p-2 outline-none focus-visible:ring-2 focus-visible:ring-ring", className);
+
+  if (!escritorio) {
+    return (
+      <>
+        <button type="button" aria-label={etiqueta} title={etiqueta} className={claseBoton} onClick={() => setAbierto(true)}>
+          {boton}
+        </button>
+        <Sheet open={abierto} onOpenChange={setAbierto}>
+          <SheetContent side="right" className="w-full max-w-none border-0 p-0 pt-[env(safe-area-inset-top)] sm:max-w-md">
+            <SheetTitle className="sr-only">Notificaciones</SheetTitle>
+            <SheetDescription className="sr-only">Tus avisos recientes</SheetDescription>
+            <div className="flex h-full flex-col pt-10">{feed}</div>
+          </SheetContent>
+        </Sheet>
+      </>
+    );
+  }
 
   return (
     <Popover.Root open={abierto} onOpenChange={setAbierto}>
-      <Popover.Trigger
-        aria-label={etiqueta}
-        title={etiqueta}
-        className={cn("relative rounded-md p-2 outline-none focus-visible:ring-2 focus-visible:ring-ring", className)}
-      >
-        <Bell className="size-5" aria-hidden />
-        {noLeidas > 0 ? (
-          <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-black leading-none text-white">
-            {noLeidas > 99 ? "99+" : noLeidas}
-          </span>
-        ) : null}
+      <Popover.Trigger aria-label={etiqueta} title={etiqueta} className={claseBoton}>
+        {boton}
       </Popover.Trigger>
-
       <Popover.Portal>
         <Popover.Content
-          side={lado}
-          align={lado === "right" ? "start" : "end"}
-          sideOffset={8}
+          side="bottom"
+          align="end"
+          sideOffset={10}
           collisionPadding={8}
-          className="z-50 flex max-h-[min(32rem,var(--radix-popover-content-available-height))] w-[min(24rem,calc(100vw-1rem))] flex-col overflow-hidden vidrio-solido rounded-2xl text-card-foreground"
+          className="vidrio-solido z-50 w-[min(26rem,calc(100vw-1rem))] overflow-hidden rounded-3xl text-card-foreground data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
         >
-          <div className="flex items-center justify-between border-b px-4 py-3">
-            <h2 className="font-black text-ergon-navy">Notificaciones</h2>
-            {noLeidas > 0 ? (
-              <button
-                type="button"
-                onClick={() => void marcarTodas()}
-                className="flex items-center gap-1 rounded-md px-2 py-1 text-sm font-bold text-primary hover:bg-accent"
-              >
-                <CheckCheck className="size-4" aria-hidden /> Marcar todas
-              </button>
-            ) : null}
-          </div>
-
-          <ul className="flex-1 overflow-y-auto">
-            {cargando ? (
-              <li className="px-4 py-8 text-center text-sm text-muted-foreground">Cargando…</li>
-            ) : notificaciones.length === 0 ? (
-              <li className="px-4 py-8 text-center text-sm text-muted-foreground">Sin notificaciones</li>
-            ) : (
-              notificaciones.map((n) => (
-                <li key={n.id} className="border-b last:border-b-0">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      void marcarLeida(n.id);
-                      if (n.link) {
-                        setAbierto(false);
-                        router.push(n.link);
-                      }
-                    }}
-                    className={cn(
-                      "flex w-full gap-3 px-4 py-3 text-left hover:bg-muted",
-                      !n.leida && "bg-accent/60",
-                    )}
-                  >
-                    <span
-                      className={cn("mt-1.5 size-2 shrink-0 rounded-full", n.leida ? "bg-transparent" : "bg-ergon-blue")}
-                      aria-hidden
-                    />
-                    <span className="min-w-0 flex-1">
-                      <span className={cn("block text-sm", n.leida ? "font-normal" : "font-bold")}>{n.titulo}</span>
-                      {n.cuerpo ? (
-                        <span className="mt-0.5 block text-sm text-muted-foreground line-clamp-2">{n.cuerpo}</span>
-                      ) : null}
-                      <span className="mt-1 block text-xs text-muted-foreground">
-                        {haceCuanto(n.creado_en)}
-                        {n.leida ? "" : " · sin leer"}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
+          {feed}
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

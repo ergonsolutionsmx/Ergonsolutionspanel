@@ -4,10 +4,10 @@ import { NOMBRE_CANAL, type Canal } from "@/lib/inbox/tipos";
 
 const ICONO = { formulario: Globe, correo: Mail, whatsapp: MessageCircle, interno: Bell } as const;
 const COLOR = {
-  formulario: "bg-blue-100 text-blue-700",
-  correo: "bg-violet-100 text-violet-700",
-  whatsapp: "bg-emerald-100 text-emerald-700",
-  interno: "bg-slate-200 text-slate-700",
+  formulario: "bg-ergon-blue/10 text-ergon-blue",
+  correo: "bg-error/10 text-error",
+  whatsapp: "bg-exito/10 text-exito",
+  interno: "bg-ergon-navy/[0.07] text-ergon-navy",
 } as const;
 
 export function IconoCanal({ canal, className }: { canal: Canal; className?: string }) {
