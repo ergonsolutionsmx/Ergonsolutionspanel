@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NativeSelect } from "@/components/ui/native-select";
+import { Segmentos } from "@/components/ui/segmentos";
 import type { Catalogos } from "@/lib/tareas-tipos";
 
 function Chip({ activo, href, children }: { activo: boolean; href: string; children: React.ReactNode }) {
@@ -15,7 +16,7 @@ function Chip({ activo, href, children }: { activo: boolean; href: string; child
       aria-current={activo ? "true" : undefined}
       className={cn(
         "flex h-9 items-center gap-1 whitespace-nowrap rounded-full border px-3 text-sm font-bold",
-        activo ? "border-ergon-navy bg-ergon-navy text-white" : "bg-card text-ergon-navy hover:bg-accent",
+        activo ? "border-ergon-navy bg-ergon-navy text-white" : "border-white/70 bg-card text-ergon-navy hover:bg-accent",
       )}
     >
       {children}
@@ -31,7 +32,7 @@ export function PestanasVista({ conProyectos = true }: { conProyectos?: boolean 
   const con = (v: string) => {
     const p = new URLSearchParams(params);
     p.set("vista", v);
-    if (v === "proyectos") ["de", "proyecto", "vencidas"].forEach((k) => p.delete(k));
+    if (v === "proyectos") ["de", "proyecto", "vencidas", "prioridad"].forEach((k) => p.delete(k));
     return `${ruta}?${p}`;
   };
   const pestanas = [
@@ -39,25 +40,7 @@ export function PestanasVista({ conProyectos = true }: { conProyectos?: boolean 
     { v: "lista", nombre: "Lista" },
     ...(conProyectos ? [{ v: "proyectos", nombre: "Proyectos" }] : []),
   ];
-  return (
-    <div role="tablist" className="inline-flex rounded-full bg-ergon-navy/[0.06] p-1">
-      {pestanas.map(({ v, nombre }) => (
-        <Link
-          key={v}
-          role="tab"
-          aria-selected={vista === v}
-          href={con(v)}
-          scroll={false}
-          className={cn(
-            "rounded-full px-4 py-1.5 text-sm font-bold",
-            vista === v ? "bg-white text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
-          )}
-        >
-          {nombre}
-        </Link>
-      ))}
-    </div>
-  );
+  return <Segmentos etiqueta="Vista" activo={vista} opciones={pestanas.map(({ v, nombre }) => ({ valor: v, etiqueta: nombre, href: con(v) }))} />;
 }
 
 /** Filtros: de quién, proyecto y vencidas. */
@@ -68,6 +51,7 @@ export function FiltrosTareas({ catalogos, conProyecto = true }: { catalogos: Ca
   const de = params.get("de") ?? "todos";
   const proyecto = params.get("proyecto") ?? "";
   const vencidas = params.get("vencidas") === "1";
+  const prioridad = params.get("prioridad") ?? "";
 
   const con = (cambios: Record<string, string | null>) => {
     const p = new URLSearchParams(params);
@@ -98,6 +82,13 @@ export function FiltrosTareas({ catalogos, conProyecto = true }: { catalogos: Ca
         <Chip activo={vencidas} href={con({ vencidas: vencidas ? null : "1" })}>
           <AlertTriangle className="size-4" aria-hidden /> Vencidas
         </Chip>
+        <span className="mx-1 w-px self-stretch bg-border" aria-hidden />
+        {(["alta", "media", "baja"] as const).map((p) => (
+          <Chip key={p} activo={prioridad === p} href={con({ prioridad: prioridad === p ? null : p })}>
+            <span className={cn("size-2 rounded-full", p === "alta" ? "bg-error" : p === "media" ? "bg-aviso" : "bg-muted-foreground")} aria-hidden />
+            {p === "alta" ? "Alta" : p === "media" ? "Media" : "Baja"}
+          </Chip>
+        ))}
       </div>
       {conProyecto ? (
         <div className="w-full sm:ml-auto sm:w-56">

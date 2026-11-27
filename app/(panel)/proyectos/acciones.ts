@@ -9,7 +9,11 @@ import {
   ESTADOS_PROYECTO,
   ESTADOS_TAREA,
   PRIORIDADES,
+  COLUMNAS_TAREA,
+  ETAPAS_METODO,
+  TIPOS_PROYECTO,
   type EstadoTarea,
+  type Tarea,
 } from "@/lib/tareas-tipos";
 
 export type EstadoForm = { error?: string } | undefined;
@@ -76,12 +80,13 @@ export async function actualizarTarea(id: string, _: EstadoForm, fd: FormData): 
 }
 
 /** Tablero: mover una tarea de columna y/o de lugar. */
-export async function moverTarea(id: string, estado: EstadoTarea, orden: number) {
+export async function moverTarea(id: string, estado: EstadoTarea, orden: number): Promise<{ ok: boolean }> {
   await obtenerUsuario();
-  if (!UUID.test(id) || !ESTADOS_TAREA.includes(estado) || !Number.isFinite(orden)) return;
+  if (!UUID.test(id) || !ESTADOS_TAREA.includes(estado) || !Number.isFinite(orden)) return { ok: false };
   const supabase = await crearClienteServidor();
-  await supabase.from("tareas").update({ estado, orden }).eq("id", id);
+  const { error } = await supabase.from("tareas").update({ estado, orden }).eq("id", id);
   refresh();
+  return { ok: !error };
 }
 
 /** Lista: palomita para terminar / reabrir. */
@@ -117,6 +122,9 @@ function datosProyecto(fd: FormData) {
       estado: deLista(texto(fd, "estado"), ESTADOS_PROYECTO, "activo"),
       responsable_id: uuidOpcional(fd, "responsable_id"),
       fecha_objetivo: fechaOpcional(fd, "fecha_objetivo"),
+      cliente: textoOpcional(fd, "cliente"),
+      tipo: (TIPOS_PROYECTO as readonly string[]).includes(texto(fd, "tipo")) ? texto(fd, "tipo") : null,
+      etapa: (ETAPAS_METODO as readonly string[]).includes(texto(fd, "etapa")) ? texto(fd, "etapa") : null,
     },
   } as const;
 }
@@ -154,4 +162,80 @@ export async function eliminarProyecto(id: string) {
     await supabase.from("proyectos").delete().eq("id", id);
   }
   redirect("/proyectos?vista=proyectos");
+}
+
+// ---------------------------------------------------------------------------
+// Detalle de tarea: checklist y comentarios
+// ---------------------------------------------------------------------------
+
+export type ElementoChecklist = { id: string; texto: string; hecho: boolean; orden: number };
+export type Comentario = { id: string; usuario_id: string | null; texto: string; creado_en: string };
+
+export async function detalleTarea(id: string) {
+  await obtenerUsuario();
+  if (!UUID.test(id)) return null;
+  const supabase = await crearClienteServidor();
+  const [tarea, checklist, comentarios] = await Promise.all([
+    supabase.from("tareas").select(COLUMNAS_TAREA).eq("id", id).maybeSingle(),
+    supabase.from("tarea_checklist").select("id, texto, hecho, orden").eq("tarea_id", id).order("orden"),
+    supabase.from("tarea_comentarios").select("id, usuario_id, texto, creado_en").eq("tarea_id", id).order("creado_en"),
+  ]);
+  if (!tarea.data) return null;
+  return {
+    tarea: tarea.data as Tarea,
+    checklist: (checklist.data ?? []) as ElementoChecklist[],
+    comentarios: (comentarios.data ?? []) as Comentario[],
+  };
+}
+
+export async function agregarChecklist(tareaId: string, textoNuevo: string) {
+  await obtenerUsuario();
+  const t = textoNuevo.trim().slice(0, 300);
+  if (!UUID.test(tareaId) || !t) return null;
+  const supabase = await crearClienteServidor();
+  const { data } = await supabase.from("tarea_checklist").insert({ tarea_id: tareaId, texto: t }).select("id, texto, hecho, orden").single();
+  return (data as ElementoChecklist) ?? null;
+}
+
+export async function alternarChecklist(id: string, hecho: boolean) {
+  await obtenerUsuario();
+  if (!UUID.test(id)) return;
+  const supabase = await crearClienteServidor();
+  await supabase.from("tarea_checklist").update({ hecho }).eq("id", id);
+}
+
+export async function borrarChecklist(id: string) {
+  await obtenerUsuario();
+  if (!UUID.test(id)) return;
+  const supabase = await crearClienteServidor();
+  await supabase.from("tarea_checklist").delete().eq("id", id);
+}
+
+export async function comentar(tareaId: string, textoNuevo: string) {
+  const usuario = await obtenerUsuario();
+  const t = textoNuevo.trim().slice(0, 2000);
+  if (!UUID.test(tareaId) || !t) return null;
+  const supabase = await crearClienteServidor();
+  const { data } = await supabase
+    .from("tarea_comentarios")
+    .insert({ tarea_id: tareaId, texto: t, usuario_id: usuario.id })
+    .select("id, usuario_id, texto, creado_en")
+    .single();
+  return (data as Comentario) ?? null;
+}
+
+export async function borrarComentario(id: string) {
+  await obtenerUsuario();
+  if (!UUID.test(id)) return;
+  const supabase = await crearClienteServidor();
+  await supabase.from("tarea_comentarios").delete().eq("id", id);
+}
+
+/** Cambia la etapa del Método Ergon desde el detalle del proyecto. */
+export async function cambiarEtapa(id: string, etapa: string) {
+  await obtenerUsuario();
+  if (!UUID.test(id) || !(ETAPAS_METODO as readonly string[]).includes(etapa)) return;
+  const supabase = await crearClienteServidor();
+  await supabase.from("proyectos").update({ etapa }).eq("id", id);
+  refresh();
 }

@@ -3,11 +3,15 @@ import { CalendarDays } from "lucide-react";
 import { fechaCorta } from "@/lib/fechas";
 import { porcentaje, type ProyectoConAvance } from "@/lib/tareas";
 import type { Catalogos } from "@/lib/tareas-tipos";
-import { Avatar, BarraAvance, EtiquetaEstadoProyecto } from "@/components/tareas/etiquetas";
+import { FolderKanban } from "lucide-react";
+import { Avatar, EtiquetaEstadoProyecto } from "@/components/tareas/etiquetas";
+import { Progress } from "@/components/ui/progress";
+import { EmptyState } from "@/components/ui/empty-state";
+import { NOMBRE_ETAPA, NOMBRE_TIPO_PROYECTO } from "@/lib/tareas-tipos";
 
 export function ListaProyectos({ proyectos, catalogos }: { proyectos: ProyectoConAvance[]; catalogos: Catalogos }) {
   if (proyectos.length === 0) {
-    return <p className="rounded-lg border border-white/70 bg-card p-8 text-center text-sm text-muted-foreground">Sin proyectos</p>;
+    return <EmptyState icono={FolderKanban} titulo="Sin proyectos" texto="Crea uno con el botón “Proyecto”." />;
   }
   return (
     <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -15,9 +19,14 @@ export function ListaProyectos({ proyectos, catalogos }: { proyectos: ProyectoCo
         const avance = porcentaje(p);
         return (
           <li key={p.id}>
-            <Link href={`/proyectos/${p.id}`} className="flex h-full flex-col gap-3 rounded-lg border border-white/70 bg-card p-4 shadow-sm hover:border-ergon-blue">
+            <Link href={`/proyectos/${p.id}`} className="tarjeta-viva flex h-full flex-col gap-3 rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm">
               <div className="flex items-start gap-2">
-                <h2 className="flex-1 font-black text-ergon-navy">{p.nombre}</h2>
+                <div className="min-w-0 flex-1">
+                  <h2 className="font-black text-ergon-navy">{p.nombre}</h2>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {[p.cliente, p.tipo ? NOMBRE_TIPO_PROYECTO[p.tipo] : null, p.etapa ? NOMBRE_ETAPA[p.etapa] : null].filter(Boolean).join(" · ")}
+                  </p>
+                </div>
                 <EtiquetaEstadoProyecto estado={p.estado} />
               </div>
               <div className="mt-auto space-y-1">
@@ -27,7 +36,7 @@ export function ListaProyectos({ proyectos, catalogos }: { proyectos: ProyectoCo
                   </span>
                   <span className="font-bold text-ergon-navy">{avance}%</span>
                 </div>
-                <BarraAvance valor={avance} />
+                <Progress value={avance} aria-label={`Avance de ${p.nombre}`} />
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Avatar perfil={catalogos.perfiles.find((x) => x.usuario_id === p.responsable_id)} />

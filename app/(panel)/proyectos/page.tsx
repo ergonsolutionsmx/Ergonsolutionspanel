@@ -41,7 +41,7 @@ export default async function ProyectosPage({ searchParams }: PageProps<"/proyec
 
   return (
     <>
-      <Titulo accion={accion}>Proyectos</Titulo>
+      <Titulo accion={accion}>Proyectos y tareas</Titulo>
       <div className="mb-4">
         <PestanasVista />
       </div>

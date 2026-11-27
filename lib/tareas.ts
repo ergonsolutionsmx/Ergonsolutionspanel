@@ -19,6 +19,8 @@ export type FiltrosTareas = {
   /** "" (todos) | "sueltas" | proyecto_id */
   proyecto: string;
   vencidas: boolean;
+  /** "" (todas) | alta | media | baja */
+  prioridad: string;
 };
 
 export function leerFiltros(sp: Record<string, string | string[] | undefined>): FiltrosTareas {
@@ -27,6 +29,7 @@ export function leerFiltros(sp: Record<string, string | string[] | undefined>): 
     de: uno(sp.de) || "todos",
     proyecto: uno(sp.proyecto),
     vencidas: uno(sp.vencidas) === "1",
+    prioridad: ["alta", "media", "baja"].includes(uno(sp.prioridad)) ? uno(sp.prioridad) : "",
   };
 }
 
@@ -36,7 +39,7 @@ export async function obtenerCatalogos(yoId: string): Promise<Catalogos> {
   const supabase = await crearClienteServidor();
   const [perfiles, proyectos] = await Promise.all([
     supabase.from("perfiles").select("usuario_id, nombre, color").order("nombre"),
-    supabase.from("proyectos").select("id, nombre, estado").order("nombre"),
+    supabase.from("proyectos").select("id, nombre, estado, tipo").order("nombre"),
   ]);
   return {
     perfiles: (perfiles.data ?? []) as PerfilCorto[],
@@ -64,6 +67,7 @@ export async function obtenerTareas(filtros: FiltrosTareas, yoId: string): Promi
   else if (UUID.test(filtros.proyecto)) q = q.eq("proyecto_id", filtros.proyecto);
 
   if (filtros.vencidas) q = q.lt("fecha_limite", hoy).neq("estado", "hecha");
+  if (filtros.prioridad) q = q.eq("prioridad", filtros.prioridad);
 
   const { data } = await q.limit(500);
   return (data ?? []) as Tarea[];

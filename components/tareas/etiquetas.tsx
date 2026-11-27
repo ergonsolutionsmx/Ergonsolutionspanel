@@ -8,7 +8,7 @@ import {
   type Prioridad,
 } from "@/lib/tareas-tipos";
 
-const COLOR_PRIORIDAD = { alta: "rojo", media: "ambar", baja: "gris" } as const;
+const COLOR_PRIORIDAD = { alta: "alta", media: "media", baja: "baja" } as const;
 export function EtiquetaPrioridad({ prioridad }: { prioridad: Prioridad }) {
   return <Badge variant={COLOR_PRIORIDAD[prioridad]}>{NOMBRE_PRIORIDAD[prioridad]}</Badge>;
 }

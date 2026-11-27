@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Campo, ErrorForm } from "@/components/ui/campo";
-import { ESTADOS_PROYECTO, NOMBRE_ESTADO_PROYECTO, type Catalogos, type Proyecto } from "@/lib/tareas-tipos";
+import { ESTADOS_PROYECTO, ETAPAS_METODO, NOMBRE_ESTADO_PROYECTO, NOMBRE_ETAPA, NOMBRE_TIPO_PROYECTO, TIPOS_PROYECTO, type Catalogos, type Proyecto } from "@/lib/tareas-tipos";
 import type { EstadoForm } from "@/app/(panel)/proyectos/acciones";
 
 export function FormularioProyecto({
@@ -30,6 +30,30 @@ export function FormularioProyecto({
       <Campo id="nombre" etiqueta="Nombre">
         <Input id="nombre" name="nombre" required maxLength={120} defaultValue={proyecto?.nombre ?? ""} autoFocus={!proyecto} />
       </Campo>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Campo id="cliente" etiqueta="Cliente">
+          <Input id="cliente" name="cliente" maxLength={120} defaultValue={proyecto?.cliente ?? ""} placeholder="Nombre del negocio" />
+        </Campo>
+        <Campo id="tipo" etiqueta="Tipo">
+          <NativeSelect id="tipo" name="tipo" defaultValue={proyecto?.tipo ?? ""}>
+            <option value="">Sin tipo</option>
+            {TIPOS_PROYECTO.map((t) => (
+              <option key={t} value={t}>
+                {NOMBRE_TIPO_PROYECTO[t]}
+              </option>
+            ))}
+          </NativeSelect>
+        </Campo>
+        <Campo id="etapa" etiqueta="Etapa">
+          <NativeSelect id="etapa" name="etapa" defaultValue={proyecto?.etapa ?? "diagnostico"}>
+            {ETAPAS_METODO.map((e) => (
+              <option key={e} value={e}>
+                {NOMBRE_ETAPA[e]}
+              </option>
+            ))}
+          </NativeSelect>
+        </Campo>
+      </div>
       <Campo id="descripcion" etiqueta="Descripción">
         <Textarea id="descripcion" name="descripcion" defaultValue={proyecto?.descripcion ?? ""} rows={4} />
       </Campo>
@@ -59,7 +83,7 @@ export function FormularioProyecto({
       </div>
       <ErrorForm mensaje={estado?.error} />
       <div className="flex gap-2">
-        <Button type="submit" disabled={enviando}>
+        <Button type="submit" loading={enviando}>
           {enviando ? "Guardando…" : textoBoton}
         </Button>
         <Button asChild variant="ghost">

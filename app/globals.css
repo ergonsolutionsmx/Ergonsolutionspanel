@@ -324,3 +324,19 @@ body::before {
   from { opacity: 0; transform: scale(0.92); filter: blur(6px); }
   to { opacity: 1; transform: none; filter: none; }
 }
+
+/* Tachado animado al completar (tareas y checklist). */
+.tachado {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 55%;
+  background-size: 0% 1.5px;
+}
+.tachado-activo {
+  background-size: 100% 1.5px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tachado {
+    transition: background-size 300ms cubic-bezier(0.16, 1, 0.3, 1), color 200ms;
+  }
+}

@@ -39,10 +39,30 @@ export type Tarea = {
   mensaje_id: string | null;
 };
 
+export const TIPOS_PROYECTO = ["sitio_web", "turnode", "software"] as const;
+export type TipoProyecto = (typeof TIPOS_PROYECTO)[number];
+export const NOMBRE_TIPO_PROYECTO: Record<TipoProyecto, string> = { sitio_web: "Sitio web", turnode: "Turnode", software: "Software" };
+
+/** Etapas del Método Ergon. POR CONFIRMAR: nombres definitivos de cada etapa. */
+export const ETAPAS_METODO = ["diagnostico", "propuesta", "diseno", "desarrollo", "pruebas", "entrega", "seguimiento"] as const;
+export type EtapaMetodo = (typeof ETAPAS_METODO)[number];
+export const NOMBRE_ETAPA: Record<EtapaMetodo, string> = {
+  diagnostico: "Diagnóstico",
+  propuesta: "Propuesta",
+  diseno: "Diseño",
+  desarrollo: "Desarrollo",
+  pruebas: "Pruebas",
+  entrega: "Entrega",
+  seguimiento: "Seguimiento",
+};
+
 export type Proyecto = {
   id: string;
   nombre: string;
   descripcion: string | null;
+  cliente: string | null;
+  tipo: TipoProyecto | null;
+  etapa: EtapaMetodo | null;
   estado: EstadoProyecto;
   responsable_id: string | null;
   fecha_objetivo: string | null;
@@ -54,14 +74,14 @@ export type PerfilCorto = { usuario_id: string; nombre: string; color: string };
 /** Datos de apoyo que necesitan los componentes de tareas para pintar nombres. */
 export type Catalogos = {
   perfiles: PerfilCorto[];
-  proyectos: Pick<Proyecto, "id" | "nombre" | "estado">[];
+  proyectos: Pick<Proyecto, "id" | "nombre" | "estado" | "tipo">[];
   yoId: string;
   hoy: string;
 };
 
 export const COLUMNAS_TAREA =
   "id, titulo, descripcion, proyecto_id, responsable_id, fecha_limite, prioridad, estado, orden, completada_en, creado_en, creado_por, mensaje_id";
-export const COLUMNAS_PROYECTO = "id, nombre, descripcion, estado, responsable_id, fecha_objetivo, creado_en";
+export const COLUMNAS_PROYECTO = "id, nombre, descripcion, cliente, tipo, etapa, estado, responsable_id, fecha_objetivo, creado_en";
 
 /** Orden de la vista lista: fecha límite (sin fecha al final), luego prioridad. */
 export function ordenarParaLista(a: Tarea, b: Tarea) {
