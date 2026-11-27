@@ -13,11 +13,19 @@ export type Evento = {
   lugar: string | null;
   notas: string | null;
   responsable_id: string | null;
+  tipo: TipoEvento;
+  modalidad: Modalidad | null;
+  enlace: string | null;
   creado_en: string;
   creado_por: string | null;
 };
 
-export const COLUMNAS_EVENTO = "id, titulo, inicio, fin, todo_el_dia, lugar, notas, responsable_id, creado_en, creado_por";
+export type TipoEvento = "evento" | "reunion";
+export type Modalidad = "en_linea" | "presencial";
+export const NOMBRE_MODALIDAD: Record<Modalidad, string> = { en_linea: "En línea", presencial: "Presencial" };
+
+export const COLUMNAS_EVENTO =
+  "id, titulo, inicio, fin, todo_el_dia, lugar, notas, responsable_id, tipo, modalidad, enlace, creado_en, creado_por";
 
 /** Un renglón en la agenda: un evento (en uno de sus días) o una tarea con fecha. */
 export type ItemAgenda =
@@ -34,6 +42,9 @@ export type ItemAgenda =
       continua: boolean;
       lugar: string | null;
       responsable_id: string | null;
+      reunion: boolean;
+      modalidad: Modalidad | null;
+      enlace: string | null;
     }
   | {
       tipo: "tarea";

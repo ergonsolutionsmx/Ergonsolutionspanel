@@ -45,22 +45,23 @@ export function ItemAgendaFila({
       <Link
         href={hrefItem(item, volver)}
         className={cn(
-          "flex items-center gap-2 rounded-md border border-dashed bg-card px-3 py-2 hover:border-ergon-blue",
+          "flex items-center gap-2 rounded-xl border-l-4 border-aviso bg-card px-3 py-2.5 shadow-sm hover:bg-muted",
           compacta && "md:items-start md:px-2",
-          vencida && "border-red-300",
+          vencida && "border-error",
+          hecha && "border-exito",
         )}
       >
         {hecha ? (
           <CircleCheck className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-hidden />
         ) : (
-          <Circle className={cn("mt-0.5 size-4 shrink-0 text-muted-foreground", vencida && "text-red-600")} aria-hidden />
+          <Circle className={cn("mt-0.5 size-4 shrink-0 text-muted-foreground", vencida && "text-error")} aria-hidden />
         )}
         <span
           className={cn(
             "min-w-0 flex-1 truncate text-sm font-bold",
             tituloCls,
             hecha && "text-muted-foreground line-through",
-            vencida && "text-red-700",
+            vencida && "text-error",
           )}
         >
           {item.titulo}
@@ -75,14 +76,18 @@ export function ItemAgendaFila({
     <Link
       href={hrefItem(item, volver)}
       className={cn(
-        "flex items-center gap-2 rounded-md border-l-4 border-ergon-blue bg-blue-50 px-3 py-2 hover:bg-blue-100",
+        "flex items-center gap-2 rounded-xl border-l-4 bg-card px-3 py-2.5 shadow-sm hover:bg-muted",
+        item.reunion ? "border-ergon-sky" : "border-ergon-blue",
         compacta && "md:px-2",
       )}
     >
       <span className="min-w-0 flex-1">
         <span className={cn("block truncate text-sm font-bold text-ergon-navy", tituloCls)}>{item.titulo}</span>
         <span className="flex flex-wrap items-center gap-x-2 text-xs text-ergon-navy/70">
-          <span>{textoHora(item)}</span>
+          <span>
+            {item.reunion ? "Reunión · " : ""}
+            {textoHora(item)}
+          </span>
           {item.lugar ? (
             <span className={cn("flex min-w-0 items-center gap-0.5 truncate", compacta && "md:hidden")}>
               <MapPin className="size-3 shrink-0" aria-hidden />

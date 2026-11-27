@@ -4,7 +4,7 @@ export const ESTADOS_TAREA = ["por_hacer", "en_curso", "en_revision", "hecha"] a
 export type EstadoTarea = (typeof ESTADOS_TAREA)[number];
 export const NOMBRE_ESTADO: Record<EstadoTarea, string> = {
   por_hacer: "Por hacer",
-  en_curso: "En curso",
+  en_curso: "En progreso",
   en_revision: "En revisión",
   hecha: "Hecha",
 };

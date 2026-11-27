@@ -15,9 +15,9 @@ import {
 import { SECCIONES } from "./secciones";
 
 const ACCIONES = [
-  { nombre: "Nueva tarea", href: "/proyectos/tareas/nueva", icono: ListPlus },
+  { nombre: "Nueva tarea", href: "/agenda/eventos/nuevo?tipo=tarea", icono: ListPlus },
   { nombre: "Nuevo evento", href: "/agenda/eventos/nuevo", icono: CalendarPlus },
-  { nombre: "Agendar reunión", href: "/agenda/eventos/nuevo?tipo=reunion", icono: Users },
+  { nombre: "Agendar reunión", href: "/agenda?reunion=1", icono: Users },
   { nombre: "Nueva propuesta", href: "/propuestas/nueva", icono: FilePlus2 },
 ];
 

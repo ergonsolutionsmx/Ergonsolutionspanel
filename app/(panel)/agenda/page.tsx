@@ -3,6 +3,8 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { userAgent } from "next/server";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { Segmentos } from "@/components/ui/segmentos";
+import { AgendarReunion } from "@/components/agenda/agendar-reunion";
 import { cn } from "@/lib/utils";
 import { obtenerUsuario } from "@/lib/auth";
 import { obtenerCatalogos } from "@/lib/tareas";
@@ -106,45 +108,35 @@ export default async function AgendaPage({ searchParams }: PageProps<"/agenda">)
     ...otros.map((p) => ({ valor: p.usuario_id, nombre: `De ${p.nombre.split(" ")[0]}` })),
   ];
 
-  const comun = { porDia, volver, hoy, perfiles: catalogos.perfiles, hrefDia };
+  const hrefNuevo = (f: string) => `/agenda/eventos/nuevo?fecha=${f}&volver=${encodeURIComponent(volver)}`;
+  const comun = { porDia, volver, hoy, perfiles: catalogos.perfiles, hrefDia, hrefNuevo };
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-black text-ergon-navy">Agenda</h1>
-        <Button asChild>
-          <Link href={`/agenda/eventos/nuevo?fecha=${vista === "dia" ? fecha : hoy}&volver=${encodeURIComponent(volver)}`}>
-            <Plus /> Evento
-          </Link>
-        </Button>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-[1.75rem] font-black tracking-tight text-ergon-navy">Agenda</h1>
+        <div className="flex items-center gap-2">
+          <AgendarReunion perfiles={catalogos.perfiles} yoId={usuario.id} fecha={vista === "dia" ? fecha : hoy} volver={volver} abrir={uno(sp.reunion) === "1"} />
+          <Button asChild>
+            <Link href={hrefNuevo(vista === "dia" ? fecha : hoy)}>
+              <Plus /> Nuevo
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <div role="tablist" className="inline-flex rounded-full bg-ergon-navy/[0.06] p-1">
-          {pestanas.map((v) => (
-            <Link
-              key={v}
-              role="tab"
-              aria-selected={vista === v}
-              href={href({ vista: v })}
-              className={cn(
-                "rounded-full px-3 py-1.5 text-sm font-bold sm:px-4",
-                vista === v ? "bg-white text-ergon-navy shadow-sm" : "text-muted-foreground hover:text-ergon-navy",
-              )}
-            >
-              {NOMBRE_VISTA[v]}
-            </Link>
-          ))}
-        </div>
+        <Segmentos etiqueta="Vista de la agenda" activo={vista} opciones={pestanas.map((v) => ({ valor: v, etiqueta: NOMBRE_VISTA[v], href: href({ vista: v }) }))} />
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:ml-auto sm:px-0">
           {filtros.map((f) => (
             <Link
               key={f.valor}
               href={href({ de: f.valor === "todos" ? null : f.valor })}
               aria-current={de === f.valor ? "true" : undefined}
+              scroll={false}
               className={cn(
-                "flex h-9 items-center whitespace-nowrap rounded-full border px-3 text-sm font-bold",
-                de === f.valor ? "border-ergon-navy bg-ergon-navy text-white" : "bg-card text-ergon-navy hover:bg-accent",
+                "flex h-9 items-center whitespace-nowrap rounded-full border px-3.5 text-sm font-bold transition-colors",
+                de === f.valor ? "border-ergon-navy bg-ergon-navy text-white" : "border-white/70 bg-card text-ergon-navy hover:bg-accent",
               )}
             >
               {f.nombre}
@@ -168,15 +160,6 @@ export default async function AgendaPage({ searchParams }: PageProps<"/agenda">)
           <Link href={href({ fecha: null })}>Hoy</Link>
         </Button>
         <h2 className="ml-1 text-lg font-black text-ergon-navy">{titulo(vista, fecha, desde, hasta, hoy)}</h2>
-      </div>
-
-      <div className="mb-3 flex gap-4 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded-[3px] border-l-4 border-ergon-blue bg-blue-50" aria-hidden /> Evento
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded-[3px] border border-dashed border-muted-foreground" aria-hidden /> Tarea
-        </span>
       </div>
 
       {vista === "dia" ? <VistaDia fecha={fecha} {...comun} /> : null}

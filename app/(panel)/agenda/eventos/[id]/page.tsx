@@ -44,6 +44,7 @@ export default async function EventoPage({ params, searchParams }: PageProps<"/a
             fechaFin: fin.fecha,
             horaFin: evento.todo_el_dia ? "10:00" : fin.hora,
             lugar: evento.lugar ?? "",
+            enlace: evento.enlace ?? "",
             notas: evento.notas ?? "",
             responsableId: evento.responsable_id ?? "",
           }}

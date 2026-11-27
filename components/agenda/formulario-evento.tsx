@@ -18,6 +18,7 @@ export type ValoresEvento = {
   fechaFin: string;
   horaFin: string;
   lugar: string;
+  enlace: string;
   notas: string;
   responsableId: string;
 };
@@ -84,6 +85,9 @@ export function FormularioEvento({
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo id="lugar" etiqueta="Lugar">
           <Input id="lugar" name="lugar" defaultValue={valores.lugar} maxLength={200} />
+        </Campo>
+        <Campo id="enlace" etiqueta="Link">
+          <Input id="enlace" name="enlace" type="url" inputMode="url" placeholder="https://…" defaultValue={valores.enlace} />
         </Campo>
         <Campo id="responsable_id" etiqueta="De quién">
           <NativeSelect id="responsable_id" name="responsable_id" defaultValue={valores.responsableId}>

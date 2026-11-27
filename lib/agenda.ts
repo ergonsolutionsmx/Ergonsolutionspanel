@@ -59,6 +59,9 @@ export async function obtenerAgenda({
         continua: dia !== ini.fecha,
         lugar: e.lugar,
         responsable_id: e.responsable_id,
+        reunion: e.tipo === "reunion",
+        modalidad: e.modalidad,
+        enlace: e.enlace,
       });
     }
   }
