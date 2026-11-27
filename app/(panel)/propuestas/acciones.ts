@@ -47,7 +47,30 @@ export async function crearPropuesta(_: EstadoForm, fd: FormData): Promise<Estad
   const supabase = await crearClienteServidor();
   const { data, error } = await supabase.from("propuestas").insert(r.datos).select("id").single();
   if (error || !data) return { error: "No se pudo crear la propuesta." };
-  redirect(`/propuestas/${data.id}`);
+  // Si viene del Catálogo ("Agregar a propuesta"), el servicio entra de una vez.
+  const servicioId = texto(fd, "servicio_id");
+  if (UUID.test(servicioId)) {
+    const { data: s } = await supabase.from("servicios").select("id, nombre, que_es").eq("id", servicioId).maybeSingle();
+    if (s) {
+      const { data: v } = await supabase
+        .from("servicio_variantes")
+        .select("id, nombre, que_incluye, precio_instalacion, precio_mensual")
+        .eq("servicio_id", s.id)
+        .order("orden")
+        .limit(1)
+        .maybeSingle();
+      await supabase.from("propuesta_conceptos").insert({
+        propuesta_id: data.id,
+        servicio_id: s.id,
+        variante_id: v?.id ?? null,
+        titulo: v && v.nombre !== "unica" ? `${s.nombre} · ${NOMBRE_VARIANTE[v.nombre as NombreVariante]}` : s.nombre,
+        descripcion: v?.que_incluye ?? s.que_es,
+        precio_instalacion: v?.precio_instalacion ?? null,
+        precio_mensual: v?.precio_mensual ?? null,
+      });
+    }
+  }
+  redirect(`/propuestas/${data.id}?paso=servicios`);
 }
 
 export async function actualizarPropuesta(id: string, _: EstadoForm, fd: FormData): Promise<EstadoForm> {
@@ -143,6 +166,20 @@ export async function duplicarPropuesta(id: string) {
 // ---------------------------------------------------------------------------
 
 /** Agrega un servicio del catálogo (con o sin variante) copiando descripción y precios. */
+function cantidadValida(fd: FormData) {
+  const n = Number.parseInt(String(fd.get("cantidad") ?? "1"), 10);
+  return Number.isFinite(n) ? Math.min(999, Math.max(1, n)) : 1;
+}
+
+/** Revisión: activar o quitar el IVA (16%) de la propuesta. */
+export async function cambiarIva(id: string, conIvaNuevo: boolean) {
+  await obtenerUsuario();
+  if (!UUID.test(id)) return;
+  const supabase = await crearClienteServidor();
+  await supabase.from("propuestas").update({ con_iva: conIvaNuevo }).eq("id", id);
+  refresh();
+}
+
 export async function agregarDelCatalogo(propuestaId: string, _: EstadoForm, fd: FormData): Promise<EstadoForm> {
   await obtenerUsuario();
   const servicioId = texto(fd, "servicio_id");
@@ -171,6 +208,7 @@ export async function agregarDelCatalogo(propuestaId: string, _: EstadoForm, fd:
     descripcion: v?.que_incluye ?? s.que_es,
     precio_instalacion: v?.precio_instalacion ?? null,
     precio_mensual: v?.precio_mensual ?? null,
+    cantidad: cantidadValida(fd),
   });
   if (error) return { error: "No se pudo agregar." };
   refresh();
@@ -196,7 +234,7 @@ export async function actualizarConcepto(id: string, _: EstadoForm, fd: FormData
   const supabase = await crearClienteServidor();
   const { error } = await supabase
     .from("propuesta_conceptos")
-    .update({ titulo, descripcion: opcional(fd, "descripcion"), precio_instalacion: instalacion, precio_mensual: mensual })
+    .update({ titulo, descripcion: opcional(fd, "descripcion"), precio_instalacion: instalacion, precio_mensual: mensual, cantidad: cantidadValida(fd) })
     .eq("id", id);
   if (error) return { error: "No se pudo guardar." };
   refresh();

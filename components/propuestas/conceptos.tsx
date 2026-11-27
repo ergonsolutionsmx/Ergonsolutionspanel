@@ -39,7 +39,7 @@ function FilaConcepto({ concepto: c }: { concepto: Concepto }) {
           variant="ghost"
           size="icon"
           aria-label={`Quitar ${c.titulo}`}
-          className="text-red-700 hover:bg-red-50"
+          className="text-destructive hover:bg-destructive/10"
           disabled={borrando}
           onClick={() => startTransition(() => eliminarConcepto(c.id))}
         >
@@ -47,6 +47,12 @@ function FilaConcepto({ concepto: c }: { concepto: Concepto }) {
         </Button>
       </div>
       <div className="flex flex-wrap items-end gap-3">
+        <div className="grid gap-1">
+          <label htmlFor={id("cantidad")} className="text-xs font-bold text-muted-foreground">
+            Cantidad
+          </label>
+          <Input id={id("cantidad")} name="cantidad" type="number" min={1} max={999} inputMode="numeric" defaultValue={c.cantidad ?? 1} className="w-20" />
+        </div>
         <div className="grid gap-1">
           <label htmlFor={id("precio_instalacion")} className="text-xs font-bold text-muted-foreground">
             Instalación (MXN)
@@ -73,10 +79,16 @@ function FilaConcepto({ concepto: c }: { concepto: Concepto }) {
             className="w-36"
           />
         </div>
-        <Button type="submit" variant="outline" size="sm" className="h-11 md:h-10" disabled={enviando}>
+        <Button type="submit" variant="outline" size="sm" className="h-11 md:h-10" loading={enviando}>
           {enviando ? "Guardando…" : "Guardar"}
         </Button>
-        {estado?.ok ? <span role="status" className="text-sm text-emerald-700">{estado.ok}</span> : null}
+        {estado?.ok ? <span role="status" className="text-sm font-bold text-exito">{estado.ok}</span> : null}
+        {(c.cantidad ?? 1) > 1 && (c.precio_instalacion !== null || c.precio_mensual !== null) ? (
+          <span className="ml-auto text-sm font-bold text-ergon-navy">
+            {c.precio_instalacion !== null ? pesos(Number(c.precio_instalacion) * c.cantidad) : ""}
+            {c.precio_mensual !== null ? ` · ${pesos(Number(c.precio_mensual) * c.cantidad)}/mes` : ""}
+          </span>
+        ) : null}
       </div>
       <ErrorForm mensaje={estado?.error} />
     </form>
@@ -88,7 +100,7 @@ function AgregarDelCatalogo({ propuestaId, servicios }: { propuestaId: string; s
   const [servicioId, setServicioId] = useState("");
   const servicio = servicios.find((s) => s.id === servicioId);
   return (
-    <form action={enviar} className="grid gap-2 sm:grid-cols-[1fr_12rem_auto] sm:items-end">
+    <form action={enviar} className="grid gap-2 sm:grid-cols-[1fr_12rem_5rem_auto] sm:items-end">
       <div className="grid gap-1">
         <label htmlFor="servicio_id" className="text-xs font-bold text-muted-foreground">
           Servicio del catálogo
@@ -119,10 +131,16 @@ function AgregarDelCatalogo({ propuestaId, servicios }: { propuestaId: string; s
           )}
         </NativeSelect>
       </div>
-      <Button type="submit" disabled={enviando || !servicioId}>
-        <Plus /> {enviando ? "Agregando…" : "Agregar"}
+      <div className="grid gap-1">
+        <label htmlFor="cantidad-nueva" className="text-xs font-bold text-muted-foreground">
+          Cantidad
+        </label>
+        <Input id="cantidad-nueva" name="cantidad" type="number" min={1} max={999} inputMode="numeric" defaultValue={1} />
+      </div>
+      <Button type="submit" loading={enviando} disabled={!servicioId}>
+        {enviando ? null : <Plus />} {enviando ? "Agregando…" : "Agregar"}
       </Button>
-      <div className="sm:col-span-3">
+      <div className="sm:col-span-4">
         <ErrorForm mensaje={estado?.error} />
       </div>
     </form>
@@ -145,7 +163,7 @@ export function EditorConceptos({
   const [agregando, startTransition] = useTransition();
   return (
     <div className="grid gap-4">
-      <div className="rounded-lg border border-white/70 bg-card p-4">
+      <div className="rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm">
         <AgregarDelCatalogo propuestaId={propuestaId} servicios={servicios} />
         <button
           type="button"
@@ -157,28 +175,26 @@ export function EditorConceptos({
         </button>
       </div>
 
-      <div className="rounded-lg border border-white/70 bg-card">
+      <div className="overflow-hidden rounded-[1.25rem] border border-white/70 bg-card shadow-sm">
         {conceptos.length === 0 ? (
           <p className="p-6 text-center text-sm text-muted-foreground">Agrega servicios del catálogo.</p>
         ) : (
           conceptos.map((c) => (
             <FilaConcepto
-              key={`${c.id}-${c.titulo}-${c.precio_instalacion}-${c.precio_mensual}-${c.descripcion}`}
+              key={`${c.id}-${c.titulo}-${c.precio_instalacion}-${c.precio_mensual}-${c.descripcion}-${c.cantidad}`}
               concepto={c}
             />
           ))
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3" aria-live="polite">
-        <div className="rounded-lg border border-white/70 bg-card p-4">
-          <p className="text-xs font-bold uppercase text-muted-foreground">Instalación (pago único)</p>
-          <p className="mt-1 text-2xl font-black text-ergon-navy">{pesos(totalInstalacion)}</p>
-        </div>
-        <div className="rounded-lg bg-ergon-navy p-4 text-white">
-          <p className="text-xs font-bold uppercase text-ergon-sky">Mensualidad</p>
-          <p className="mt-1 text-2xl font-black">{pesos(totalMensual)}</p>
-        </div>
+      <div className="flex flex-wrap justify-end gap-x-6 gap-y-1 rounded-[1.25rem] border border-white/70 bg-card px-5 py-3 text-sm shadow-sm" aria-live="polite">
+        <span className="text-muted-foreground">
+          Subtotal instalación <strong className="ml-1 text-base text-ergon-navy">{pesos(totalInstalacion)}</strong>
+        </span>
+        <span className="text-muted-foreground">
+          Subtotal mensual <strong className="ml-1 text-base text-ergon-navy">{pesos(totalMensual)}</strong>
+        </span>
       </div>
     </div>
   );

@@ -2,12 +2,12 @@ import { Badge } from "@/components/ui/badge";
 import { NOMBRE_ESTADO_PROPUESTA, type EstadoPropuesta } from "@/lib/propuestas-tipos";
 
 const COLOR = {
-  borrador: "gris",
-  enviada: "azul",
-  vista: "ambar",
-  aceptada: "verde",
+  borrador: "baja",
+  enviada: "enviada",
+  vista: "pendiente",
+  aceptada: "aceptada",
   rechazada: "rojo",
-  vencida: "default",
+  vencida: "vencida",
 } as const;
 
 export function EtiquetaEstadoPropuesta({ estado }: { estado: EstadoPropuesta }) {

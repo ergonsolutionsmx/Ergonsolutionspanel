@@ -1,7 +1,7 @@
 import "server-only";
 import path from "node:path";
 import { Document, Font, Image as ImagenPdf, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
-import type { PropuestaParaCliente } from "@/lib/propuestas-tipos";
+import { conIva, type PropuestaParaCliente } from "@/lib/propuestas-tipos";
 import { LOCALE, ZONA_HORARIA } from "@/lib/utils";
 
 // Recursos dentro del repo (incluidos en el despliegue con outputFileTracingIncludes).
@@ -109,6 +109,8 @@ function Precio({ valor, mensual = false }: { valor: number | null; mensual?: bo
 export function DocumentoPropuesta({ p }: { p: PropuestaParaCliente }) {
   const emitida = p.enviada_en ?? p.creado_en;
   const porDefinir = p.conceptos.some((c) => c.precio_instalacion === null && c.precio_mensual === null);
+  const inst = conIva(p.total_instalacion, p.con_iva);
+  const mens = conIva(p.total_mensual, p.con_iva);
 
   return (
     <Document title={`Propuesta ${p.folio} · Ergon Solutions`} author="Ergon Solutions" language="es-MX">
@@ -167,11 +169,14 @@ export function DocumentoPropuesta({ p }: { p: PropuestaParaCliente }) {
                 p.conceptos.map((c, i) => (
                   <View key={i} style={s.fila} wrap={false}>
                     <View style={s.colConcepto}>
-                      <Text style={s.conceptoTitulo}>{c.titulo}</Text>
+                      <Text style={s.conceptoTitulo}>
+                        {c.titulo}
+                        {c.cantidad > 1 ? <Text style={s.porDefinir}> × {c.cantidad}</Text> : null}
+                      </Text>
                       {c.descripcion ? <Text style={s.conceptoDesc}>{c.descripcion}</Text> : null}
                     </View>
-                    <Precio valor={c.precio_instalacion} />
-                    <Precio valor={c.precio_mensual} mensual />
+                    <Precio valor={c.precio_instalacion === null ? null : c.precio_instalacion * c.cantidad} />
+                    <Precio valor={c.precio_mensual === null ? null : c.precio_mensual * c.cantidad} mensual />
                   </View>
                 ))
               )}
@@ -180,16 +185,18 @@ export function DocumentoPropuesta({ p }: { p: PropuestaParaCliente }) {
             <View style={s.totales} wrap={false}>
               <View style={[s.cajaTotal, { backgroundColor: MARCA.fondo }]}>
                 <Text style={[s.totalEtiqueta, { color: MARCA.gris }]}>INSTALACIÓN (PAGO ÚNICO)</Text>
-                <Text style={[s.totalValor, { color: MARCA.navy }]}>{pesos(p.total_instalacion)}</Text>
+                <Text style={[s.totalValor, { color: MARCA.navy }]}>{pesos(inst.total)}</Text>
+                {p.con_iva ? <Text style={[s.textoChico, { marginTop: 2 }]}>{pesos(inst.subtotal)} + IVA {pesos(inst.iva)}</Text> : null}
               </View>
               <View style={[s.cajaTotal, { backgroundColor: MARCA.navy }]}>
                 <Text style={[s.totalEtiqueta, { color: MARCA.cielo }]}>MENSUALIDAD</Text>
-                <Text style={[s.totalValor, { color: "#FFFFFF" }]}>{pesos(p.total_mensual)}</Text>
+                <Text style={[s.totalValor, { color: "#FFFFFF" }]}>{pesos(mens.total)}</Text>
+                {p.con_iva ? <Text style={[s.textoChico, { marginTop: 2, color: "#C9D6EA" }]}>{pesos(mens.subtotal)} + IVA {pesos(mens.iva)}</Text> : null}
               </View>
             </View>
 
             <Text style={s.nota}>
-              Precios en pesos mexicanos (MXN).{/* POR CONFIRMAR: ¿incluyen IVA? */}
+              Precios en pesos mexicanos (MXN). {p.con_iva ? "Los totales incluyen IVA (16%)." : "Precios sin IVA."}
               {porDefinir ? " Los conceptos marcados con — tienen precio por definir." : ""}
             </Text>
           </View>

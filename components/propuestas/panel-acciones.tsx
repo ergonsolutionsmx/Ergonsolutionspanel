@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { Archive, ArchiveRestore, Check, Copy, Download, ExternalLink, FilePlus2, RefreshCw, Send, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useConfirmar } from "@/components/ui/confirmar";
+import { toast } from "@/components/avisos/toast";
 import type { EstadoPropuesta } from "@/lib/propuestas-tipos";
 import {
   archivarPropuesta,
@@ -35,27 +37,31 @@ export function PanelAcciones({
   const borrador = estado === "borrador";
   const ruta = `/p/${token}`;
 
-  const hacer = (fn: () => Promise<unknown>, pregunta?: string) => {
-    if (pregunta && !window.confirm(pregunta)) return;
+  const [confirmar, ventana] = useConfirmar();
+  const hacer = async (fn: () => Promise<unknown>, pregunta?: string, aviso?: string) => {
+    if (pregunta && !(await confirmar(pregunta))) return;
     startTransition(async () => {
       await fn();
+      if (aviso) toast.success(aviso);
     });
   };
 
   async function copiar() {
     await navigator.clipboard.writeText(`${window.location.origin}${ruta}`);
     setCopiado(true);
+    toast.success("Link copiado");
     setTimeout(() => setCopiado(false), 2000);
   }
 
   return (
     <div className="grid gap-4">
-      <section className="rounded-lg border border-white/70 bg-card p-4" aria-label="Link para el prospecto">
+      {ventana}
+      <section className="rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm" aria-label="Link para el prospecto">
         <h2 className="mb-2 font-black text-ergon-navy">Link para el prospecto</h2>
         {borrador ? (
           <>
             <p className="mb-3 text-sm text-muted-foreground">El link se activa al enviarla y dura 30 días.</p>
-            <Button className="w-full" disabled={pendiente} onClick={() => hacer(() => marcarEnviada(id))}>
+            <Button className="w-full" disabled={pendiente} onClick={() => hacer(() => marcarEnviada(id), undefined, "Propuesta enviada")}>
               <Send /> Marcar como enviada
             </Button>
           </>
@@ -89,7 +95,7 @@ export function PanelAcciones({
       </section>
 
       {!borrador && estado !== "aceptada" && estado !== "rechazada" ? (
-        <section className="rounded-lg border border-white/70 bg-card p-4" aria-label="Respuesta del prospecto">
+        <section className="rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm" aria-label="Respuesta del prospecto">
           <h2 className="mb-2 font-black text-ergon-navy">Respuesta</h2>
           <div className="grid grid-cols-2 gap-2">
             <Button
@@ -112,7 +118,7 @@ export function PanelAcciones({
         </section>
       ) : null}
 
-      <section className="grid gap-2 rounded-lg border border-white/70 bg-card p-4" aria-label="Más acciones">
+      <section className="grid gap-2 rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm" aria-label="Más acciones">
         <Button asChild variant="outline">
           <a href={`/propuestas/${id}/pdf`} download>
             <Download /> Descargar PDF

@@ -3,6 +3,7 @@
 import { useActionState, useTransition } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useConfirmar } from "@/components/ui/confirmar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Campo, ErrorForm } from "@/components/ui/campo";
@@ -13,6 +14,7 @@ type Demo = { id: string; nombre: string; descripcion: string | null; url: strin
 function FormularioDemo({ demo, siguienteOrden }: { demo?: Demo; siguienteOrden: number }) {
   const [estado, enviar, enviando] = useActionState(guardarDemo.bind(null, demo?.id ?? null), undefined);
   const [borrando, startTransition] = useTransition();
+  const [confirmar, ventana] = useConfirmar();
   const id = (k: string) => `${k}-${demo?.id ?? "nueva"}`;
   return (
     <form action={enviar} className="grid gap-3 rounded-lg border border-white/70 bg-card p-4">
@@ -46,15 +48,16 @@ function FormularioDemo({ demo, siguienteOrden }: { demo?: Demo; siguienteOrden:
           <Button
             type="button"
             variant="ghost"
-            className="ml-auto text-red-700 hover:bg-red-50"
+            className="ml-auto text-destructive hover:bg-destructive/10"
             disabled={borrando}
-            onClick={() => {
-              if (window.confirm(`¿Quitar "${demo.nombre}" del lanzador?`)) startTransition(() => eliminarDemo(demo.id));
+            onClick={async () => {
+              if (await confirmar(`¿Quitar "${demo.nombre}" del lanzador?`, { accion: "Quitar" })) startTransition(() => eliminarDemo(demo.id));
             }}
           >
             <Trash2 /> Quitar
           </Button>
         ) : null}
+        {ventana}
       </div>
     </form>
   );

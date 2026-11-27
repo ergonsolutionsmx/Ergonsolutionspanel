@@ -3,6 +3,7 @@
 import { useActionState, useTransition } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useConfirmar } from "@/components/ui/confirmar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -13,11 +14,13 @@ import { eliminarVariante, guardarVariante } from "@/app/(panel)/catalogo/accion
 function FormularioVariante({ servicioId, variante }: { servicioId: string; variante?: Variante }) {
   const [estado, enviar, enviando] = useActionState(guardarVariante.bind(null, servicioId, variante?.id ?? null), undefined);
   const [borrando, startTransition] = useTransition();
+  const [confirmar, ventana] = useConfirmar();
   const sufijo = variante?.id ?? "nueva";
   const id = (campo: string) => `${campo}-${sufijo}`;
 
   return (
-    <form action={enviar} className="grid gap-3 rounded-lg border border-white/70 bg-card p-4">
+    <form action={enviar} className="grid gap-3 rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm">
+      {ventana}
       <div className="flex items-end gap-3">
         <div className="flex-1">
           <Campo id={id("nombre")} etiqueta={variante ? "Variante" : "Nueva variante"}>
@@ -36,10 +39,10 @@ function FormularioVariante({ servicioId, variante }: { servicioId: string; vari
             variant="ghost"
             size="icon"
             aria-label={`Eliminar variante ${NOMBRE_VARIANTE[variante.nombre]}`}
-            className="text-red-700 hover:bg-red-50"
+            className="text-destructive hover:bg-destructive/10"
             disabled={borrando}
-            onClick={() => {
-              if (window.confirm(`¿Eliminar la variante ${NOMBRE_VARIANTE[variante.nombre]}?`))
+            onClick={async () => {
+              if (await confirmar(`¿Eliminar la variante ${NOMBRE_VARIANTE[variante.nombre]}?`, { accion: "Eliminar" }))
                 startTransition(() => eliminarVariante(servicioId, variante.id));
             }}
           >

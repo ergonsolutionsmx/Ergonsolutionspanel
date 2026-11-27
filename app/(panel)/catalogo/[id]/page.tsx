@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, FolderOpen, Pencil } from "lucide-react";
+import { ArrowLeft, ExternalLink, FolderOpen, Pencil, FilePlus2 } from "lucide-react";
 import { pesos } from "@/lib/utils";
 import { obtenerUsuario } from "@/lib/auth";
 import { obtenerServicio } from "@/lib/catalogo";
@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: "Servicio" };
 
 function Seccion({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-lg border border-white/70 bg-card p-4 md:p-5">
+    <section className="rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm md:p-5">
       <h2 className="mb-2 font-black text-ergon-navy">{titulo}</h2>
       {children}
     </section>
@@ -80,12 +80,17 @@ export default async function ServicioPage({ params }: PageProps<"/catalogo/[id]
         </div>
         <div className="flex flex-wrap gap-2">
           {s.link_drive ? (
-            <Button asChild>
+            <Button asChild variant="outline">
               <a href={s.link_drive} target="_blank" rel="noopener noreferrer">
                 <FolderOpen /> Carpeta en Drive <ExternalLink className="size-3" aria-hidden />
               </a>
             </Button>
           ) : null}
+          <Button asChild variant={s.link_drive ? "outline" : "default"}>
+            <Link href={`/propuestas/nueva?servicio=${s.id}`}>
+              <FilePlus2 /> Agregar a propuesta
+            </Link>
+          </Button>
           <Button asChild variant="outline">
             <Link href={`/catalogo/${s.id}/editar`}>
               <Pencil /> Editar

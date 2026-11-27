@@ -34,6 +34,16 @@ export async function obtenerPropuestas({
   return ((data ?? []) as Propuesta[]).map(limpiarPropuesta);
 }
 
+/** Nombres de los servicios de varias propuestas (para la lista). */
+export async function serviciosDePropuestas(ids: string[]): Promise<Record<string, string[]>> {
+  if (!ids.length) return {};
+  const supabase = await crearClienteServidor();
+  const { data } = await supabase.from("propuesta_conceptos").select("propuesta_id, titulo").in("propuesta_id", ids).order("orden");
+  const r: Record<string, string[]> = {};
+  for (const c of data ?? []) (r[c.propuesta_id] ??= []).push(c.titulo);
+  return r;
+}
+
 export async function obtenerPropuesta(id: string): Promise<{ propuesta: Propuesta; conceptos: Concepto[] } | null> {
   if (!UUID.test(id)) return null;
   const supabase = await crearClienteServidor();
@@ -49,7 +59,7 @@ export async function obtenerPropuesta(id: string): Promise<{ propuesta: Propues
 }
 
 export type ResultadoPublico =
-  | { estado: "ok"; propuesta: PropuestaParaCliente }
+  | { estado: "ok"; propuesta: PropuestaParaCliente; estadoPropuesta: string }
   | { estado: "vencida"; folio: string }
   | { estado: "no_existe" };
 
@@ -69,6 +79,7 @@ export async function obtenerPropuestaPublica(token: string, marcarVista: boolea
   const p = r.propuesta;
   return {
     estado: "ok",
+    estadoPropuesta: String(p.estado ?? ""),
     propuesta: {
       folio: String(p.folio),
       prospecto_nombre: String(p.prospecto_nombre),
@@ -79,10 +90,12 @@ export async function obtenerPropuestaPublica(token: string, marcarVista: boolea
       vence_en: (p.vence_en as string) ?? null,
       total_instalacion: Number(p.total_instalacion),
       total_mensual: Number(p.total_mensual),
+      con_iva: p.con_iva === true,
       creado_en: String(p.creado_en),
       conceptos: (r.conceptos ?? []).map((c) => ({
         titulo: String(c.titulo),
         descripcion: (c.descripcion as string) ?? null,
+        cantidad: Number(c.cantidad ?? 1) || 1,
         precio_instalacion: numero(c.precio_instalacion),
         precio_mensual: numero(c.precio_mensual),
       })),

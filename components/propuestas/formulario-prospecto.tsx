@@ -14,7 +14,9 @@ export function FormularioProspecto({
   propuesta,
   textoBoton,
   cancelar,
+  servicioId,
 }: {
+  servicioId?: string;
   accion: (e: EstadoForm, fd: FormData) => Promise<EstadoForm>;
   propuesta?: Propuesta;
   textoBoton: string;
@@ -24,6 +26,7 @@ export function FormularioProspecto({
   const p = propuesta;
   return (
     <form action={enviar} className="grid gap-4">
+      {servicioId ? <input type="hidden" name="servicio_id" value={servicioId} /> : null}
       <div className="grid gap-4 sm:grid-cols-3">
         <Campo id="prospecto_nombre" etiqueta="Prospecto">
           <Input id="prospecto_nombre" name="prospecto_nombre" required maxLength={150} defaultValue={p?.prospecto_nombre ?? ""} autoFocus={!p} />
