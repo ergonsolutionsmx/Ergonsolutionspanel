@@ -69,12 +69,13 @@ Las migraciones de `supabase/migrations` ya están aplicadas en el proyecto de S
 | 8:00 | Aviso "Vence hoy" por cada tarea que vence ese día |
 | 8:05 | Marca propuestas vencidas y avisa |
 | 8:10 | Aviso en la bandeja por cada tarea vencida (una vez) |
+| 8:15 | Finanzas: crea los movimientos de los recurrentes y avisa cobros/pagos vencidos |
 
 ## Estructura
 
 ```
 app/(auth)        login, recuperar, nueva-contrasena
-app/(panel)       inicio, agenda, bandeja, catalogo, propuestas, proyectos, demos, ajustes
+app/(panel)       inicio, agenda, bandeja, catalogo, propuestas, finanzas, proyectos, demos, ajustes
 app/p/[token]     propuesta pública (sin sesión)
 app/api/inbox     formulario y whatsapp
 lib/              acceso a datos por módulo, fechas (CDMX), pdf, inbox/adapters
@@ -82,6 +83,16 @@ components/       UI por módulo y componentes base (components/ui)
 supabase/         migraciones y carga inicial del catálogo (seed/catalogo.json)
 docs/             guía para conectar el formulario del sitio
 ```
+
+## Finanzas
+
+- **Tablas:** `movimientos` (ingresos y gastos; IVA 16% opcional, retenciones opcionales; `total` lo calcula
+  la base) y `recurrentes` (plantillas mensuales o anuales). Solo pesos MXN.
+- **Facturas:** bucket privado `facturas` (PDF, XML o foto, máx. 5 MB); se abren con link temporal de 5 min.
+- **Resumen:** base de efectivo (cuenta en el mes en que se cobró o pagó). Tarjetas, gráfica de 12 meses,
+  anillo de gastos por categoría (adaptado de Kokonut UI, MIT) y flujo del dinero (adaptado de Money River).
+- **Exportar:** `/finanzas/exportar` descarga CSV para Excel con IVA y retenciones separados.
+- **Categorías:** `lib/finanzas-tipos.ts`.
 
 ## Marca y diseño
 

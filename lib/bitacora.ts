@@ -13,6 +13,8 @@ export const TABLAS_BITACORA: Record<string, string> = {
   mensajes: "Mensaje",
   canales_config: "Canal",
   demos: "Demo",
+  movimientos: "Movimiento de finanzas",
+  recurrentes: "Recurrente de finanzas",
   perfiles: "Perfil",
   cuenta: "Cuenta",
 };

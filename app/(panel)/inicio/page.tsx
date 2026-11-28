@@ -74,7 +74,7 @@ export default async function InicioPage() {
         <TarjetaPendientes titulo="Propuestas por vencer" icono={FileText} href="/propuestas" grupos={propuestas} />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <section className="rounded-[1.25rem] border border-white/70 bg-card p-5 shadow-sm lg:col-span-3" aria-labelledby="grafica-tareas">
           <div className="mb-2">
             <h2 id="grafica-tareas" className="font-black text-ergon-navy">

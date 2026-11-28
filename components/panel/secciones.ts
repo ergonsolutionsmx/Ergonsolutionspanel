@@ -7,6 +7,7 @@ import {
   Inbox,
   MonitorPlay,
   Settings,
+  Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -26,6 +27,7 @@ export const SECCIONES: Seccion[] = [
   { href: "/bandeja", nombre: "Bandeja", icono: Inbox, enBarra: true },
   { href: "/catalogo", nombre: "Catálogo", icono: BookOpen },
   { href: "/propuestas", nombre: "Propuestas", icono: FileText },
+  { href: "/finanzas", nombre: "Finanzas", icono: Wallet },
   { href: "/proyectos", nombre: "Proyectos y tareas", corto: "Tareas", icono: FolderKanban, enBarra: true },
   { href: "/demos", nombre: "Demos", icono: MonitorPlay },
   { href: "/ajustes", nombre: "Ajustes", icono: Settings },

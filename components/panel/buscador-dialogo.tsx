@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, CalendarPlus, FilePlus2, ListPlus, Users } from "lucide-react";
+import { BookOpen, CalendarPlus, FilePlus2, ListPlus, Receipt, Users, Wallet } from "lucide-react";
 import { serviciosParaBuscar } from "./buscador-acciones";
 import {
   CommandDialog,
@@ -20,6 +20,8 @@ const ACCIONES = [
   { nombre: "Nuevo evento", href: "/agenda/eventos/nuevo", icono: CalendarPlus },
   { nombre: "Agendar reunión", href: "/agenda?reunion=1", icono: Users },
   { nombre: "Nueva propuesta", href: "/propuestas/nueva", icono: FilePlus2 },
+  { nombre: "Nuevo ingreso", href: "/finanzas?nuevo=ingreso", icono: Wallet },
+  { nombre: "Nuevo gasto", href: "/finanzas?nuevo=gasto", icono: Receipt },
 ];
 
 /** Ventana del buscador (se carga al abrirla por primera vez). */

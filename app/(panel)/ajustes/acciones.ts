@@ -112,7 +112,7 @@ export async function eliminarDemo(id: string) {
 // Preferencias de notificaciones
 // ---------------------------------------------------------------------------
 
-const CLAVES_PREFERENCIA = ["mensaje", "tarea", "evento", "propuesta"] as const;
+const CLAVES_PREFERENCIA = ["mensaje", "tarea", "evento", "propuesta", "finanzas"] as const;
 
 export async function guardarPreferencia(clave: string, activa: boolean): Promise<{ ok: boolean }> {
   const yo = await obtenerUsuario();

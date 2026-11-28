@@ -1,7 +1,7 @@
 "use client";
 
 import { useOptimistic, useTransition } from "react";
-import { CalendarDays, FileText, Inbox, ListTodo, type LucideIcon } from "lucide-react";
+import { CalendarDays, FileText, Inbox, ListTodo, Wallet, type LucideIcon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/avisos/toast";
 import { guardarPreferencia } from "@/app/(panel)/ajustes/acciones";
@@ -11,6 +11,7 @@ const OPCIONES: { clave: string; titulo: string; texto: string; icono: LucideIco
   { clave: "tarea", titulo: "Tareas por vencer", texto: "Tareas asignadas y las que vencen hoy.", icono: ListTodo },
   { clave: "evento", titulo: "Eventos próximos", texto: "Reuniones y eventos de la agenda.", icono: CalendarDays },
   { clave: "propuesta", titulo: "Propuestas", texto: "Cuando una propuesta se ve, se acepta o está por vencer.", icono: FileText },
+  { clave: "finanzas", titulo: "Finanzas", texto: "Cuando un cobro o un pago se vence.", icono: Wallet },
 ];
 
 /** Interruptores de notificaciones: se guardan al momento. */
