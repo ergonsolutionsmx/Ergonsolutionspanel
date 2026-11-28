@@ -7,14 +7,14 @@ import { cn } from "@/lib/utils";
 import { ETAPAS_METODO, NOMBRE_ETAPA, type EtapaMetodo } from "@/lib/tareas-tipos";
 import { cambiarEtapa } from "@/app/(panel)/proyectos/acciones";
 
-/** Etapas del Método Ergon: tocar una etapa la marca como la actual. */
+/** Fases del trabajo: tocar una fase la marca como la actual. */
 export function EtapasMetodo({ proyectoId, etapa }: { proyectoId: string; etapa: EtapaMetodo | null }) {
-  const [actual, setActual] = useOptimistic(etapa ?? "diagnostico");
+  const [actual, setActual] = useOptimistic(etapa ?? "analisis");
   const [, startTransition] = useTransition();
   const idx = ETAPAS_METODO.indexOf(actual);
   return (
-    <section aria-label="Etapas del Método Ergon" className="rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm">
-      <h2 className="mb-3 text-sm font-black text-ergon-navy">Método Ergon</h2>
+    <section aria-label="Fases del trabajo" className="rounded-[1.25rem] border border-white/70 bg-card p-4 shadow-sm">
+      <h2 className="mb-3 text-sm font-black text-ergon-navy">Fase del trabajo</h2>
       <ol className="flex gap-1 overflow-x-auto pb-1">
         {ETAPAS_METODO.map((e, i) => {
           const hecha = i < idx;

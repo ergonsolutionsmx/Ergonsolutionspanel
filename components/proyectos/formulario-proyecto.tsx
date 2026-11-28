@@ -44,8 +44,8 @@ export function FormularioProyecto({
             ))}
           </NativeSelect>
         </Campo>
-        <Campo id="etapa" etiqueta="Etapa">
-          <NativeSelect id="etapa" name="etapa" defaultValue={proyecto?.etapa ?? "diagnostico"}>
+        <Campo id="etapa" etiqueta="Fase">
+          <NativeSelect id="etapa" name="etapa" defaultValue={proyecto?.etapa ?? "analisis"}>
             {ETAPAS_METODO.map((e) => (
               <option key={e} value={e}>
                 {NOMBRE_ETAPA[e]}

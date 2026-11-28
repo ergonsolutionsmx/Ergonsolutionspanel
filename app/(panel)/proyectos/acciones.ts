@@ -231,7 +231,7 @@ export async function borrarComentario(id: string) {
   await supabase.from("tarea_comentarios").delete().eq("id", id);
 }
 
-/** Cambia la etapa del Método Ergon desde el detalle del proyecto. */
+/** Cambia la fase del trabajo desde el detalle del proyecto. */
 export async function cambiarEtapa(id: string, etapa: string) {
   await obtenerUsuario();
   if (!UUID.test(id) || !(ETAPAS_METODO as readonly string[]).includes(etapa)) return;

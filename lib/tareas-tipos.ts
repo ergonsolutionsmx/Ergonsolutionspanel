@@ -44,16 +44,15 @@ export type TipoProyecto = (typeof TIPOS_PROYECTO)[number];
 export const NOMBRE_TIPO_PROYECTO: Record<TipoProyecto, string> = { sitio_web: "Sitio web", turnode: "Turnode", software: "Software" };
 
 /** Etapas del Método Ergon. POR CONFIRMAR: nombres definitivos de cada etapa. */
-export const ETAPAS_METODO = ["diagnostico", "propuesta", "diseno", "desarrollo", "pruebas", "entrega", "seguimiento"] as const;
+/** Fases de un trabajo (en qué fase nos quedamos). Se pueden renombrar aquí. */
+export const ETAPAS_METODO = ["analisis", "propuesta", "desarrollo", "revision", "entregado"] as const;
 export type EtapaMetodo = (typeof ETAPAS_METODO)[number];
 export const NOMBRE_ETAPA: Record<EtapaMetodo, string> = {
-  diagnostico: "Diagnóstico",
+  analisis: "Análisis",
   propuesta: "Propuesta",
-  diseno: "Diseño",
   desarrollo: "Desarrollo",
-  pruebas: "Pruebas",
-  entrega: "Entrega",
-  seguimiento: "Seguimiento",
+  revision: "Revisión",
+  entregado: "Entregado",
 };
 
 export type Proyecto = {

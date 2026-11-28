@@ -5,7 +5,6 @@ import {
   FolderKanban,
   House,
   Inbox,
-  MonitorPlay,
   Settings,
   Wallet,
   type LucideIcon,
@@ -29,7 +28,6 @@ export const SECCIONES: Seccion[] = [
   { href: "/propuestas", nombre: "Propuestas", icono: FileText },
   { href: "/finanzas", nombre: "Finanzas", icono: Wallet },
   { href: "/proyectos", nombre: "Proyectos y tareas", corto: "Tareas", icono: FolderKanban, enBarra: true },
-  { href: "/demos", nombre: "Demos", icono: MonitorPlay },
   { href: "/ajustes", nombre: "Ajustes", icono: Settings },
 ];
 
