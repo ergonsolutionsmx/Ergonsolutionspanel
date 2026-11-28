@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { ProveedorMovimiento } from "@/components/movimiento/proveedor";
 import { Toaster } from "@/components/avisos/toast";
 import { SCRIPT_TEMA } from "@/components/tema/tema";
 
-// Tipografía: Inter (la más parecida a San Francisco de Apple), variable: cualquier grosor.
-const fuenteMarca = Inter({
+// Tipografía: Geist (geométrica y limpia, en la línea de San Francisco de Apple), variable: cualquier grosor.
+const fuenteMarca = Geist({
   variable: "--font-marca",
   subsets: ["latin"],
 });

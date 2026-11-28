@@ -87,7 +87,7 @@ docs/             guía para conectar el formulario del sitio
 
 - **Colores:** `app/globals.css` (`--ergon-*`, roles de shadcn, `--sidebar-*`, estados `--estado-*`, gráficas `--chart-*`).
   Nada de colores sueltos: todo sale de variables.
-- **Tipografía:** Inter (estilo Apple, grosor variable) en `app/layout.tsx`; títulos en 700 y énfasis en 600. El PDF sigue en Lato.
+- **Tipografía:** Geist (estilo Apple, grosor variable) en `app/layout.tsx`; títulos en 700 y énfasis en 600. El PDF sigue en Lato.
 - **Logo:** `components/brand/logo.tsx` con variantes `full`, `icon` y `app`, y tonos `light` (fondo navy) y
   `dark` (fondo claro). SVG limpios en `public/brand/` (sacados de los PDF de Drive, con degradado real).
   Íconos de la app (favicon, apple, 192/512, maskable) e imagen para compartir (`public/brand/og.png`).

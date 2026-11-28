@@ -45,7 +45,7 @@ export function TaskCard({
     <m.div
       initial={arrastrando ? false : { opacity: 0, y: 6, filter: "blur(4px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         "group/tarjeta relative rounded-2xl border border-white/70 bg-card p-3 shadow-sm transition-[box-shadow,transform] duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md",
         arrastrando && "rotate-2 scale-[1.02] shadow-lg ring-2 ring-ergon-blue",

@@ -30,13 +30,13 @@ export function LineaTiempo({ dias, compacta = false }: { dias: DiaActividad[]; 
       {dias.map((d) => (
         <section key={d.dia}>
           <h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">{d.dia}</h3>
-          <m.ol className="relative" variants={stagger(0.04)} initial="oculto" animate="visible">
+          <m.ol className="relative" variants={stagger(0.025)} initial="oculto" animate="visible">
             <m.span
               aria-hidden
               className="absolute bottom-4 left-4 top-4 w-px origin-top bg-border"
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             />
             {d.entradas.map((e) => {
               const contenido = (

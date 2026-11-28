@@ -21,7 +21,7 @@ export const GIROS: { clave: string; nombre: string; texto: string; icono: Lucid
 /** Lanzador en cuadrícula tipo bento: una tarjeta por giro. */
 export function BentoDemos({ url }: { url: string | null }) {
   return (
-    <m.ul className="grid auto-rows-[minmax(9.5rem,auto)] gap-3 sm:grid-cols-2 lg:grid-cols-4" variants={stagger(0.04)} initial="oculto" animate="visible">
+    <m.ul className="grid auto-rows-[minmax(9.5rem,auto)] gap-3 sm:grid-cols-2 lg:grid-cols-4" variants={stagger(0.025)} initial="oculto" animate="visible">
       {GIROS.map((g, i) => {
         const grande = i === 0;
         const href = url ? `${url}${url.includes("?") ? "&" : "?"}giro=${g.clave}` : null;

@@ -21,7 +21,7 @@ function Progress({ className, value, ...props }: React.ComponentProps<typeof Pr
           className="h-full w-full rounded-full bg-gradient-to-r from-ergon-blue to-ergon-sky"
           initial={{ x: "-100%" }}
           animate={{ x: `-${100 - v}%` }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
         />
       </ProgressPrimitive.Indicator>
     </ProgressPrimitive.Root>

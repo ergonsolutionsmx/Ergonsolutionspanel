@@ -128,7 +128,7 @@ export function CalendarioPared(props: Props) {
                     key={d}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: Math.min(i * 0.008, 0.3), duration: 0.3 }}
+                    transition={{ delay: Math.min(i * 0.005, 0.15), duration: 0.2 }}
                     style={{ transformStyle: "preserve-3d" }}
                     className={cn(
                       "group/dia relative flex min-h-28 flex-col rounded-2xl border border-white/70 bg-card p-2.5 shadow-sm",

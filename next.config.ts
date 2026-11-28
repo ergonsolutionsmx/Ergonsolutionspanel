@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   experimental: {
     // Solo validar "navegación instantánea" en segmentos que lo pidan explícitamente.
     instantInsights: { validationLevel: "manual-warning" },
+    // Reusar por 30 s las secciones ya visitadas: volver a una es instantáneo.
+    // Las acciones que guardan datos llaman refresh()/revalidatePath, que limpian esta caché.
+    staleTimes: { dynamic: 30 },
   },
   // Fuentes y logo que usa el PDF de propuestas (se leen del disco en el servidor).
   outputFileTracingIncludes: {
