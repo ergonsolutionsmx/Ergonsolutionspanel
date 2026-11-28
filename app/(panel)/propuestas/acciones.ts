@@ -126,12 +126,12 @@ export async function archivarPropuesta(id: string, archivada: boolean) {
   refresh();
 }
 
-/** Solo los borradores se borran (las enviadas se archivan). */
-export async function eliminarBorrador(id: string) {
+/** Borra la propuesta (cualquier estado) con sus conceptos. El link público deja de funcionar. */
+export async function eliminarPropuesta(id: string) {
   await obtenerUsuario();
   if (UUID.test(id)) {
     const supabase = await crearClienteServidor();
-    await supabase.from("propuestas").delete().eq("id", id).eq("estado", "borrador");
+    await supabase.from("propuestas").delete().eq("id", id);
   }
   redirect("/propuestas");
 }

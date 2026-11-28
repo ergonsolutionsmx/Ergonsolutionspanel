@@ -9,7 +9,7 @@ import type { EstadoPropuesta } from "@/lib/propuestas-tipos";
 import {
   archivarPropuesta,
   duplicarPropuesta,
-  eliminarBorrador,
+  eliminarPropuesta,
   marcarEnviada,
   marcarRespuesta,
   renovar,
@@ -127,16 +127,7 @@ export function PanelAcciones({
         <Button variant="outline" disabled={pendiente} onClick={() => hacer(() => duplicarPropuesta(id))}>
           <FilePlus2 /> Duplicar
         </Button>
-        {borrador ? (
-          <Button
-            variant="ghost"
-            className="text-red-700 hover:bg-red-50"
-            disabled={pendiente}
-            onClick={() => hacer(() => eliminarBorrador(id), "¿Eliminar este borrador? No se puede deshacer.")}
-          >
-            <Trash2 /> Eliminar borrador
-          </Button>
-        ) : (
+        {!borrador ? (
           <Button
             variant="ghost"
             disabled={pendiente}
@@ -149,7 +140,22 @@ export function PanelAcciones({
           >
             {archivada ? <ArchiveRestore /> : <Archive />} {archivada ? "Desarchivar" : "Archivar"}
           </Button>
-        )}
+        ) : null}
+        <Button
+          variant="ghost"
+          className="text-red-700 hover:bg-red-50"
+          disabled={pendiente}
+          onClick={() =>
+            hacer(
+              () => eliminarPropuesta(id),
+              borrador
+                ? "¿Eliminar este borrador? No se puede deshacer."
+                : "¿Eliminar esta propuesta? Se borra con todos sus conceptos y el link del cliente deja de funcionar. No se puede deshacer.",
+            )
+          }
+        >
+          <Trash2 /> {borrador ? "Eliminar borrador" : "Eliminar propuesta"}
+        </Button>
       </section>
     </div>
   );
