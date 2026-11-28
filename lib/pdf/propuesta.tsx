@@ -20,11 +20,11 @@ Font.register({
 Font.registerHyphenationCallback((palabra) => [palabra]);
 
 const MARCA = {
-  navy: "#06142e",
-  navy2: "#0b1c3d",
-  azul: "#1d3fb8",
-  cielo: "#2e90df",
-  fondo: "#F3F4F6",
+  navy: "#030b1d",
+  navy2: "#07142e",
+  azul: "#17339a",
+  cielo: "#2377c2",
+  fondo: "#e8ecf3",
   texto: "#0F172A",
   gris: "#475569",
   borde: "#E2E8F0",
