@@ -19,7 +19,7 @@ import { QuickActions } from "@/components/inicio/quick-actions";
 import { TarjetaPendientes } from "@/components/inicio/tarjeta-pendientes";
 import { ProjectsCard } from "@/components/inicio/projects-card";
 import { ActivityCard } from "@/components/inicio/activity-card";
-import { GraficaDiferida } from "@/components/inicio/grafica-diferida";
+import { GraficaFlujo } from "@/components/ui/grafica-flujo";
 
 export const metadata: Metadata = { title: "Inicio" };
 
@@ -82,7 +82,14 @@ export default async function InicioPage() {
             </h2>
             <p className="text-xs text-muted-foreground">Últimas 8 semanas</p>
           </div>
-          <GraficaDiferida datos={grafica} />
+          <GraficaFlujo
+            nombreA="Completadas"
+            nombreB="Abiertas"
+            formato="numero"
+            resumen={false}
+            alto={190}
+            periodos={[{ id: "8s", nombre: "8 semanas", puntos: grafica.map((g) => ({ etiqueta: g.semana, a: g.completadas, b: g.abiertas })) }]}
+          />
         </section>
         <div className="lg:col-span-2">
           <ProjectsCard proyectos={proyectos} />

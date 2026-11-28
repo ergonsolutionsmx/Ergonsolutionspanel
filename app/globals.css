@@ -18,7 +18,18 @@
   /* Roles (shadcn/ui) mapeados a la marca */
   --background: var(--ergon-bg);
   --foreground: #0f172a;
-  --card: rgb(255 255 255 / 0.36); /* vidrio: deja ver el fondo de marca */
+  /* Vidrio (estilo adjustable-glass-dashboard): se puede ajustar en Ajustes → Apariencia. */
+  --vidrio-blur: 22px;
+  --vidrio-opacidad: 0.3;
+  --vidrio-saturacion: 1.2;
+  --vidrio-borde: 0.6;
+  --vidrio-superficie: #ffffff;
+  --vidrio-panel: #ffffff;
+  --vidrio-luz: #ffffff;
+  --vidrio-sombra: rgb(3 11 29 / 0.3);
+  --vidrio-sombra-panel: rgb(3 11 29 / 0.22);
+  /* Tarjetas: un poco más claras que el contenedor, siguen la opacidad elegida. */
+  --card: color-mix(in srgb, var(--vidrio-panel) calc((0.16 + var(--vidrio-opacidad) * 0.5) * 100%), transparent);
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
@@ -67,7 +78,11 @@
   --ergon-bg: #01040b;
   --background: #01040b;
   --foreground: #e6ecf7;
-  --card: rgb(28 50 98 / 0.24);
+  --vidrio-superficie: #182236;
+  --vidrio-panel: #2b3652;
+  --vidrio-luz: rgb(255 255 255 / 0.34);
+  --vidrio-sombra: rgb(0 0 0 / 0.6);
+  --vidrio-sombra-panel: rgb(0 0 0 / 0.55);
   --card-foreground: #e6ecf7;
   --popover: #0b1631;
   --popover-foreground: #e6ecf7;
@@ -135,14 +150,14 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* Sombras de vidrio: filo de luz arriba + sombra larga y suave con tinte navy. */
-  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 1px 0 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(255 255 255 / 0.2), 0 1px 2px rgb(3 11 29 / 0.04), 0 12px 28px -20px rgb(3 11 29 / 0.42);
-  --shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.8), 0 1px 2px -1px rgb(3 11 29 / 0.08), 0 16px 40px -22px rgb(3 11 29 / 0.35);
-  --shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 2px 4px -2px rgb(3 11 29 / 0.1), 0 24px 60px -24px rgb(3 11 29 / 0.4);
+  --shadow-sm: inset 0 1px 0 color-mix(in srgb, var(--vidrio-luz) calc(var(--vidrio-borde) * 75%), transparent), 0 8px 22px -20px var(--vidrio-sombra-panel);
+  --shadow-md: inset 0 1px 0 color-mix(in srgb, var(--vidrio-luz) calc(var(--vidrio-borde) * 85%), transparent), 0 16px 36px -22px var(--vidrio-sombra-panel);
+  --shadow-lg: inset 0 1px 0 color-mix(in srgb, var(--vidrio-luz) calc(var(--vidrio-borde) * 90%), transparent), 0 24px 60px -24px var(--vidrio-sombra);
   /* Solo para la acción principal (botón azul). */
   --shadow-accion: 0 0.7px 2.7px -1.2px rgb(23 51 154 / 0.3), 0 2.7px 10px -2.3px rgb(23 51 154 / 0.25), 0 10px 30px -6px rgb(23 51 154 / 0.18);
 
-  /* Tipografía: Inter (estilo Apple). Se cambia en app/layout.tsx */
-  --font-sans: var(--font-marca), -apple-system, BlinkMacSystemFont, "SF Pro Text", ui-sans-serif, system-ui, sans-serif;
+  /* Tipografía redonda estilo Apple: SF Pro Rounded donde existe (Safari en iPhone/Mac), si no Nunito (app/layout.tsx). */
+  --font-sans: ui-rounded, "SF Pro Rounded", var(--font-marca), -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
   /* Grosores estilo Apple: títulos en negrita (no extra negrita), énfasis en semi-negrita. */
   --font-weight-black: 700;
   --font-weight-bold: 600;
@@ -153,8 +168,8 @@
     border-color: var(--color-border);
   }
   body {
-    font-feature-settings: "ss01", "ss03"; /* alternativas de Geist: a y g más limpias */
-    letter-spacing: -0.008em;
+    font-variant-numeric: tabular-nums; /* números del mismo ancho: las cantidades se alinean */
+    letter-spacing: -0.004em;
     background: var(--background);
     position: relative;
     isolation: isolate;
@@ -166,7 +181,7 @@
   h2,
   h3 {
     text-wrap: balance;
-    letter-spacing: -0.028em;
+    letter-spacing: -0.02em;
   }
   ::selection {
     background: rgb(35 119 194 / 0.3);
@@ -268,79 +283,29 @@ body::before {
  * filo de luz arriba y a la izquierda, reflejo suave en la esquina y sombra larga.
  */
 @utility vidrio {
-  background:
-    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.45), transparent 50%),
-    radial-gradient(80% 60% at 100% 100%, rgb(255 255 255 / 0.14), transparent 60%),
-    linear-gradient(160deg, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0.07));
-  -webkit-backdrop-filter: blur(18px) saturate(2.4) brightness(1.08);
-  backdrop-filter: blur(18px) saturate(2.4) brightness(1.08);
+  background: color-mix(in srgb, var(--vidrio-superficie) calc(var(--vidrio-opacidad) * 100%), transparent);
+  -webkit-backdrop-filter: blur(var(--vidrio-blur)) saturate(var(--vidrio-saturacion));
+  backdrop-filter: blur(var(--vidrio-blur)) saturate(var(--vidrio-saturacion));
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 1),
-    inset 1px 0 0 rgb(255 255 255 / 0.7),
-    inset -1px 0 0 rgb(255 255 255 / 0.25),
-    inset 0 -1px 0 rgb(255 255 255 / 0.35),
-    inset 0 0 0 1px rgb(255 255 255 / 0.4),
-    inset 0 10px 24px -18px rgb(255 255 255 / 0.9),
-    inset 0 -22px 44px -30px rgb(23 51 154 / 0.3),
-    0 24px 60px -30px rgb(3 11 29 / 0.42);
+    inset 0 1px 0 color-mix(in srgb, var(--vidrio-luz) calc(var(--vidrio-borde) * 100%), transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--vidrio-luz) calc(var(--vidrio-borde) * 34%), transparent),
+    0 20px 52px -25px var(--vidrio-sombra);
   @supports not (backdrop-filter: blur(1px)) {
-    background: rgb(255 255 255 / 0.94);
+    background: color-mix(in srgb, var(--vidrio-superficie) 94%, transparent);
   }
 }
-/* Vidrio más sólido para ventanas que flotan sobre contenido. */
+/* Vidrio más sólido para ventanas, menús y la barra inferior (se lee sobre cualquier contenido). */
 @utility vidrio-solido {
-  background:
-    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.7), transparent 55%),
-    linear-gradient(160deg, rgb(255 255 255 / 0.74), rgb(255 255 255 / 0.56));
-  -webkit-backdrop-filter: blur(28px) saturate(2.1) brightness(1.05);
-  backdrop-filter: blur(28px) saturate(2.1) brightness(1.05);
+  background: color-mix(in srgb, var(--vidrio-superficie) 86%, transparent);
+  -webkit-backdrop-filter: blur(32px) saturate(var(--vidrio-saturacion));
+  backdrop-filter: blur(32px) saturate(var(--vidrio-saturacion));
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 1),
-    inset 1px 0 0 rgb(255 255 255 / 0.6),
-    inset 0 0 0 1px rgb(255 255 255 / 0.45),
-    0 24px 80px -20px rgb(3 11 29 / 0.38);
+    inset 0 1px 0 color-mix(in srgb, var(--vidrio-luz) calc(var(--vidrio-borde) * 100%), transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--vidrio-luz) calc(var(--vidrio-borde) * 30%), transparent),
+    0 24px 80px -20px var(--vidrio-sombra);
   @supports not (backdrop-filter: blur(1px)) {
-    background: rgb(255 255 255 / 0.97);
+    background: var(--vidrio-superficie);
   }
-}
-.dark .vidrio {
-  background:
-    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.11), transparent 50%),
-    radial-gradient(80% 60% at 100% 100%, rgb(75 163 230 / 0.08), transparent 60%),
-    linear-gradient(160deg, rgb(34 58 108 / 0.26), rgb(10 22 48 / 0.14));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.26),
-    inset 1px 0 0 rgb(255 255 255 / 0.12),
-    inset -1px 0 0 rgb(255 255 255 / 0.05),
-    inset 0 0 0 1px rgb(255 255 255 / 0.08),
-    inset 0 10px 24px -18px rgb(255 255 255 / 0.18),
-    inset 0 -22px 44px -30px rgb(35 119 194 / 0.35),
-    0 24px 60px -30px rgb(0 0 0 / 0.7);
-}
-@media (min-width: 48rem) {
-  .dark .md\:vidrio {
-    background:
-      radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.11), transparent 50%),
-      radial-gradient(80% 60% at 100% 100%, rgb(75 163 230 / 0.08), transparent 60%),
-      linear-gradient(160deg, rgb(34 58 108 / 0.26), rgb(10 22 48 / 0.14));
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.26),
-      inset 1px 0 0 rgb(255 255 255 / 0.12),
-      inset -1px 0 0 rgb(255 255 255 / 0.05),
-      inset 0 0 0 1px rgb(255 255 255 / 0.08),
-      inset 0 10px 24px -18px rgb(255 255 255 / 0.18),
-      inset 0 -22px 44px -30px rgb(35 119 194 / 0.35),
-      0 24px 60px -30px rgb(0 0 0 / 0.7);
-  }
-}
-.dark .vidrio-solido {
-  background:
-    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.08), transparent 55%),
-    linear-gradient(160deg, rgb(22 40 80 / 0.72), rgb(6 14 34 / 0.66));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.22),
-    inset 0 0 0 1px rgb(255 255 255 / 0.09),
-    0 24px 80px -20px rgb(0 0 0 / 0.7);
 }
 
 /* Entrada suave del contenido al cambiar de sección (sube y se enfoca). */
@@ -470,46 +435,23 @@ body::before {
 .dark ::selection {
   background: rgb(35 119 194 / 0.35);
 }
-/* En oscuro, el filo de luz de las tarjetas es tenue (en claro es blanco brillante). */
-.dark [class~="shadow-sm"] {
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), inset 1px 0 0 rgb(255 255 255 / 0.04), 0 14px 30px -20px rgb(0 0 0 / 0.65);
-}
-.dark :is([class~="shadow-md"], [class*="hover:shadow-md"]:hover) {
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 18px 40px -22px rgb(0 0 0 / 0.75);
-}
-.dark [class~="shadow-lg"] {
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 24px 60px -24px rgb(0 0 0 / 0.8);
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .dark .tarjeta-viva:hover {
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 18px 40px -22px rgb(0 0 0 / 0.75);
-  }
-}
 
-/* Finanzas: mini gráficas de las tarjetas (la línea se dibuja y el punto aparece). */
+/* Gráfica de flujo: las líneas se dibujan y el área aparece. */
 @media (prefers-reduced-motion: no-preference) {
-  .kpi-trazo {
+  .flujo-linea {
     stroke-dasharray: 1;
-    animation: kpi-trazo 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    animation: flujo-linea 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  .kpi-relleno {
-    animation: kpi-aparece 0.6s ease-out 0.5s both;
-  }
-  .kpi-punto {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: kpi-punto 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both;
+  .flujo-area {
+    animation: kpi-aparece 0.7s ease-out 0.25s both;
   }
 }
-@keyframes kpi-trazo {
+@keyframes flujo-linea {
   from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
 }
 @keyframes kpi-aparece {
   from { opacity: 0; }
-}
-@keyframes kpi-punto {
-  from { transform: scale(0); }
 }
 
 /* Finanzas: flujo del dinero (barras que crecen y etiquetas que aparecen). */

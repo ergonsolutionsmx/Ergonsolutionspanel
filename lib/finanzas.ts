@@ -1,6 +1,7 @@
 import "server-only";
 import { crearClienteServidor } from "@/lib/supabase/server";
-import { hoyISO, sumarMeses } from "@/lib/fechas";
+import { fechaCorta, hoyISO, rangoDias, sumarDias, sumarMeses } from "@/lib/fechas";
+import type { PeriodoFlujo } from "@/components/ui/grafica-flujo";
 import { LOCALE } from "@/lib/utils";
 import {
   CATEGORIAS,
@@ -53,6 +54,8 @@ export type ResumenFinanzas = {
   porPagar: { total: number; cuantos: number };
   gastosPorCategoria: { clave: string; monto: number; anterior: number }[];
   rio: RioPeriodo[];
+  flujo: PeriodoFlujo[];
+  recientes: Movimiento[];
   pendientes: Movimiento[];
 };
 
@@ -61,9 +64,10 @@ export async function resumenFinanzas(mes: string): Promise<ResumenFinanzas> {
   const supabase = await crearClienteServidor();
   const desde = sumarMeses(`${mes}-01`, -11);
   const hasta = finMes(mes);
-  const [pagados, pendientes] = await Promise.all([
+  const [pagados, pendientes, recientes] = await Promise.all([
     supabase.from("movimientos").select(COLUMNAS_MOVIMIENTO).eq("estado", "pagado").gte("pagado_en", desde).lte("pagado_en", hasta).limit(5000),
     supabase.from("movimientos").select(COLUMNAS_MOVIMIENTO).eq("estado", "pendiente").order("vence", { ascending: true, nullsFirst: false }).limit(500),
+    supabase.from("movimientos").select(COLUMNAS_MOVIMIENTO).neq("estado", "cancelado").order("fecha", { ascending: false }).order("creado_en", { ascending: false }).limit(5),
   ]);
   const lista = ((pagados.data ?? []) as Movimiento[]).map(limpiar);
   const pend = ((pendientes.data ?? []) as Movimiento[]).map(limpiar);
@@ -117,9 +121,35 @@ export async function resumenFinanzas(mes: string): Promise<ResumenFinanzas> {
     };
   };
 
+  // Gráfica de flujo: lo cobrado (A) y lo pagado (B) por día o por mes.
+  const fin = hoy < hasta ? hoy : hasta;
+  const porDia = (dias: string[], etiqueta: (d: string) => string) =>
+    dias.map((d) => {
+      const del = lista.filter((m) => m.pagado_en === d);
+      return {
+        etiqueta: etiqueta(d),
+        a: del.filter((m) => m.tipo === "ingreso").reduce((x, m) => x + m.total, 0),
+        b: del.filter((m) => m.tipo === "gasto").reduce((x, m) => x + m.total, 0),
+      };
+    });
+  // El mes se ve como lo que se lleva acumulado (sube día a día, más fácil de leer que picos diarios).
+  const acumular = (pts: { etiqueta: string; a: number; b: number }[]) => {
+    let a = 0;
+    let b = 0;
+    return pts.map((p) => ({ etiqueta: p.etiqueta, a: (a += p.a), b: (b += p.b) }));
+  };
+  const diaSemana = new Intl.DateTimeFormat(LOCALE, { weekday: "short", day: "numeric", timeZone: "UTC" });
+  const flujo: PeriodoFlujo[] = [
+    { id: "semana", nombre: "Semana", puntos: porDia(rangoDias(sumarDias(fin, -6), fin), (d) => diaSemana.format(new Date(`${d}T12:00:00Z`)).replace(".", "")) },
+    { id: "mes", nombre: "Mes", acumulado: true, puntos: acumular(porDia(rangoDias(`${mes}-01`, fin < `${mes}-01` ? `${mes}-01` : fin), (d) => fechaCorta(d, hoy))) },
+    { id: "anio", nombre: "Año", puntos: meses.map((p) => ({ etiqueta: p.mes, a: p.ingresos, b: p.gastos })) },
+  ];
+
   return {
     mes,
     meses,
+    flujo,
+    recientes: ((recientes.data ?? []) as Movimiento[]).map(limpiar),
     cobrado: kpi("ingresos"),
     gastado: kpi("gastos"),
     utilidad: kpi("utilidad"),

@@ -302,3 +302,47 @@ export function ListaRecurrentes({ recurrentes }: { recurrentes: Recurrente[] })
     </div>
   );
 }
+
+/** Actividad reciente (estilo "Recent activity" del dashboard de vidrio): ícono, concepto, estado y monto. */
+export function ActividadReciente({ movimientos }: { movimientos: Movimiento[] }) {
+  const hoy = hoyISO();
+  if (!movimientos.length) {
+    return <p className="py-10 text-center text-sm text-muted-foreground">Aún no hay movimientos.</p>;
+  }
+  return (
+    <ul>
+      {movimientos.map((mov) => (
+        <li key={mov.id} className="border-t border-ergon-navy/[0.08] first:border-t-0">
+          <button
+            type="button"
+            onClick={() => abrirMovimiento(mov.tipo, mov)}
+            className="group -mx-2 flex w-[calc(100%+1rem)] items-center gap-3 rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-ergon-navy/[0.04]"
+          >
+            <span
+              className={cn(
+                "grid size-9 shrink-0 place-items-center rounded-[0.7rem]",
+                mov.tipo === "ingreso" ? "bg-ergon-sky/15 text-ergon-sky" : "bg-ergon-navy/[0.07] text-ergon-navy",
+              )}
+            >
+              {mov.tipo === "ingreso" ? <ArrowDownLeft className="size-4" aria-hidden /> : <ArrowUpRight className="size-4" aria-hidden />}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-semibold text-ergon-navy">{mov.concepto}</span>
+              <span className="block truncate text-xs text-muted-foreground">
+                {nombreCategoria(mov.categoria)} · {fechaRelativa(mov.fecha, hoy)}
+              </span>
+            </span>
+            <span className="hidden items-center gap-1 text-[11px] text-muted-foreground sm:flex">
+              {mov.estado === "pagado" ? <Check className="size-3" aria-hidden /> : null}
+              {mov.estado === "pagado" ? (mov.tipo === "ingreso" ? "Cobrado" : "Pagado") : "Pendiente"}
+            </span>
+            <strong className={cn("whitespace-nowrap text-sm font-semibold tabular-nums", mov.tipo === "ingreso" ? "text-ergon-sky" : "text-ergon-navy")}>
+              {mov.tipo === "ingreso" ? "+" : "−"}
+              {pesos(mov.total)}
+            </strong>
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}

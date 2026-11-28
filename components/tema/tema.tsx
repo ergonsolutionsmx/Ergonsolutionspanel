@@ -9,12 +9,6 @@ export type Tema = "claro" | "oscuro" | "sistema";
 const CLAVE = "tema";
 const oyentes = new Set<() => void>();
 
-/**
- * Script que corre antes de pintar (en <head>): pone .dark según la preferencia guardada.
- * La página pública de propuestas (/p/...) siempre va en claro.
- */
-export const SCRIPT_TEMA = `(function(){try{if(location.pathname.indexOf('/p/')===0)return;var t=localStorage.getItem('${CLAVE}')||'sistema';var d=t==='oscuro'||(t==='sistema'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d)}catch(e){}})()`;
-
 function leer(): Tema {
   try {
     const t = localStorage.getItem(CLAVE);

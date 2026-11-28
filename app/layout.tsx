@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import { ProveedorMovimiento } from "@/components/movimiento/proveedor";
 import { Toaster } from "@/components/avisos/toast";
-import { SCRIPT_TEMA } from "@/components/tema/tema";
+import { SCRIPT_TEMA, SCRIPT_VIDRIO } from "@/components/tema/scripts";
 
-// Tipografía: Geist (geométrica y limpia, en la línea de San Francisco de Apple), variable: cualquier grosor.
-const fuenteMarca = Geist({
+// Tipografía redonda estilo Apple: en iPhone/Mac (Safari) se usa SF Pro Rounded del sistema;
+// en los demás, Nunito (la más parecida, también redonda). Variable: cualquier grosor.
+const fuenteMarca = Nunito({
   variable: "--font-marca",
   subsets: ["latin"],
 });
@@ -39,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es-MX" className={`${fuenteMarca.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         {/* Tema claro/oscuro antes de pintar (sin parpadeo). */}
-        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+        <script dangerouslySetInnerHTML={{ __html: `${SCRIPT_TEMA};${SCRIPT_VIDRIO}` }} />
       </head>
       <body className="min-h-full font-sans">
         <ProveedorMovimiento>

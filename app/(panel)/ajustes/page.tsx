@@ -3,6 +3,7 @@ import { obtenerUsuario } from "@/lib/auth";
 import { FormularioPerfil } from "@/components/ajustes/formulario-perfil";
 import { SeccionAjustes } from "@/components/ajustes/seccion";
 import { SelectorTema } from "@/components/tema/tema";
+import { AjustarVidrio } from "@/components/tema/vidrio";
 
 export const metadata: Metadata = { title: "Perfil" };
 
@@ -15,6 +16,9 @@ export default async function AjustesPerfilPage() {
       </SeccionAjustes>
       <SeccionAjustes titulo="Apariencia" descripcion="Automático sigue el modo de tu celular o computadora. Se guarda en este dispositivo.">
         <SelectorTema />
+      </SeccionAjustes>
+      <SeccionAjustes titulo="Vidrio" descripcion="Ajusta qué tan transparente se ve el panel. Se guarda en este dispositivo.">
+        <AjustarVidrio />
       </SeccionAjustes>
     </div>
   );

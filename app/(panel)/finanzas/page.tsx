@@ -1,28 +1,28 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Download, Receipt, Repeat, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Download, HandCoins, Receipt, Repeat, Search, TrendingUp } from "lucide-react";
+import { cn, pesos } from "@/lib/utils";
 import { obtenerUsuario } from "@/lib/auth";
 import { hoyISO, mayuscula, nombreMes, sumarMeses } from "@/lib/fechas";
 import { obtenerMovimientos, obtenerPendientes, obtenerRecurrentes, proyectosParaFinanzas, resumenFinanzas } from "@/lib/finanzas";
-import { CATEGORIAS, MES_VALIDO, type EstadoMovimiento, type TipoMovimiento } from "@/lib/finanzas-tipos";
+import { CATEGORIAS, MES_VALIDO, colorCategoria, nombreCategoria, type EstadoMovimiento, type TipoMovimiento } from "@/lib/finanzas-tipos";
 import { Titulo } from "@/components/panel/titulo";
 import { Segmentos } from "@/components/ui/segmentos";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { TarjetasKpi } from "@/components/finanzas/tarjetas-kpi";
-import { GraficaMesesDiferida } from "@/components/finanzas/diferidos";
-import { AnilloGastos } from "@/components/finanzas/anillo-gastos";
+import { GraficaFlujo } from "@/components/ui/grafica-flujo";
+import { Progress } from "@/components/ui/progress";
 import { RioDinero } from "@/components/finanzas/rio-dinero";
 import { Editores } from "@/components/finanzas/editor";
-import { BotonesNuevo, ListaMovimientos, ListaRecurrentes, TablaPendientes } from "@/components/finanzas/listas";
+import { ActividadReciente, BotonesNuevo, ListaMovimientos, ListaRecurrentes, TablaPendientes } from "@/components/finanzas/listas";
 
 export const metadata: Metadata = { title: "Finanzas" };
 
 const VISTAS = ["resumen", "movimientos", "pendientes", "recurrentes"] as const;
 type Vista = (typeof VISTAS)[number];
 const uno = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
-const tarjeta = "rounded-[1.25rem] border border-white/60 bg-card p-4 shadow-sm md:p-5";
+const tarjeta = "rounded-[1.1rem] bg-card p-4 shadow-sm md:p-5";
+const tituloPanel = "text-sm font-semibold text-ergon-navy";
 
 export default async function FinanzasPage({ searchParams }: PageProps<"/finanzas">) {
   await obtenerUsuario();
@@ -68,15 +68,18 @@ async function Resumen({ mes }: { mes: string }) {
   const siguiente = sumarMeses(`${mes}-01`, 1).slice(0, 7);
   const cobrar = r.pendientes.filter((x) => x.tipo === "ingreso").slice(0, 6);
   const pagar = r.pendientes.filter((x) => x.tipo === "gasto").slice(0, 6);
-  const flecha = "grid size-9 place-items-center rounded-full text-ergon-navy transition-colors hover:bg-accent";
+  const flecha = "grid size-9 place-items-center rounded-full text-ergon-navy transition-colors hover:bg-ergon-navy/[0.06]";
+  const nombre = nombreMes(`${mes}-15`).split(" ")[0];
+  const cambio = r.utilidad.anterior ? ((r.utilidad.actual - r.utilidad.anterior) / Math.abs(r.utilidad.anterior)) * 100 : null;
+  const totalGastos = r.gastosPorCategoria.reduce((s2, g) => s2 + g.monto, 0);
 
   return (
-    <div className="space-y-4 md:space-y-5">
+    <div className="space-y-4">
       <div className="flex items-center gap-1">
         <Link href={`/finanzas?mes=${anterior}`} className={flecha} aria-label="Mes anterior" scroll={false}>
           <ChevronLeft className="size-5" aria-hidden />
         </Link>
-        <h2 className="min-w-40 text-center text-lg font-black text-ergon-navy">{mayuscula(nombreMes(`${mes}-15`))}</h2>
+        <h2 className="min-w-40 text-center text-base font-semibold text-ergon-navy">{mayuscula(nombreMes(`${mes}-15`))}</h2>
         {mes < actual ? (
           <Link href={`/finanzas?mes=${siguiente}`} className={flecha} aria-label="Mes siguiente" scroll={false}>
             <ChevronRight className="size-5" aria-hidden />
@@ -91,24 +94,117 @@ async function Resumen({ mes }: { mes: string }) {
         ) : null}
       </div>
 
-      <TarjetasKpi cobrado={r.cobrado} gastado={r.gastado} utilidad={r.utilidad} porCobrar={r.porCobrar} />
-
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <section className={cn(tarjeta, "lg:col-span-3")} aria-labelledby="grafica-meses">
-          <div className="mb-2 flex items-baseline justify-between gap-3">
-            <h2 id="grafica-meses" className="font-black text-ergon-navy">Ingresos, gastos y utilidad</h2>
-            <span className="text-xs text-muted-foreground">Últimos 12 meses</span>
+      {/* Fila 1: utilidad del mes + flujo de efectivo */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[0.82fr_1.5fr]">
+        <section className={cn(tarjeta, "flex flex-col")}>
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span>Utilidad de {nombre}</span>
+            <TrendingUp className="size-4 opacity-70" aria-hidden />
           </div>
-          <GraficaMesesDiferida datos={r.meses} />
+          <strong
+            className={cn(
+              "mt-3 block truncate text-[2.4rem] font-medium leading-tight tracking-[-0.04em] tabular-nums md:text-[2.7rem]",
+              r.utilidad.actual < 0 ? "text-error" : "text-ergon-navy",
+            )}
+          >
+            {pesos(r.utilidad.actual)}
+          </strong>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {cambio === null ? (
+              "Primer mes con datos"
+            ) : (
+              <>
+                <span className={cn("mr-1.5 rounded-md px-1.5 py-0.5 font-semibold tabular-nums", cambio >= 0 ? "bg-ergon-sky/15 text-ergon-sky" : "bg-error/12 text-error")}>
+                  {cambio > 0 ? "+" : ""}
+                  {cambio.toFixed(1)}%
+                </span>
+                comparado con el mes pasado
+              </>
+            )}
+          </p>
+          <dl className="mt-5 grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <dt className="text-muted-foreground">Cobrado</dt>
+              <dd className="mt-0.5 text-base font-semibold tabular-nums text-ergon-navy">{pesos(r.cobrado.actual)}</dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">Gastado</dt>
+              <dd className="mt-0.5 text-base font-semibold tabular-nums text-ergon-navy">{pesos(r.gastado.actual)}</dd>
+            </div>
+          </dl>
+          <Link href="/finanzas?vista=pendientes" className="group mt-auto flex items-center gap-3 pt-6">
+            <span className="grid size-9 shrink-0 place-items-center rounded-[0.7rem] bg-ergon-navy/[0.07] text-ergon-navy">
+              <HandCoins className="size-[1.1rem]" aria-hidden />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-xs font-semibold text-ergon-navy">Por cobrar · {pesos(r.porCobrar.total)}</span>
+              <span className={cn("block text-[11px]", r.porCobrar.vencido ? "font-semibold text-error" : "text-muted-foreground")}>
+                {r.porCobrar.vencido
+                  ? `${pesos(r.porCobrar.vencido)} vencido`
+                  : r.porCobrar.cuantos
+                    ? `${r.porCobrar.cuantos} pendiente${r.porCobrar.cuantos === 1 ? "" : "s"}`
+                    : "Nada pendiente"}
+              </span>
+            </span>
+            <span className="grid size-9 place-items-center rounded-full bg-ergon-navy/[0.07] text-ergon-navy transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+              <ArrowUpRight className="size-[1.1rem]" aria-hidden />
+            </span>
+          </Link>
         </section>
-        <section className={cn(tarjeta, "lg:col-span-2")}>
+
+        <section className={tarjeta} aria-labelledby="flujo-caja">
+          <h2 id="flujo-caja" className={cn(tituloPanel, "mb-3")}>Flujo de efectivo</h2>
+          <GraficaFlujo periodos={r.flujo} inicial="mes" nombreA="Entró" nombreB="Salió" />
+        </section>
+      </div>
+
+      {/* Fila 2: actividad reciente + a dónde se va */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.3fr_1fr]">
+        <section className={tarjeta} aria-labelledby="actividad">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 id="actividad" className={tituloPanel}>Actividad reciente</h2>
+            <Link href="/finanzas?vista=movimientos" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-ergon-sky">
+              Ver todo <ArrowRight className="size-3.5" aria-hidden />
+            </Link>
+          </div>
+          <ActividadReciente movimientos={r.recientes} />
+        </section>
+
+        <section className={tarjeta} aria-labelledby="a-donde">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 id="a-donde" className={tituloPanel}>A dónde se va</h2>
+            <span className="text-xs text-muted-foreground">Gastos de {nombre}</span>
+          </div>
           {r.gastosPorCategoria.length ? (
-            <AnilloGastos categorias={r.gastosPorCategoria} />
+            <ul className="space-y-4">
+              {r.gastosPorCategoria.slice(0, 4).map((g) => {
+                const pct = totalGastos ? (g.monto / totalGastos) * 100 : 0;
+                return (
+                  <li key={g.clave}>
+                    <div className="flex items-center gap-2.5">
+                      <span className="grid size-8 shrink-0 place-items-center rounded-[0.6rem] bg-ergon-navy/[0.06]">
+                        <i className="size-2 rounded-full" style={{ background: colorCategoria(g.clave) }} />
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-ergon-navy">{nombreCategoria(g.clave)}</span>
+                      <span className="text-xs tabular-nums text-muted-foreground">{Math.round(pct)}%</span>
+                    </div>
+                    <Progress value={pct} className="mt-2.5 h-1.5 bg-ergon-navy/[0.08]" aria-label={nombreCategoria(g.clave)} />
+                    <p className="mt-1.5 flex justify-between text-xs text-muted-foreground">
+                      <strong className="font-semibold tabular-nums text-ergon-navy">{pesos(g.monto)}</strong>
+                      <span className="tabular-nums">de {pesos(totalGastos)}</span>
+                    </p>
+                  </li>
+                );
+              })}
+              {r.gastosPorCategoria.length > 4 ? (
+                <li className="text-xs text-muted-foreground">
+                  y {r.gastosPorCategoria.length - 4} categoría{r.gastosPorCategoria.length - 4 === 1 ? "" : "s"} más ·{" "}
+                  <Link href="/finanzas?vista=movimientos&tipo=gasto" className="font-semibold text-ergon-sky hover:underline">ver gastos</Link>
+                </li>
+              ) : null}
+            </ul>
           ) : (
-            <>
-              <h2 className="font-black text-ergon-navy">Gastos por categoría</h2>
-              <EmptyState compacto icono={Receipt} titulo="Sin gastos pagados este mes" texto="Cuando registres gastos, aquí verás en qué se va el dinero." />
-            </>
+            <EmptyState compacto icono={Receipt} titulo="Sin gastos pagados" texto="Cuando registres gastos, aquí verás en qué se va el dinero." />
           )}
         </section>
       </div>
@@ -120,15 +216,15 @@ async function Resumen({ mes }: { mes: string }) {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <section aria-labelledby="por-cobrar">
           <div className="mb-2 flex items-baseline justify-between px-1">
-            <h2 id="por-cobrar" className="font-black text-ergon-navy">Por cobrar</h2>
-            <Link href="/finanzas?vista=pendientes" className="text-sm font-bold text-primary hover:underline">Ver todo</Link>
+            <h2 id="por-cobrar" className={tituloPanel}>Por cobrar</h2>
+            <Link href="/finanzas?vista=pendientes" className="text-xs text-muted-foreground hover:text-ergon-sky">Ver todo</Link>
           </div>
           <TablaPendientes tipo="ingreso" movimientos={cobrar} compacto />
         </section>
         <section aria-labelledby="por-pagar">
           <div className="mb-2 flex items-baseline justify-between px-1">
-            <h2 id="por-pagar" className="font-black text-ergon-navy">Por pagar</h2>
-            <Link href="/finanzas?vista=pendientes" className="text-sm font-bold text-primary hover:underline">Ver todo</Link>
+            <h2 id="por-pagar" className={tituloPanel}>Por pagar</h2>
+            <Link href="/finanzas?vista=pendientes" className="text-xs text-muted-foreground hover:text-ergon-sky">Ver todo</Link>
           </div>
           <TablaPendientes tipo="gasto" movimientos={pagar} compacto />
         </section>
